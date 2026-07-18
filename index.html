@@ -407,6 +407,21 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
 .ticket-actions{display:flex;justify-content:flex-end;margin-top:0.25rem}
 .btn-resolve{font-size:0.8rem;padding:0.45rem 1rem;border-radius:8px}
 .tickets-empty{text-align:center;color:var(--text3);padding:2.5rem 0;font-size:0.9rem}
+/* ===== CHAT (dentro do ticket) ===== */
+.chat-panel{margin-top:0.75rem;border-top:1px solid var(--border2);padding-top:0.85rem;display:none}
+.chat-panel.open{display:block}
+.chat-messages{max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:0.55rem;padding:0.75rem;background:var(--bg2);border-radius:10px;margin-bottom:0.6rem;border:1px solid var(--border2)}
+.chat-msg{max-width:80%;padding:0.55rem 0.85rem;border-radius:14px;font-size:0.86rem;line-height:1.45;word-wrap:break-word;white-space:pre-wrap;position:relative}
+.chat-msg.mine{align-self:flex-end;background:#6366f1;color:#fff;border-bottom-right-radius:4px}
+.chat-msg.theirs{align-self:flex-start;background:var(--bg3);color:var(--text1);border:1px solid var(--border2);border-bottom-left-radius:4px}
+.chat-msg-meta{font-size:0.66rem;opacity:0.75;margin-top:0.25rem;display:block}
+.chat-empty{text-align:center;color:var(--text3);font-size:0.82rem;padding:1rem;margin:0}
+.chat-input-row{display:flex;gap:0.5rem}
+.chat-input-row input{flex:1;padding:0.65rem 0.85rem;border-radius:8px;background:var(--bg3);border:1px solid var(--border2);color:var(--text1);font-size:0.87rem;font-family:inherit}
+.chat-input-row input:focus{outline:none;border-color:#6366f1}
+.chat-input-row button{padding:0.55rem 1.1rem;border-radius:8px;font-size:0.82rem}
+.btn-chat-toggle{background:transparent;border:1px solid var(--border2);color:var(--text2);padding:0.4rem 0.95rem;border-radius:8px;font-size:0.78rem;font-weight:500;cursor:pointer;transition:.15s}
+.btn-chat-toggle:hover{border-color:#6366f1;color:var(--text1)}
 .admin-badge{display:inline-block;font-size:0.68rem;font-weight:700;background:rgba(139,92,246,0.2);color:#a78bfa;border:1px solid rgba(139,92,246,0.3);border-radius:20px;padding:0.15rem 0.55rem;margin-left:0.5rem;vertical-align:middle}
 
 @media(max-width:768px){
@@ -432,6 +447,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
   <ul class="nav-links">
     <li><a href="#feedback">Feedbacks</a></li>
     <li><a href="#faq" onclick="switchTab('tab-faq', document.getElementById('faq-tab-btn'))">FAQ</a></li>
+    <li><a href="#feedback" onclick="switchTab('tab-support', document.getElementById('support-tab-btn'))">Suporte</a></li>
   </ul>
   <div class="nav-right" id="navRight">
     <div class="nav-account" id="navAccount">
@@ -491,7 +507,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
     <div class="service-item"><span class="service-icon">🎧</span><p>Suporte completo</p></div>
   </div>
   <div style="text-align:center;margin-top:2.5rem">
-    <a href="#" onclick="switchTab('tab-contact', document.getElementById('contact-tab-btn'));return false" class="btn btn-solid">Fazer orçamento →</a>
+    <a href="#" onclick="switchTab('tab-support', document.getElementById('support-tab-btn'));return false" class="btn btn-solid">Fazer orçamento →</a>
     <p style="color:var(--text2);font-size:0.8rem;margin-top:1rem">Rápido — respondemos em minutos pelo WhatsApp.</p>
   </div>
 </section>
@@ -507,6 +523,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
     <button class="tab-btn" onclick="switchTab('tab-fb',this)">Feedbacks</button>
     <button class="tab-btn" onclick="switchTab('tab-faq',this)" id="faq-tab-btn">FAQ</button>
     <button class="tab-btn" onclick="switchTab('tab-contact',this)" id="contact-tab-btn">Contato</button>
+    <button class="tab-btn" id="support-tab-btn" style="display:none" onclick="switchTab('tab-support',this)">Suporte</button>
   </div>
 
   <!-- FEEDBACK TAB -->
@@ -734,7 +751,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
           <li>Redução de input lag e stutter</li>
           <li>Sistema leve e responsivo</li>
         </ul>
-        <a href="#" onclick="switchTab('tab-contact', document.getElementById('contact-tab-btn'));return false" class="btn btn-solid pricing-btn">Fazer orçamento</a>
+        <a href="#" onclick="switchTab('tab-support', document.getElementById('support-tab-btn'));return false" class="btn btn-solid pricing-btn">Fazer orçamento</a>
       </div>
       <div class="pricing-card">
         <div class="pricing-icon">🔥</div>
@@ -751,7 +768,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
           <li>BIOS tunada para extrair o máximo do hardware</li>
           <li>Sistema leve com ganhos reais de FPS</li>
         </ul>
-        <a href="#" onclick="switchTab('tab-contact', document.getElementById('contact-tab-btn'));return false" class="btn btn-solid pricing-btn">Fazer orçamento</a>
+        <a href="#" onclick="switchTab('tab-support', document.getElementById('support-tab-btn'));return false" class="btn btn-solid pricing-btn">Fazer orçamento</a>
       </div>
     </div>
   </div>
@@ -816,6 +833,49 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
     </div>
   </div>
 
+  <!-- SUPPORT TAB -->
+  <div id="tab-support" class="tab-pane">
+    <!-- ESTADO: NÃO LOGADO -->
+    <div id="support-gate" class="support-gate" style="display:none">
+      <p>Você precisa estar logado para abrir um ticket de suporte.</p>
+      <button class="btn btn-solid" onclick="document.getElementById('btnOpenLogin').click()">Entrar / Criar conta</button>
+    </div>
+    <!-- ESTADO: USUÁRIO COMUM -->
+    <div id="support-user" class="ticket-form-wrap" style="display:none">
+      <h3>Abrir ticket de suporte</h3>
+      <p class="sub">Descreva seu problema e responderei o mais rápido possível.</p>
+      <div class="tf-msg" id="ticketMsg"></div>
+      <form id="ticketForm" novalidate>
+        <div class="tf-field">
+          <label for="ticketAssunto">Assunto</label>
+          <input type="text" id="ticketAssunto" placeholder="Ex: Problema no tweak de FPS" required maxlength="120">
+        </div>
+        <div class="tf-field">
+          <label for="ticketMensagem">Mensagem</label>
+          <textarea id="ticketMensagem" placeholder="Descreva o que está acontecendo com o máximo de detalhes..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-solid" id="ticketSubmit" style="width:100%;justify-content:center;padding:0.8rem">Enviar ticket</button>
+      </form>
+      <div id="userTicketsWrap" style="margin-top:2.25rem">
+        <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:0.75rem">Meus tickets</h3>
+        <div id="userTicketList" class="ticket-list">
+          <p class="tickets-empty">Você ainda não abriu nenhum ticket.</p>
+        </div>
+      </div>
+    </div>
+    <!-- ESTADO: ADMIN -->
+    <div id="support-admin" class="admin-panel" style="display:none">
+      <h3>Painel de Suporte <span class="admin-badge">ADMIN</span></h3>
+      <p class="sub">Gerencie os tickets enviados pelos usuários.</p>
+      <div class="admin-tabs">
+        <button class="admin-tab active" id="adminTabOpen" onclick="window.__adminTab('open')">Abertos <span id="countOpen"></span></button>
+        <button class="admin-tab" id="adminTabClosed" onclick="window.__adminTab('closed')">Resolvidos <span id="countClosed"></span></button>
+      </div>
+      <div class="ticket-list" id="ticketList">
+        <p class="tickets-empty">Carregando tickets…</p>
+      </div>
+    </div>
+  </div>
 
   <!-- FAQ TAB -->
   <div id="tab-faq" class="tab-pane">
@@ -884,6 +944,17 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
         <h3>Twitter / X</h3>
         <p>Updates, dicas e tweaks novos por lá.</p>
         <div class="contact-handle">@gutweaks</div>
+      </a>
+      <a href="#" onclick="switchTab('tab-support', document.getElementById('support-tab-btn'));return false" class="contact-card" style="position:relative">
+        <span class="contact-icon">🎫</span>
+        <h3>Abrir ticket
+          <span style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:#4ade80;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:999px;padding:0.15rem 0.55rem;margin-left:0.5rem;vertical-align:middle">
+            <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block"></span>
+            Online
+          </span>
+        </h3>
+        <p>Estamos ativos. Abra um ticket e responderei rapidamente.</p>
+        <div class="contact-handle">Painel de suporte</div>
       </a>
     </div>
   </div>
@@ -1040,7 +1111,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import {
   getFirestore, collection, addDoc, getDocs, doc,
-  updateDoc, query, orderBy, serverTimestamp
+  updateDoc, query, orderBy, serverTimestamp,
+  onSnapshot, where
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -1190,27 +1262,41 @@ forgotPasswordLink?.addEventListener('click', async () => {
 /* ── Logout ── */
 btnLogout?.addEventListener('click', () => signOut(auth));
 
-/* ════════════ SUPORTE / TICKETS ════════════ */
-const ticketForm   = document.getElementById('ticketForm');
-const ticketMsg    = document.getElementById('ticketMsg');
-const ticketSubmit = document.getElementById('ticketSubmit');
-const supportGate  = document.getElementById('support-gate');
-const supportUser  = document.getElementById('support-user');
-const supportAdmin = document.getElementById('support-admin');
-const ticketList   = document.getElementById('ticketList');
-const countOpen    = document.getElementById('countOpen');
-const countClosed  = document.getElementById('countClosed');
+/* ════════════ SUPORTE / TICKETS + CHAT ════════════ */
+const ticketForm     = document.getElementById('ticketForm');
+const ticketMsg      = document.getElementById('ticketMsg');
+const ticketSubmit   = document.getElementById('ticketSubmit');
+const supportGate    = document.getElementById('support-gate');
+const supportUser    = document.getElementById('support-user');
+const supportAdmin   = document.getElementById('support-admin');
+const ticketList     = document.getElementById('ticketList');
+const userTicketList = document.getElementById('userTicketList');
+const countOpen      = document.getElementById('countOpen');
+const countClosed    = document.getElementById('countClosed');
 
 let currentUser  = null;
 let adminTabView = 'open';
 let allTickets   = [];
+let userTickets  = [];
+let unsubTickets = null;
+let unsubUserTickets = null;
+const chatSubs  = new Map();  // ticketId -> unsubscribe
+const chatCache = new Map();  // ticketId -> messages[]
+const openChats = new Set();  // ticketIds abertos
 
 window.__adminTab = function(tab){
   adminTabView = tab;
   document.getElementById('adminTabOpen').classList.toggle('active', tab==='open');
   document.getElementById('adminTabClosed').classList.toggle('active', tab==='closed');
-  renderTickets();
+  renderAdminTickets();
 };
+
+function cleanupChatSubs(){
+  chatSubs.forEach(u => u());
+  chatSubs.clear();
+  chatCache.clear();
+  openChats.clear();
+}
 
 function updateSupportView(user){
   if(!supportGate) return;
@@ -1218,7 +1304,13 @@ function updateSupportView(user){
   supportGate.style.display  = !user    ? '' : 'none';
   supportUser.style.display  = (user && !isAdmin) ? '' : 'none';
   supportAdmin.style.display = isAdmin  ? '' : 'none';
-  if(isAdmin) loadTickets();
+
+  if(unsubTickets){ unsubTickets(); unsubTickets = null; }
+  if(unsubUserTickets){ unsubUserTickets(); unsubUserTickets = null; }
+  cleanupChatSubs();
+
+  if(isAdmin) subscribeAdminTickets();
+  else if(user) subscribeUserTickets(user.uid);
 }
 window.__updateSupportView = () => updateSupportView(currentUser);
 
@@ -1232,14 +1324,22 @@ ticketForm?.addEventListener('submit', async (e) => {
   if(!mensagem){ showMsg(ticketMsg,'Digite uma mensagem.','error'); return; }
   setLoading(ticketSubmit, true);
   try {
-    await addDoc(collection(db,'tickets'),{
+    const ref = await addDoc(collection(db,'tickets'),{
       assunto, mensagem, status:'open',
       userEmail: currentUser.email,
       userName:  currentUser.displayName || currentUser.email,
       uid:       currentUser.uid,
       criadoEm: serverTimestamp()
     });
-    showMsg(ticketMsg,'Ticket enviado! Responderei em breve.','success');
+    // primeira mensagem no chat
+    await addDoc(collection(db,'tickets',ref.id,'messages'),{
+      text: mensagem,
+      senderUid: currentUser.uid,
+      senderName: currentUser.displayName || currentUser.email,
+      isAdmin: false,
+      criadoEm: serverTimestamp()
+    });
+    showMsg(ticketMsg,'Ticket enviado! Você já pode conversar com o admin abaixo.','success');
     ticketForm.reset();
   } catch(err){
     console.error('Erro ao enviar ticket:', err);
@@ -1247,22 +1347,57 @@ ticketForm?.addEventListener('submit', async (e) => {
   } finally{ setLoading(ticketSubmit, false, 'Enviar ticket'); }
 });
 
-/* ── Carregar tickets (admin) ── */
-async function loadTickets(){
-  if(!ticketList) return;
-  ticketList.innerHTML = '<p class="tickets-empty">Carregando…</p>';
-  try {
-    const snap = await getDocs(query(collection(db,'tickets'), orderBy('criadoEm','desc')));
+/* ── Subscriptions em tempo real ── */
+function subscribeAdminTickets(){
+  const qy = query(collection(db,'tickets'), orderBy('criadoEm','desc'));
+  unsubTickets = onSnapshot(qy, snap => {
     allTickets = snap.docs.map(d => ({id:d.id,...d.data()}));
-    renderTickets();
-  } catch(err){
-    console.error('Erro ao carregar tickets:', err);
-    ticketList.innerHTML = '<p class="tickets-empty">Erro ao carregar tickets.</p>';
-  }
+    renderAdminTickets();
+  }, err => {
+    console.error('Erro tickets:', err);
+    if(ticketList) ticketList.innerHTML = '<p class="tickets-empty">Erro ao carregar tickets.</p>';
+  });
 }
 
-/* ── Renderizar tickets ── */
-function renderTickets(){
+function subscribeUserTickets(uid){
+  const qy = query(collection(db,'tickets'), where('uid','==',uid), orderBy('criadoEm','desc'));
+  unsubUserTickets = onSnapshot(qy, snap => {
+    userTickets = snap.docs.map(d => ({id:d.id,...d.data()}));
+    renderUserTickets();
+  }, err => {
+    console.error('Erro tickets do usuário:', err);
+    if(userTicketList) userTicketList.innerHTML = '<p class="tickets-empty">Erro ao carregar seus tickets.</p>';
+  });
+}
+
+/* ── Renderização ── */
+function ticketCardHTML(t, isAdminView){
+  const data = t.criadoEm?.toDate ? t.criadoEm.toDate().toLocaleString('pt-BR') : '—';
+  const chatOpen = openChats.has(t.id);
+  const resolveBtn = (isAdminView && t.status==='open')
+    ? `<button class="btn btn-solid btn-resolve" onclick="window.__resolveTicket('${t.id}')">Marcar como resolvido</button>` : '';
+  const chatBtn = `<button class="btn-chat-toggle" onclick="window.__toggleChat('${t.id}')">${chatOpen?'Fechar chat':'Abrir chat'}</button>`;
+  const who = isAdminView ? `De: ${esc(t.userName||t.userEmail)} · ${data}` : `Ticket · ${data}`;
+  return `<div class="ticket-card" data-ticket="${t.id}">
+    <div class="ticket-card-head">
+      <span class="ticket-assunto">${esc(t.assunto)}</span>
+      <span class="ticket-badge ${t.status==='open'?'open':'closed'}">${t.status==='open'?'Aberto':'Resolvido'}</span>
+    </div>
+    <div class="ticket-meta">${who}</div>
+    <div class="ticket-msg">${esc(t.mensagem)}</div>
+    <div class="ticket-actions" style="gap:0.5rem;flex-wrap:wrap">${chatBtn}${resolveBtn}</div>
+    <div class="chat-panel ${chatOpen?'open':''}" id="chat-${t.id}">
+      <div class="chat-messages" id="chatMsgs-${t.id}"><p class="chat-empty">Carregando…</p></div>
+      <form class="chat-input-row" onsubmit="return window.__sendChat(event,'${t.id}')">
+        <input type="text" id="chatInput-${t.id}" placeholder="Escreva uma mensagem…" maxlength="500" autocomplete="off" required>
+        <button type="submit" class="btn btn-solid">Enviar</button>
+      </form>
+    </div>
+  </div>`;
+}
+
+function renderAdminTickets(){
+  if(!ticketList) return;
   const filtered = allTickets.filter(t => t.status === (adminTabView==='open' ? 'open' : 'closed'));
   const opens    = allTickets.filter(t => t.status==='open').length;
   const closeds  = allTickets.filter(t => t.status==='closed').length;
@@ -1272,25 +1407,92 @@ function renderTickets(){
     ticketList.innerHTML = `<p class="tickets-empty">${adminTabView==='open' ? 'Nenhum ticket aberto.' : 'Nenhum ticket resolvido.'}</p>`;
     return;
   }
-  ticketList.innerHTML = filtered.map(t => {
-    const data = t.criadoEm?.toDate ? t.criadoEm.toDate().toLocaleString('pt-BR') : '—';
-    return `<div class="ticket-card">
-      <div class="ticket-card-head">
-        <span class="ticket-assunto">${esc(t.assunto)}</span>
-        <span class="ticket-badge ${t.status==='open'?'open':'closed'}">${t.status==='open'?'Aberto':'Resolvido'}</span>
-      </div>
-      <div class="ticket-meta">De: ${esc(t.userName||t.userEmail)} · ${data}</div>
-      <div class="ticket-msg">${esc(t.mensagem)}</div>
-      ${t.status==='open'?`<div class="ticket-actions"><button class="btn btn-solid btn-resolve" onclick="window.__resolveTicket('${t.id}')">Marcar como resolvido</button></div>`:''}
-    </div>`;
-  }).join('');
+  ticketList.innerHTML = filtered.map(t => ticketCardHTML(t, true)).join('');
+  openChats.forEach(id => { if(chatCache.has(id)) renderChatMessages(id); });
 }
+
+function renderUserTickets(){
+  if(!userTicketList) return;
+  if(!userTickets.length){
+    userTicketList.innerHTML = '<p class="tickets-empty">Você ainda não abriu nenhum ticket.</p>';
+    return;
+  }
+  userTicketList.innerHTML = userTickets.map(t => ticketCardHTML(t, false)).join('');
+  openChats.forEach(id => { if(chatCache.has(id)) renderChatMessages(id); });
+}
+
+/* ── Chat (tempo real via onSnapshot) ── */
+window.__toggleChat = function(id){
+  const panel = document.getElementById('chat-'+id);
+  if(!panel) return;
+  const card = panel.closest('.ticket-card');
+  const btn  = card?.querySelector('.btn-chat-toggle');
+  if(openChats.has(id)){
+    openChats.delete(id);
+    panel.classList.remove('open');
+    if(btn) btn.textContent = 'Abrir chat';
+    const unsub = chatSubs.get(id);
+    if(unsub){ unsub(); chatSubs.delete(id); }
+  } else {
+    openChats.add(id);
+    panel.classList.add('open');
+    if(btn) btn.textContent = 'Fechar chat';
+    subscribeChat(id);
+    setTimeout(()=>document.getElementById('chatInput-'+id)?.focus(), 60);
+  }
+};
+
+function subscribeChat(id){
+  if(chatSubs.has(id)) return;
+  const qy = query(collection(db,'tickets',id,'messages'), orderBy('criadoEm','asc'));
+  const unsub = onSnapshot(qy, snap => {
+    chatCache.set(id, snap.docs.map(d => ({id:d.id,...d.data()})));
+    renderChatMessages(id);
+  }, err => console.error('Erro chat', err));
+  chatSubs.set(id, unsub);
+}
+
+function renderChatMessages(id){
+  const box = document.getElementById('chatMsgs-'+id);
+  if(!box) return;
+  const msgs = chatCache.get(id) || [];
+  if(!msgs.length){ box.innerHTML = '<p class="chat-empty">Sem mensagens ainda. Diga oi!</p>'; return; }
+  const myUid = currentUser?.uid;
+  box.innerHTML = msgs.map(m => {
+    const mine = m.senderUid === myUid;
+    const t = m.criadoEm?.toDate ? m.criadoEm.toDate().toLocaleString('pt-BR',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'}) : '';
+    const who = m.isAdmin ? '👑 ' + (m.senderName||'Admin') : (m.senderName||'Usuário');
+    return `<div class="chat-msg ${mine?'mine':'theirs'}">${esc(m.text)}<span class="chat-msg-meta">${esc(who)}${t?' · '+t:''}</span></div>`;
+  }).join('');
+  box.scrollTop = box.scrollHeight;
+}
+
+window.__sendChat = async function(e, id){
+  e.preventDefault();
+  if(!currentUser) return false;
+  const input = document.getElementById('chatInput-'+id);
+  const text  = input.value.trim();
+  if(!text) return false;
+  input.value = '';
+  try {
+    await addDoc(collection(db,'tickets',id,'messages'),{
+      text,
+      senderUid:  currentUser.uid,
+      senderName: currentUser.displayName || currentUser.email,
+      isAdmin:    currentUser.email === ADMIN_EMAIL,
+      criadoEm:   serverTimestamp()
+    });
+  } catch(err){
+    console.error('Erro ao enviar mensagem:', err);
+    alert('Erro ao enviar mensagem.');
+    input.value = text;
+  }
+  return false;
+};
 
 window.__resolveTicket = async function(id){
   try {
     await updateDoc(doc(db,'tickets',id),{status:'closed'});
-    allTickets = allTickets.map(t => t.id===id ? {...t,status:'closed'} : t);
-    renderTickets();
   } catch(err){ console.error(err); alert('Erro ao atualizar ticket.'); }
 };
 
