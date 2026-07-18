@@ -408,17 +408,6 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
 .btn-resolve{font-size:0.8rem;padding:0.45rem 1rem;border-radius:8px}
 .tickets-empty{text-align:center;color:var(--text3);padding:2.5rem 0;font-size:0.9rem}
 .admin-badge{display:inline-block;font-size:0.68rem;font-weight:700;background:rgba(139,92,246,0.2);color:#a78bfa;border:1px solid rgba(139,92,246,0.3);border-radius:20px;padding:0.15rem 0.55rem;margin-left:0.5rem;vertical-align:middle}
-.ticket-chat{margin-top:0.75rem;border-top:1px solid var(--border);padding-top:0.75rem;display:none}
-.ticket-chat.open{display:block}
-.chat-msgs{display:flex;flex-direction:column;gap:0.4rem;max-height:260px;overflow-y:auto;padding:0.25rem 0;margin-bottom:0.6rem}
-.chat-msg{padding:0.5rem 0.75rem;border-radius:10px;font-size:0.85rem;line-height:1.4;max-width:85%;white-space:pre-wrap;word-wrap:break-word}
-.chat-msg.mine{align-self:flex-end;background:var(--red);color:#0a0a0a}
-.chat-msg.theirs{align-self:flex-start;background:var(--bg3);border:1px solid var(--border2);color:var(--text2)}
-.chat-msg .who{display:block;font-size:0.65rem;opacity:0.7;margin-bottom:0.15rem;font-weight:600}
-.chat-form{display:flex;gap:0.4rem}
-.chat-form input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.55rem 0.75rem;color:var(--text);font-family:inherit;font-size:0.85rem}
-.chat-form button{padding:0.55rem 1rem;font-size:0.82rem}
-.btn-chat{background:var(--bg3);border:1px solid var(--border2);color:var(--text);margin-right:0.5rem}
 
 @media(max-width:768px){
   .nav-links{display:none}
@@ -1101,8 +1090,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import {
   getFirestore, collection, addDoc, getDocs, doc,
-  updateDoc, query, orderBy, serverTimestamp,
-  onSnapshot
+  updateDoc, query, orderBy, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -1115,7 +1103,7 @@ const firebaseConfig = {
 };
 
 /* ── Seu e-mail de admin (dono do site) ── */
-const ADMIN_EMAIL = "herotweakss@gmail.com";
+const ADMIN_EMAIL = "gutweaks@gmail.com";
 
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -1324,92 +1312,29 @@ async function loadTickets(){
 }
 
 /* ── Renderizar tickets ── */
-const chatUnsubs = {};
-
 function renderTickets(){
   const filtered = allTickets.filter(t => t.status === (adminTabView==='open' ? 'open' : 'closed'));
   const opens    = allTickets.filter(t => t.status==='open').length;
   const closeds  = allTickets.filter(t => t.status==='closed').length;
   if(countOpen)   countOpen.textContent   = opens   ? `(${opens})`   : '';
   if(countClosed) countClosed.textContent = closeds ? `(${closeds})` : '';
-  Object.values(chatUnsubs).forEach(u => u && u());
-  Object.keys(chatUnsubs).forEach(k => delete chatUnsubs[k]);
   if(!filtered.length){
     ticketList.innerHTML = `<p class="tickets-empty">${adminTabView==='open' ? 'Nenhum ticket aberto.' : 'Nenhum ticket resolvido.'}</p>`;
     return;
   }
   ticketList.innerHTML = filtered.map(t => {
     const data = t.criadoEm?.toDate ? t.criadoEm.toDate().toLocaleString('pt-BR') : '—';
-    return `<div class="ticket-card" data-id="${t.id}">
+    return `<div class="ticket-card">
       <div class="ticket-card-head">
         <span class="ticket-assunto">${esc(t.assunto)}</span>
         <span class="ticket-badge ${t.status==='open'?'open':'closed'}">${t.status==='open'?'Aberto':'Resolvido'}</span>
       </div>
       <div class="ticket-meta">De: ${esc(t.userName||t.userEmail)} · ${data}</div>
       <div class="ticket-msg">${esc(t.mensagem)}</div>
-      <div class="ticket-actions">
-        <button class="btn btn-chat" onclick="window.__toggleChat('${t.id}')">Abrir chat</button>
-        ${t.status==='open'?`<button class="btn btn-solid btn-resolve" onclick="window.__resolveTicket('${t.id}')">Marcar como resolvido</button>`:''}
-      </div>
-      <div class="ticket-chat" id="chat-${t.id}">
-        <div class="chat-msgs" id="chat-msgs-${t.id}"><p class="tickets-empty" style="padding:0.5rem 0">Carregando…</p></div>
-        <form class="chat-form" onsubmit="window.__sendChat(event,'${t.id}')">
-          <input type="text" id="chat-input-${t.id}" placeholder="Escreva uma resposta…" maxlength="1000" required>
-          <button class="btn btn-solid" type="submit">Enviar</button>
-        </form>
-      </div>
+      ${t.status==='open'?`<div class="ticket-actions"><button class="btn btn-solid btn-resolve" onclick="window.__resolveTicket('${t.id}')">Marcar como resolvido</button></div>`:''}
     </div>`;
   }).join('');
 }
-
-window.__toggleChat = function(id){
-  const box = document.getElementById(`chat-${id}`);
-  if(!box) return;
-  const opening = !box.classList.contains('open');
-  box.classList.toggle('open');
-  if(opening && !chatUnsubs[id]){
-    const q = query(collection(db,'tickets',id,'messages'), orderBy('criadoEm','asc'));
-    chatUnsubs[id] = onSnapshot(q, (snap) => {
-      const cont = document.getElementById(`chat-msgs-${id}`);
-      if(!cont) return;
-      if(snap.empty){ cont.innerHTML = '<p class="tickets-empty" style="padding:0.5rem 0">Nenhuma mensagem ainda.</p>'; return; }
-      cont.innerHTML = snap.docs.map(d => {
-        const m = d.data();
-        const mine = currentUser && m.uid === currentUser.uid;
-        const who = m.isAdmin ? 'Suporte' : (m.userName || m.userEmail || 'Usuário');
-        return `<div class="chat-msg ${mine?'mine':'theirs'}"><span class="who">${esc(who)}</span>${esc(m.texto)}</div>`;
-      }).join('');
-      cont.scrollTop = cont.scrollHeight;
-    }, (err) => {
-      console.error('Erro no chat:', err);
-      const cont = document.getElementById(`chat-msgs-${id}`);
-      if(cont) cont.innerHTML = '<p class="tickets-empty" style="padding:0.5rem 0;color:#f87171">Erro ao carregar chat.</p>';
-    });
-  }
-};
-
-window.__sendChat = async function(ev, id){
-  ev.preventDefault();
-  if(!currentUser) return;
-  const input = document.getElementById(`chat-input-${id}`);
-  const texto = input.value.trim();
-  if(!texto) return;
-  input.value = '';
-  try {
-    await addDoc(collection(db,'tickets',id,'messages'), {
-      texto,
-      uid: currentUser.uid,
-      userEmail: currentUser.email,
-      userName: currentUser.displayName || currentUser.email,
-      isAdmin: currentUser.email === ADMIN_EMAIL,
-      criadoEm: serverTimestamp()
-    });
-  } catch(err){
-    console.error('Erro ao enviar mensagem:', err);
-    alert('Erro ao enviar mensagem.');
-    input.value = texto;
-  }
-};
 
 window.__resolveTicket = async function(id){
   try {
