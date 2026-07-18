@@ -432,7 +432,6 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
   <ul class="nav-links">
     <li><a href="#feedback">Feedbacks</a></li>
     <li><a href="#faq" onclick="switchTab('tab-faq', document.getElementById('faq-tab-btn'))">FAQ</a></li>
-    <li><a href="#feedback" onclick="switchTab('tab-support', document.getElementById('support-tab-btn'))">Suporte</a></li>
   </ul>
   <div class="nav-right" id="navRight">
     <div class="nav-account" id="navAccount">
@@ -492,7 +491,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
     <div class="service-item"><span class="service-icon">🎧</span><p>Suporte completo</p></div>
   </div>
   <div style="text-align:center;margin-top:2.5rem">
-    <a href="#" onclick="switchTab('tab-support', document.getElementById('support-tab-btn'));return false" class="btn btn-solid">Fazer orçamento →</a>
+    <a href="#" onclick="switchTab('tab-contact', document.getElementById('contact-tab-btn'));return false" class="btn btn-solid">Fazer orçamento →</a>
     <p style="color:var(--text2);font-size:0.8rem;margin-top:1rem">Rápido — respondemos em minutos pelo WhatsApp.</p>
   </div>
 </section>
@@ -508,7 +507,6 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
     <button class="tab-btn" onclick="switchTab('tab-fb',this)">Feedbacks</button>
     <button class="tab-btn" onclick="switchTab('tab-faq',this)" id="faq-tab-btn">FAQ</button>
     <button class="tab-btn" onclick="switchTab('tab-contact',this)" id="contact-tab-btn">Contato</button>
-    <button class="tab-btn" id="support-tab-btn" style="display:none" onclick="switchTab('tab-support',this)">Suporte</button>
   </div>
 
   <!-- FEEDBACK TAB -->
@@ -736,7 +734,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
           <li>Redução de input lag e stutter</li>
           <li>Sistema leve e responsivo</li>
         </ul>
-        <a href="#" onclick="switchTab('tab-support', document.getElementById('support-tab-btn'));return false" class="btn btn-solid pricing-btn">Fazer orçamento</a>
+        <a href="#" onclick="switchTab('tab-contact', document.getElementById('contact-tab-btn'));return false" class="btn btn-solid pricing-btn">Fazer orçamento</a>
       </div>
       <div class="pricing-card">
         <div class="pricing-icon">🔥</div>
@@ -753,7 +751,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
           <li>BIOS tunada para extrair o máximo do hardware</li>
           <li>Sistema leve com ganhos reais de FPS</li>
         </ul>
-        <a href="#" onclick="switchTab('tab-support', document.getElementById('support-tab-btn'));return false" class="btn btn-solid pricing-btn">Fazer orçamento</a>
+        <a href="#" onclick="switchTab('tab-contact', document.getElementById('contact-tab-btn'));return false" class="btn btn-solid pricing-btn">Fazer orçamento</a>
       </div>
     </div>
   </div>
@@ -818,43 +816,6 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
     </div>
   </div>
 
-  <!-- SUPPORT TAB -->
-  <div id="tab-support" class="tab-pane">
-    <!-- ESTADO: NÃO LOGADO -->
-    <div id="support-gate" class="support-gate" style="display:none">
-      <p>Você precisa estar logado para abrir um ticket de suporte.</p>
-      <button class="btn btn-solid" onclick="document.getElementById('btnOpenLogin').click()">Entrar / Criar conta</button>
-    </div>
-    <!-- ESTADO: USUÁRIO COMUM -->
-    <div id="support-user" class="ticket-form-wrap" style="display:none">
-      <h3>Abrir ticket de suporte</h3>
-      <p class="sub">Descreva seu problema e responderei o mais rápido possível.</p>
-      <div class="tf-msg" id="ticketMsg"></div>
-      <form id="ticketForm" novalidate>
-        <div class="tf-field">
-          <label for="ticketAssunto">Assunto</label>
-          <input type="text" id="ticketAssunto" placeholder="Ex: Problema no tweak de FPS" required maxlength="120">
-        </div>
-        <div class="tf-field">
-          <label for="ticketMensagem">Mensagem</label>
-          <textarea id="ticketMensagem" placeholder="Descreva o que está acontecendo com o máximo de detalhes..." required></textarea>
-        </div>
-        <button type="submit" class="btn btn-solid" id="ticketSubmit" style="width:100%;justify-content:center;padding:0.8rem">Enviar ticket</button>
-      </form>
-    </div>
-    <!-- ESTADO: ADMIN -->
-    <div id="support-admin" class="admin-panel" style="display:none">
-      <h3>Painel de Suporte <span class="admin-badge">ADMIN</span></h3>
-      <p class="sub">Gerencie os tickets enviados pelos usuários.</p>
-      <div class="admin-tabs">
-        <button class="admin-tab active" id="adminTabOpen" onclick="window.__adminTab('open')">Abertos <span id="countOpen"></span></button>
-        <button class="admin-tab" id="adminTabClosed" onclick="window.__adminTab('closed')">Resolvidos <span id="countClosed"></span></button>
-      </div>
-      <div class="ticket-list" id="ticketList">
-        <p class="tickets-empty">Carregando tickets…</p>
-      </div>
-    </div>
-  </div>
 
   <!-- FAQ TAB -->
   <div id="tab-faq" class="tab-pane">
@@ -923,17 +884,6 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
         <h3>Twitter / X</h3>
         <p>Updates, dicas e tweaks novos por lá.</p>
         <div class="contact-handle">@gutweaks</div>
-      </a>
-      <a href="#" onclick="switchTab('tab-support', document.getElementById('support-tab-btn'));return false" class="contact-card" style="position:relative">
-        <span class="contact-icon">🎫</span>
-        <h3>Abrir ticket
-          <span style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:#4ade80;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:999px;padding:0.15rem 0.55rem;margin-left:0.5rem;vertical-align:middle">
-            <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block"></span>
-            Online
-          </span>
-        </h3>
-        <p>Estamos ativos. Abra um ticket e responderei rapidamente.</p>
-        <div class="contact-handle">Painel de suporte</div>
       </a>
     </div>
   </div>
@@ -1364,16 +1314,6 @@ onAuthStateChanged(auth, (user) => {
   }
   updateSupportView(user);
 });
-</script>
-<script>
-  // Redireciona botões de login/cadastro para o sistema de tickets
-  (function(){
-    function goAuth(e){ if(e) e.preventDefault(); e && e.stopImmediatePropagation && e.stopImmediatePropagation(); window.location.href = 'https://gutweaks.com.br/auth'; }
-    ['btnOpenLogin','btnOpenSignup'].forEach(function(id){
-      var el = document.getElementById(id);
-      if(el){ el.addEventListener('click', goAuth, true); }
-    });
-  })();
 </script>
 </body>
 </html>
