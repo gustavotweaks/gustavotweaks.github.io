@@ -269,86 +269,33 @@
     .chat-step { text-align: center; font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 0.5rem; }
     .whatsapp-btn { display: flex; width: 100%; align-items: center; justify-content: center; gap: 0.5rem; background: #25d366; color: #000; padding: 0.875rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; }
 
-    
-    /* ===== RIPPLE + PRESS ANIMATIONS ===== */
-    .brand-btn, .secondary-btn, .suggestion-btn, .whatsapp-btn, .floating-cta,
-    .chat-send, .chat-close, .auth-btn, .auth-tab, .auth-switch-btn {
-      position: relative; overflow: hidden;
-      transition: transform .18s cubic-bezier(.2,.9,.3,1.2), box-shadow .2s ease, background .2s ease, border-color .2s ease;
-      will-change: transform;
-    }
-    .brand-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 30px -12px rgba(255,255,255,.35); }
-    .brand-btn:active, .secondary-btn:active, .suggestion-btn:active, .whatsapp-btn:active,
-    .floating-cta:active, .chat-send:active, .auth-btn:active { transform: scale(.96); }
-    .secondary-btn:hover { transform: translateY(-2px); }
-    .floating-cta:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 30px 70px -15px rgba(255,255,255,.4); }
-
-    .ripple {
-      position: absolute; border-radius: 999px; transform: scale(0);
-      animation: ripple .65s cubic-bezier(.2,.7,.3,1);
-      background: rgba(255,255,255,.45); pointer-events: none;
-    }
-    .brand-btn .ripple, .whatsapp-btn .ripple, .auth-btn .ripple { background: rgba(0,0,0,.25); }
-    @keyframes ripple {
-      to { transform: scale(2.6); opacity: 0; }
-    }
-
-    /* ===== AUTH MODAL ===== */
-    .auth-overlay {
-      position: fixed; inset: 0; z-index: 60;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(0,0,0,.75); backdrop-filter: blur(8px);
-      animation: authFadeIn .25s ease;
-      padding: 1rem;
-    }
-    @keyframes authFadeIn { from { opacity: 0 } to { opacity: 1 } }
-    .auth-modal {
-      width: 100%; max-width: 26rem;
-      background: linear-gradient(180deg, var(--bg-3) 0%, var(--bg) 100%);
-      border: 1px solid var(--border);
-      border-radius: 1rem;
-      padding: 2rem 1.75rem;
-      box-shadow: 0 40px 80px -20px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.04) inset;
-      animation: authSlideUp .35s cubic-bezier(.2,.9,.3,1.1);
-    }
-    @keyframes authSlideUp { from { opacity: 0; transform: translateY(20px) scale(.97) } to { opacity: 1; transform: translateY(0) scale(1) } }
-    .auth-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
-    .auth-header h3 { font-size: 1.5rem; font-weight: 700; }
-    .auth-tabs { display: flex; gap: .25rem; padding: .25rem; background: var(--bg-2); border: 1px solid var(--border); border-radius: .625rem; margin-bottom: 1.5rem; }
-    .auth-tab {
-      flex: 1; padding: .625rem; font-size: .8125rem; font-weight: 600;
-      background: transparent; color: var(--muted); border-radius: .5rem;
-    }
-    .auth-tab.active { background: var(--fg); color: var(--brand-fg); }
-    .auth-field { display: flex; flex-direction: column; gap: .375rem; margin-bottom: 1rem; }
-    .auth-field label { font-size: .75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-    .auth-field input {
-      background: var(--bg-2); border: 1px solid var(--border); color: var(--fg);
-      padding: .75rem .875rem; border-radius: .625rem; font-size: .9375rem; font-family: inherit;
-      outline: none; transition: border-color .2s, box-shadow .2s;
-    }
-    .auth-field input:focus { border-color: rgba(255,255,255,.5); box-shadow: 0 0 0 3px rgba(255,255,255,.08); }
-    .auth-btn {
-      width: 100%; padding: .875rem; margin-top: .5rem;
-      background: linear-gradient(135deg, #fff 0%, #bbb 100%); color: var(--brand-fg);
-      border-radius: .625rem; font-weight: 700; font-size: .9375rem;
-    }
-    .auth-btn:disabled { opacity: .5; cursor: not-allowed; }
-    .auth-msg { margin-top: 1rem; padding: .75rem; border-radius: .5rem; font-size: .8125rem; text-align: center; }
-    .auth-msg.error { background: rgba(239,68,68,.12); color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
-    .auth-msg.success { background: rgba(52,211,153,.12); color: #6ee7b7; border: 1px solid rgba(52,211,153,.3); }
-    .auth-footer { text-align: center; font-size: .8125rem; color: var(--muted); margin-top: 1.25rem; }
-    .auth-switch-btn { background: transparent; color: var(--fg); font-weight: 600; padding: .25rem .5rem; border-radius: .375rem; text-decoration: underline; }
-    .auth-logged {
-      display: inline-flex; align-items: center; gap: .5rem;
-      padding: .5rem .875rem; border-radius: .5rem;
-      background: var(--bg-2); border: 1px solid var(--border);
-      font-size: .8125rem; color: var(--muted);
-    }
-    .auth-logged strong { color: var(--fg); font-weight: 600; max-width: 12rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .nav-auth { display: flex; align-items: center; gap: .5rem; }
-
     .hidden { display: none !important; }
+
+    /* --- clique sonoro + ripple --- */
+    .ripple-fx {
+      position: relative;
+      overflow: hidden;
+      transform: scale(1);
+      transition: transform .12s ease;
+    }
+    .ripple-fx:active { transform: scale(0.96); }
+    .ripple-fx::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle, rgba(255,255,255,.25) 0%, transparent 70%);
+      opacity: 0;
+      transform: scale(0);
+      pointer-events: none;
+    }
+    .ripple-fx.clicked::before {
+      animation: ripple-pop .45s ease-out forwards;
+    }
+    @keyframes ripple-pop {
+      0%   { opacity: .55; transform: scale(0); }
+      100% { opacity: 0;   transform: scale(2.2); }
+    }
   </style>
 </head>
 <body>
@@ -368,16 +315,10 @@
         <a href="#depoimentos">Resultados</a>
         <a href="#faq">FAQ</a>
       </nav>
-      <div class="nav-auth">
-        <button class="secondary-btn" id="navAuthBtn" onclick="openAuth('login')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          Entrar
-        </button>
-        <button class="brand-btn" onclick="openChat()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-          Fazer orçamento
-        </button>
-      </div>
+      <button class="brand-btn ripple-fx" onclick="openChat()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+        Fazer orçamento
+      </button>
     </div>
   </header>
 
@@ -390,11 +331,11 @@
         <h1><span class="gradient-text">Otimização profissional</span><br>de PC ao extremo.</h1>
         <p>Ajustes de BIOS, overclock seguro, redução de input lag e estabilidade total. Atendimento 100% personalizado, feito sob medida pra sua máquina e o seu jogo.</p>
         <div class="hero-actions">
-          <button class="brand-btn" onclick="openChat()">
+          <button class="brand-btn ripple-fx" onclick="openChat()">
             Fazer orçamento personalizado
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
-          <a href="#servicos" class="secondary-btn">Ver serviços</a>
+          <a href="#servicos" class="secondary-btn ripple-fx">Ver serviços</a>
         </div>
         <div class="hero-tags">
           <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Overclock seguro</span>
@@ -474,7 +415,7 @@
               <p style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Pagamento</p>
               <p style="font-size:0.875rem;margin-top:0.25rem">PIX · Cartão · Internacional</p>
             </div>
-            <button class="brand-btn" onclick="openChat()">Fazer orçamento <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+            <button class="brand-btn ripple-fx" onclick="openChat()">Fazer orçamento <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
           </div>
         </div>
         <div class="mini-cards">
@@ -549,7 +490,7 @@
         <div style="position:relative;z-index:1">
           <h2 class="section-title" style="max-width:32rem;margin-inline:auto">Pronto pra extrair o <span class="gradient-text">máximo</span> do seu PC?</h2>
           <p class="section-desc" style="max-width:28rem;margin-inline:auto;text-align:center">Abre o chat de orçamento, me passa sua config e agendamos hoje mesmo.</p>
-          <button class="brand-btn" style="margin-top:2rem" onclick="openChat()">
+          <button class="brand-btn ripple-fx" style="margin-top:2rem" onclick="openChat()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
             Fazer orçamento personalizado
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -569,7 +510,7 @@
     </div>
   </footer>
 
-  <button class="floating-cta" onclick="openChat()">
+  <button class="floating-cta ripple-fx" onclick="openChat()">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
     Orçamento
   </button>
@@ -582,17 +523,17 @@
           <div class="chat-avatar"><img src="gutweaks-logo.png" alt="GuTweaks" /><span class="chat-status"></span></div>
           <div><p class="chat-name">Atendimento GuTweaks</p><p class="chat-sub">Online — resposta em minutos</p></div>
         </div>
-        <button class="chat-close" onclick="closeChat()" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+        <button class="chat-close ripple-fx" onclick="closeChat()" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       </div>
       <div id="chatMessages" class="chat-messages"></div>
       <div class="chat-footer">
-        <a id="whatsappBtn" class="whatsapp-btn hidden" target="_blank" rel="noopener noreferrer">
+        <a id="whatsappBtn" class="whatsapp-btn ripple-fx hidden" target="_blank" rel="noopener noreferrer">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26 9.99 9.99 0 0 1 16.638-7.45c.026.025.05.05.074.076l.17.17a9.99 9.99 0 0 1 2.91 7.037 9.86 9.86 0 0 1-9.901 9.905M20.11 7.916a8.23 8.23 0 0 0-5.889-2.435 8.24 8.24 0 0 0-8.236 8.228 8.23 8.23 0 0 0 1.258 4.383l.18.288-.84 3.06 3.112-.816.19.113a8.22 8.22 0 0 0 4.225 1.159 8.24 8.24 0 0 0 8.236-8.228 8.21 8.21 0 0 0-2.436-5.752Z"/></svg>
           Enviar no WhatsApp e agendar
         </a>
         <form id="chatForm" class="chat-form" onsubmit="return false">
           <textarea id="chatInput" class="chat-input" rows="1" placeholder="Digite sua resposta..."></textarea>
-          <button type="button" id="chatSend" class="chat-send" aria-label="Enviar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
+          <button type="button" id="chatSend" class="chat-send ripple-fx" aria-label="Enviar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
         </form>
         <p id="chatStep" class="chat-step">Etapa 1 de 12</p>
       </div>
@@ -726,180 +667,51 @@
       this.style.height = 'auto';
       this.style.height = Math.min(this.scrollHeight, 128) + 'px';
     });
-  </script>
 
-
-  <!-- AUTH MODAL -->
-  <div id="authOverlay" class="auth-overlay hidden" onclick="if(event.target===this) closeAuth()">
-    <div class="auth-modal" role="dialog" aria-modal="true">
-      <div class="auth-header">
-        <h3 id="authTitle">Entrar</h3>
-        <button class="chat-close" onclick="closeAuth()" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-      </div>
-      <div class="auth-tabs">
-        <button class="auth-tab active" data-mode="login" onclick="switchAuth('login')">Entrar</button>
-        <button class="auth-tab" data-mode="signup" onclick="switchAuth('signup')">Criar conta</button>
-      </div>
-      <form id="authForm" onsubmit="return handleAuthSubmit(event)">
-        <div class="auth-field" id="nameField" style="display:none">
-          <label for="authName">Nome</label>
-          <input type="text" id="authName" placeholder="Seu nome" autocomplete="name" />
-        </div>
-        <div class="auth-field">
-          <label for="authEmail">Email</label>
-          <input type="email" id="authEmail" placeholder="voce@email.com" autocomplete="email" required />
-        </div>
-        <div class="auth-field">
-          <label for="authPassword">Senha</label>
-          <input type="password" id="authPassword" placeholder="Mínimo 6 caracteres" autocomplete="current-password" minlength="6" required />
-        </div>
-        <button type="submit" class="auth-btn" id="authSubmit">Entrar</button>
-        <div id="authMsg" class="auth-msg hidden"></div>
-      </form>
-      <p class="auth-footer" id="authFooter">
-        Ainda não tem conta? <button type="button" class="auth-switch-btn" onclick="switchAuth('signup')">Criar conta</button>
-      </p>
-    </div>
-  </div>
-
-  <!-- FIREBASE AUTH -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-    import {
-      getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-      signOut, onAuthStateChanged, updateProfile
-    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-
-    // ⚠️ COLE AQUI a sua config do Firebase (Console → Configurações do projeto → Seus apps → SDK setup)
-    const firebaseConfig = {
-      apiKey: "AIzaSyB5kSBjv-wWfivVYt5oqrBJKB2v2HWfBCU",
-      authDomain: "herotweaks-site.firebaseapp.com",
-      projectId: "herotweaks-site",
-      storageBucket: "herotweaks-site.firebasestorage.app",
-      messagingSenderId: "497130733036",
-      appId: "1:497130733036:web:2de52026c4baafef3714c9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    let mode = 'login';
-
-    window.openAuth = function(m){
-      mode = m || 'login';
-      document.getElementById('authOverlay').classList.remove('hidden');
-      switchAuth(mode);
-      setTimeout(()=>document.getElementById('authEmail').focus(), 50);
-    };
-    window.closeAuth = function(){
-      document.getElementById('authOverlay').classList.add('hidden');
-      document.getElementById('authMsg').classList.add('hidden');
-    };
-    window.switchAuth = function(m){
-      mode = m;
-      document.querySelectorAll('.auth-tab').forEach(t=>t.classList.toggle('active', t.dataset.mode===m));
-      document.getElementById('authTitle').textContent = m==='signup' ? 'Criar conta' : 'Entrar';
-      document.getElementById('authSubmit').textContent = m==='signup' ? 'Criar conta' : 'Entrar';
-      document.getElementById('nameField').style.display = m==='signup' ? 'flex' : 'none';
-      document.getElementById('authPassword').setAttribute('autocomplete', m==='signup' ? 'new-password' : 'current-password');
-      document.getElementById('authFooter').innerHTML = m==='signup'
-        ? 'Já tem conta? <button type="button" class="auth-switch-btn" onclick="switchAuth(\'login\')">Entrar</button>'
-        : 'Ainda não tem conta? <button type="button" class="auth-switch-btn" onclick="switchAuth(\'signup\')">Criar conta</button>';
-      document.getElementById('authMsg').classList.add('hidden');
-    };
-
-    function showMsg(type, text){
-      const el = document.getElementById('authMsg');
-      el.className = 'auth-msg ' + type;
-      el.textContent = text;
-      el.classList.remove('hidden');
-    }
-
-    function friendlyError(code){
-      const map = {
-        'auth/invalid-email': 'Email inválido.',
-        'auth/user-not-found': 'Usuário não encontrado.',
-        'auth/wrong-password': 'Senha incorreta.',
-        'auth/invalid-credential': 'Email ou senha incorretos.',
-        'auth/email-already-in-use': 'Este email já está cadastrado.',
-        'auth/weak-password': 'Senha muito fraca (mínimo 6 caracteres).',
-        'auth/network-request-failed': 'Sem conexão com a internet.',
-        'auth/too-many-requests': 'Muitas tentativas. Tente novamente em instantes.',
-        'auth/configuration-not-found': 'Habilite Email/Senha no console do Firebase (Authentication → Sign-in method).'
-      };
-      return map[code] || 'Erro: ' + code;
-    }
-
-    window.handleAuthSubmit = async function(e){
-      e.preventDefault();
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value;
-      const name = document.getElementById('authName').value.trim();
-      const btn = document.getElementById('authSubmit');
-      btn.disabled = true; btn.textContent = 'Carregando...';
-      try {
-        if(mode === 'signup'){
-          const cred = await createUserWithEmailAndPassword(auth, email, password);
-          if(name) await updateProfile(cred.user, { displayName: name });
-          showMsg('success', 'Conta criada com sucesso! 🎉');
-          setTimeout(()=>closeAuth(), 900);
-        } else {
-          await signInWithEmailAndPassword(auth, email, password);
-          showMsg('success', 'Login efetuado ✅');
-          setTimeout(()=>closeAuth(), 700);
-        }
-      } catch(err){
-        showMsg('error', friendlyError(err.code));
-      } finally {
-        btn.disabled = false;
-        btn.textContent = mode==='signup' ? 'Criar conta' : 'Entrar';
+    /* --- som clean de clique (Web Audio API) --- */
+    (function(){
+      let ctx = null;
+      function resume(){
+        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
       }
-      return false;
-    };
-
-    window.doSignOut = async function(){
-      await signOut(auth);
-    };
-
-    onAuthStateChanged(auth, (user)=>{
-      const wrap = document.getElementById('navAuthBtn');
-      if(!wrap) return;
-      if(user){
-        const name = user.displayName || user.email.split('@')[0];
-        wrap.outerHTML = `<div class="auth-logged" id="navAuthBtn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Olá, <strong>${name}</strong>
-          <button class="auth-switch-btn" onclick="doSignOut()" title="Sair">Sair</button>
-        </div>`;
-      } else {
-        wrap.outerHTML = `<button class="secondary-btn" id="navAuthBtn" onclick="openAuth('login')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          Entrar
-        </button>`;
+      function playClick(opts){
+        opts = opts || {};
+        const volume = opts.volume !== undefined ? opts.volume : 0.12;
+        const pitch  = opts.pitch  !== undefined ? opts.pitch  : 900;
+        const duration = opts.duration !== undefined ? opts.duration : 0.08;
+        resume();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(pitch, now);
+        osc.frequency.exponentialRampToValueAtTime(pitch * 0.6, now + duration);
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(volume, now + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration + 0.05);
+        setTimeout(() => { osc.disconnect(); gain.disconnect(); }, (duration + 0.1) * 1000);
       }
-    });
-
-    // ESC fecha
-    document.addEventListener('keydown', e=>{
-      if(e.key==='Escape') closeAuth();
-    });
-  </script>
-
-  <!-- RIPPLE EFFECT em todos os botões -->
-  <script>
-    document.addEventListener('click', function(e){
-      const btn = e.target.closest('.brand-btn, .secondary-btn, .suggestion-btn, .whatsapp-btn, .floating-cta, .chat-send, .auth-btn, .auth-tab');
-      if(!btn) return;
-      const rect = btn.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      const ripple = document.createElement('span');
-      ripple.className = 'ripple';
-      ripple.style.width = ripple.style.height = size + 'px';
-      ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
-      ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
-      btn.appendChild(ripple);
-      setTimeout(()=>ripple.remove(), 700);
-    });
+      function ripple(el){
+        if (!el.classList.contains('ripple-fx')) return;
+        el.classList.remove('clicked');
+        void el.offsetWidth; // reflow
+        el.classList.add('clicked');
+        setTimeout(() => el.classList.remove('clicked'), 460);
+      }
+      function handleInteractive(e){
+        const target = e.target.closest('button, a, summary, .ripple-fx');
+        if (!target) return;
+        // ignorar links externos que abrem nova aba já têm feedback nativo
+        playClick({ volume: 0.10, pitch: 950, duration: 0.07 });
+        ripple(target);
+      }
+      document.addEventListener('click', handleInteractive, true);
+    })();
   </script>
 
 </body>
