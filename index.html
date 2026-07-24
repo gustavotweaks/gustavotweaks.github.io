@@ -337,22 +337,69 @@
       overflow-y: auto; padding: 3rem 1.25rem;
     }
     .lang-inner { max-width: 46rem; width: 100%; text-align: center; position: relative; }
-    .lang-eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.75rem; }
+    .lang-eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg); margin-bottom: 1.75rem; }
     .lang-title { font-size: 2.25rem; }
     @media (min-width: 640px) { .lang-title { font-size: 3.25rem; } }
-    .lang-sub { margin-top: 0.85rem; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .lang-sub { margin-top: 0.85rem; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg); }
     .lang-divider { width: 3rem; height: 1px; background: var(--border); margin: 2.25rem auto; }
-    .lang-instruction { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 2rem; }
+    .lang-instruction { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); margin-bottom: 2rem; }
     .lang-cards { display: grid; gap: 1rem; grid-template-columns: 1fr; max-width: 34rem; margin-inline: auto; }
     @media (min-width: 560px) { .lang-cards { grid-template-columns: 1fr 1fr; } }
     .lang-card { padding: 1.75rem; text-align: left; cursor: pointer; transition: border-color .2s, transform .15s; background: rgba(20,20,20,0.5); }
     .lang-card:hover { border-color: rgba(255,255,255,0.4); transform: translateY(-2px); }
-    .lang-card-tag { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.85rem; }
+    .lang-card-tag { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); margin-bottom: 0.85rem; }
     .lang-card-name-row { display: flex; align-items: center; gap: 0.6rem; }
-    .lang-flag { font-size: 0.625rem; font-weight: 700; border: 1px solid var(--border); padding: 0.1rem 0.4rem; border-radius: 0.25rem; color: var(--muted); }
-    .lang-card-name { font-size: 1.4rem; font-family: 'Space Grotesk', sans-serif; }
+    .lang-flag { font-size: 0.625rem; font-weight: 700; border: 1px solid var(--border); padding: 0.1rem 0.4rem; border-radius: 0.25rem; color: var(--fg); }
+    .lang-card-name { font-size: 1.4rem; font-family: 'Space Grotesk', sans-serif; color: #ffffff; letter-spacing: -0.01em; }
     .lang-card-line { width: 2rem; height: 1px; background: var(--border); margin-top: 1.1rem; }
-    .lang-footer-note { margin-top: 3rem; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); opacity: 0.55; }
+    .lang-footer-note { margin-top: 3rem; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); opacity: 0.75; }
+  
+    
+    
+    /* INVESTIMENTO block */
+    .invest-eyebrow { color: var(--fg) !important; opacity: 0.6; }
+    .invest-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: -0.03em; line-height: 1; font-size: clamp(2.5rem, 6vw, 4.5rem); margin-top: 1rem; }
+    .invest-title span { display: block; }
+    .invest-line-1 { color: var(--fg); }
+    .invest-line-2 { color: #4aa8ff; background: linear-gradient(180deg, #7dd3fc 0%, #3b82f6 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .invest-desc { margin-top: 1.5rem; max-width: 44rem; margin-inline: auto; color: var(--muted); font-style: italic; font-size: 1rem; line-height: 1.7; }
+    .invest-divider { width: 3rem; height: 1px; background: var(--border); margin: 2.5rem auto; }
+
+    /* FOOTER logo hero */
+    .footer-hero { text-align: center; padding: 4rem 0 2rem; border-top: 1px solid var(--border); }
+    .footer-hero img { height: 120px; width: auto; margin-inline: auto; opacity: 0.9; filter: drop-shadow(0 8px 40px rgba(255,255,255,0.08)); transition: opacity .2s, transform .3s; }
+    .footer-hero img:hover { opacity: 1; transform: translateY(-2px); }
+    .footer-hero-tag { margin-top: 1.25rem; font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--muted); }
+
+
+    /* OPT — O que é a otimização */
+    #otimizacao { padding-top: 5rem; }
+    .opt-badges { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+    .opt-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.9rem; border-radius: 999px; border: 1px solid var(--border); background: rgba(20,20,20,0.6); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg); font-family: 'Space Grotesk', sans-serif; }
+    .opt-badge .opt-badge-sign { font-weight: 800; font-size: 0.85rem; line-height: 1; }
+    .opt-badge--up .opt-badge-sign { color: #34d399; }
+    .opt-badge--down .opt-badge-sign { color: #f87171; }
+    .opt-grid { display: grid; gap: 1.25rem; margin-top: 2.5rem; grid-template-columns: 1fr; }
+    @media (min-width: 640px) { .opt-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .opt-grid { grid-template-columns: repeat(4, 1fr); } }
+    .opt-card { padding: 1.75rem; display: flex; flex-direction: column; gap: 0.6rem; transition: border-color .2s, transform .2s; }
+    .opt-card:hover { border-color: rgba(255,255,255,0.28); transform: translateY(-2px); }
+    .opt-icon { width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border: 1px solid var(--border); background: var(--bg-2); border-radius: 0.5rem; color: var(--fg); margin-bottom: 0.75rem; }
+    .opt-tag { display: inline-block; align-self: flex-start; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: 0.2rem 0.55rem; border-radius: 999px; }
+    .opt-title { font-size: 1.15rem; font-weight: 600; font-style: italic; margin-top: 0.5rem; }
+    .opt-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+    .opt-hi { color: #7dd3fc; }
+
+
+    /* CUSTOM WHITE CURSOR */
+    html, body, a, button, [role="button"], .ripple-fx, .lang-card, summary, .brand-btn, .secondary-btn, textarea, input { cursor: none !important; }
+    #cursorDot, #cursorRing { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; border-radius: 999px; mix-blend-mode: difference; }
+    #cursorDot { width: 6px; height: 6px; background: #fff; transform: translate(-50%,-50%); transition: width .15s ease, height .15s ease, background .15s ease; }
+    #cursorRing { width: 34px; height: 34px; border: 1.5px solid rgba(255,255,255,0.65); transform: translate(-50%,-50%); transition: transform .12s ease, width .2s ease, height .2s ease, border-color .2s ease; }
+    body.cursor-hover #cursorDot { width: 10px; height: 10px; }
+    body.cursor-hover #cursorRing { width: 48px; height: 48px; border-color: #fff; }
+    @media (hover: none) { #cursorDot, #cursorRing { display: none !important; } html, body, a, button { cursor: auto !important; } }
+
   </style>
 </head>
 <body>
@@ -362,7 +409,7 @@
     <div class="abstract-lines"></div>
     <div class="lang-inner">
       <p class="lang-eyebrow">GuTweaks · Pro Optimization</p>
-      <h1 class="lang-title"><span class="gradient-text">Select Your Experience</span></h1>
+      <h1 class="lang-title" style="color:#fff"><span>Select Your Experience</span></h1>
       <p class="lang-sub">Escolha seu idioma&nbsp; &middot; &nbsp;Choose your language</p>
       <div class="lang-divider"></div>
       <div class="lang-cards">
@@ -384,7 +431,7 @@
   <header>
     <div class="container-x nav-inner">
       <a href="#" class="logo">
-        <img src="gutweaks-logo.png" alt="GuTweaks" />
+        <img src="/gutweaks-logo.png" alt="GuTweaks" />
         <div class="logo-text">
           <p>GuTweaks</p>
           <p>Pro Optimization</p>
@@ -461,6 +508,48 @@
               <div class="fc-desc" data-i18n="feature3.desc">Mais performance extraída da CPU, GPU e RAM com segurança total.</div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="otimizacao">
+    <div class="container-x">
+      <p class="section-label" data-i18n="opt.eyebrow">Engenharia de performance</p>
+      <h2 class="section-title"><span data-i18n="opt.title1">O que é a</span><br><span class="gradient-text" data-i18n="opt.title2">otimização?</span></h2>
+      <p class="section-desc" data-i18n="opt.desc">Cada ajuste tem um propósito: mais frames, menos delay, menos calor e mais anos de vida útil pro seu PC.</p>
+
+      <div class="opt-badges">
+        <span class="opt-badge opt-badge--up"><span class="opt-badge-sign">+</span> FPS</span>
+        <span class="opt-badge opt-badge--down"><span class="opt-badge-sign">−</span> INPUTLAG</span>
+        <span class="opt-badge opt-badge--down"><span class="opt-badge-sign">−</span> TEMPERATURA</span>
+        <span class="opt-badge opt-badge--up"><span class="opt-badge-sign">+</span> VIDA ÚTIL</span>
+      </div>
+
+      <div class="opt-grid">
+        <div class="surface-card opt-card">
+          <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></div>
+          <p class="opt-tag">Deep Tuning</p>
+          <h3 class="opt-title" data-i18n="opt.c1.title">Overclock saudável</h3>
+          <p class="opt-desc" data-i18n="opt.c1.desc">Via chamada de vídeo, vamos até a <span class="opt-hi">BIOS</span> da sua placa-mãe. Aumento a performance subindo as <span class="opt-hi">frequências</span> e reduzindo as temperaturas ao baixar as <span class="opt-hi">tensões</span>.</p>
+        </div>
+        <div class="surface-card opt-card">
+          <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+          <p class="opt-tag">Resposta rápida</p>
+          <h3 class="opt-title" data-i18n="opt.c2.title">Inputlag zero</h3>
+          <p class="opt-desc" data-i18n="opt.c2.desc">Instalação de um Windows 100% otimizado a partir do original da Microsoft. Sem programas e serviços inúteis travando seu PC. Acesso <span class="opt-hi">vitalício</span> a futuras versões.</p>
+        </div>
+        <div class="surface-card opt-card">
+          <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <p class="opt-tag">Para o seu conforto</p>
+          <h3 class="opt-title" data-i18n="opt.c3.title">Atendimento remoto</h3>
+          <p class="opt-desc" data-i18n="opt.c3.desc">O procedimento dura em média de 1h a 2h, de forma totalmente remota. Eu daqui, e você daí, podendo ver e interferir em tudo o que é feito.</p>
+        </div>
+        <div class="surface-card opt-card">
+          <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+          <p class="opt-tag">Autonomia</p>
+          <h3 class="opt-title" data-i18n="opt.c4.title">Depois, faça você mesmo!</h3>
+          <p class="opt-desc" data-i18n="opt.c4.desc">Você recebe um manual de cuidados práticos essenciais para manter a máquina voando sozinho, incluindo links de drivers e futuras atualizações. Total autonomia, sem mensalidades.</p>
         </div>
       </div>
     </div>
@@ -637,6 +726,13 @@
       <div class="surface-card cta-card">
         <div class="cta-glow"></div>
         <div style="position:relative;z-index:1">
+          <p class="section-label invest-eyebrow" data-i18n="invest.eyebrow">Filosofia</p>
+          <h2 class="invest-title">
+            <span class="invest-line-1" data-i18n="invest.line1">Não um gasto.</span>
+            <span class="invest-line-2" data-i18n="invest.line2">Um investimento.</span>
+          </h2>
+          <p class="invest-desc" data-i18n="invest.desc">A otimização definitiva projetada tanto para quem busca o máximo de FPS e fluidez em jogos competitivos quanto para aceleração extrema em fluxos de trabalho e produtividade profissional. Sem recorrência, sem mensalidades.</p>
+          <div class="invest-divider"></div>
           <h2 class="section-title" style="max-width:32rem;margin-inline:auto"><span data-i18n="cta.title1">Pronto pra extrair o</span> <span class="gradient-text" data-i18n="cta.titleGradient">máximo</span> <span data-i18n="cta.title2">do seu PC?</span></h2>
           <p class="section-desc" style="max-width:28rem;margin-inline:auto;text-align:center" data-i18n="cta.desc">Abre o chat de orçamento, me passa sua config e agendamos hoje mesmo.</p>
           <button class="brand-btn ripple-fx" style="margin-top:2rem" onclick="openChat()">
@@ -649,10 +745,15 @@
     </div>
   </section>
 
+  <div class="footer-hero container-x">
+    <img src="/gutweaks-logo.png" alt="GuTweaks" />
+    <p class="footer-hero-tag">GuTweaks · Pro Optimization</p>
+  </div>
+
   <footer>
     <div class="container-x footer-inner">
       <div class="footer-brand">
-        <img src="gutweaks-logo.png" alt="GuTweaks" />
+        <img src="/gutweaks-logo.png" alt="GuTweaks" />
         <span>© 2026 GuTweaks · Pro Optimization</span>
       </div>
       <span style="font-size:0.75rem" data-i18n="footer.tagline">Feito por gamer, pra gamer.</span>
@@ -669,7 +770,7 @@
     <div class="surface-card chat-modal" role="dialog" aria-modal="true" aria-label="Orçamento personalizado">
       <div class="chat-header">
         <div class="chat-agent">
-          <div class="chat-avatar"><img src="gutweaks-logo.png" alt="GuTweaks" /><span class="chat-status"></span></div>
+          <div class="chat-avatar"><img src="/gutweaks-logo.png" alt="GuTweaks" /><span class="chat-status"></span></div>
           <div><p class="chat-name" data-i18n="chat.name">Atendimento GuTweaks</p><p class="chat-sub" data-i18n="chat.sub">Online — resposta em minutos</p></div>
         </div>
         <button class="chat-close ripple-fx" onclick="closeChat()" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
@@ -1054,6 +1155,33 @@
       document.addEventListener('click', handleInteractive, true);
     })();
   </script>
+
+
+<div id="cursorRing"></div>
+<div id="cursorDot"></div>
+<script>
+(function(){
+  if (matchMedia('(hover: none)').matches) return;
+  var dot = document.getElementById('cursorDot');
+  var ring = document.getElementById('cursorRing');
+  var tx=0,ty=0,rx=0,ry=0;
+  document.addEventListener('mousemove', function(e){
+    tx = e.clientX; ty = e.clientY;
+    dot.style.transform = 'translate('+tx+'px,'+ty+'px) translate(-50%,-50%)';
+  });
+  (function loop(){
+    rx += (tx - rx) * 0.18;
+    ry += (ty - ry) * 0.18;
+    ring.style.transform = 'translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';
+    requestAnimationFrame(loop);
+  })();
+  var hoverSel = 'a,button,[role=button],summary,.ripple-fx,.lang-card,.opt-badge,textarea,input,.faq-item';
+  document.addEventListener('mouseover', function(e){ if(e.target.closest(hoverSel)) document.body.classList.add('cursor-hover'); });
+  document.addEventListener('mouseout',  function(e){ if(e.target.closest(hoverSel)) document.body.classList.remove('cursor-hover'); });
+  document.addEventListener('mouseleave', function(){ dot.style.opacity='0'; ring.style.opacity='0'; });
+  document.addEventListener('mouseenter', function(){ dot.style.opacity='1'; ring.style.opacity='1'; });
+})();
+</script>
 
 </body>
 </html>
