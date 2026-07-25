@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="pageTitle">GuTweaks — Otimização profissional de PC gamer</title>
+  <meta id="metaDesc" name="description" content="Menos delay, mais frame. Otimização sob medida, ajustes de BIOS, overclock seguro e redução de input lag. Configuração personalizada, sem gambiarra." />
+  <meta property="og:title" content="GustavoTweaks — Otimização profissional de PC gamer" />
+  <meta property="og:description" content="Menos delay, mais frame. Otimização sob medida, ajustes de BIOS, overclock seguro e redução de input lag." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080808;
+      --bg-2: #0f0f0f;
+      --bg-3: #141414;
+      --fg: #ffffff;
+      --muted: #a0a0a0;
+      --border: rgba(255,255,255,0.14);
+      --brand: #ffffff;
+      --brand-fg: #080808;
+      --radius: 0.75rem;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      background-image:
+        radial-gradient(1200px 600px at 50% -10%, rgba(255,255,255,0.05), transparent 60%),
+        radial-gradient(900px 600px at 90% 10%, rgba(255,255,255,0.03), transparent 60%);
+      background-attachment: fixed;
+    }
+    h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; line-height: 1.1; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; }
+    img { max-width: 100%; display: block; }
+
+    .container-x {
+      width: 100%;
+      max-width: 1200px;
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+    }
+    .gradient-text {
+      background: linear-gradient(180deg, #fff 0%, #888 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .brand-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: linear-gradient(135deg, #fff 0%, #bbb 100%);
+      color: var(--brand-fg);
+      padding: 0.875rem 1.5rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: transform .15s ease;
+    }
+    .brand-btn:hover { transform: scale(1.02); }
+    .surface-card {
+      background: linear-gradient(180deg, var(--bg-3) 0%, var(--bg) 100%);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      box-shadow: 0 1px 0 0 rgba(255,255,255,0.05) inset, 0 30px 60px -30px rgba(0,0,0,0.8);
+    }
+    .abstract-lines {
+      position: absolute; inset: 0; pointer-events: none; z-index: -1;
+      background-image:
+        linear-gradient(115deg, transparent 0 49.6%, rgba(255,255,255,0.07) 49.6% 49.9%, transparent 49.9%),
+        linear-gradient(115deg, transparent 0 29.6%, rgba(255,255,255,0.05) 29.6% 29.85%, transparent 29.85%),
+        linear-gradient(65deg, transparent 0 70%, rgba(255,255,255,0.06) 70% 70.25%, transparent 70.25%),
+        linear-gradient(65deg, transparent 0 85%, rgba(255,255,255,0.04) 85% 85.2%, transparent 85.2%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+    }
+
+    /* NAV */
+    header {
+      position: sticky; top: 0; z-index: 40;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,8,8,0.7);
+      backdrop-filter: blur(20px);
+    }
+    .nav-inner { display: flex; height: 4rem; align-items: center; justify-content: space-between; gap: 1rem; }
+    .logo { display: flex; align-items: center; gap: 0.75rem; }
+    .logo img { height: 2.5rem; width: 2.5rem; object-fit: contain; }
+    .logo-text p:first-child { font-size: 0.875rem; font-weight: 700; }
+    .logo-text p:last-child { font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted); }
+    .nav-links { display: none; align-items: center; gap: 2rem; font-size: 0.875rem; color: var(--muted); }
+    .nav-links a:hover { color: var(--fg); }
+    @media (min-width: 768px) { .nav-links { display: flex; } }
+    .nav-right { display: flex; align-items: center; gap: 0.75rem; }
+
+    /* LANGUAGE SWITCH (small, in header) */
+    .lang-switch { display: inline-flex; align-items: center; gap: 0.15rem; border: 1px solid var(--border); border-radius: 999px; padding: 0.2rem; background: rgba(20,20,20,0.6); }
+    .lang-switch button { padding: 0.3rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; color: var(--muted); background: transparent; }
+    .lang-switch button.active { background: var(--fg); color: var(--brand-fg); }
+
+    /* HERO */
+    .hero { position: relative; overflow: hidden; }
+    .hero-watermark {
+      position: absolute; right: -6rem; top: 50%; transform: translateY(-50%);
+      opacity: 0.06; pointer-events: none; z-index: -1; display: none;
+    }
+    @media (min-width: 768px) { .hero-watermark { display: block; } }
+    .hero-watermark img { height: 520px; width: 520px; object-fit: contain; }
+    .hero-grid { display: grid; gap: 3rem; padding: 5rem 0; }
+    @media (min-width: 768px) { .hero-grid { grid-template-columns: 1.1fr 1fr; padding: 7rem 0; } }
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 1px solid var(--border); background: rgba(20,20,20,0.6);
+      padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; margin-bottom: 1.5rem;
+    }
+    .dot { width: 0.5rem; height: 0.5rem; border-radius: 999px; background: #34d399; animation: pulse 1.8s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.85)} }
+    .hero h1 { font-size: 3rem; }
+    @media (min-width: 640px) { .hero h1 { font-size: 3.75rem; } }
+    @media (min-width: 1024px) { .hero h1 { font-size: 4.5rem; } }
+    .hero p { margin-top: 1rem; color: var(--muted); font-size: 1.125rem; max-width: 36rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+    .secondary-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 1px solid var(--border); background: rgba(20,20,20,0.6);
+      color: var(--fg); padding: 0.875rem 1.5rem; border-radius: var(--radius);
+      font-weight: 600; font-size: 0.875rem;
+    }
+    .secondary-btn:hover { background: rgba(255,255,255,0.08); }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 2.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    .hero-tags span { display: flex; align-items: center; gap: 0.5rem; }
+    .feature-cards { display: grid; gap: 0.75rem; align-content: start; }
+    .feature-card { padding: 1.25rem; transition: border-color .2s; }
+    .feature-card:hover { border-color: rgba(255,255,255,0.35); }
+    .fc-row { display: flex; align-items: flex-start; gap: 1rem; }
+    .fc-icon { flex-shrink: 0; width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border: 1px solid var(--border); background: var(--bg-2); border-radius: 0.5rem; }
+    .fc-meta { display: flex; align-items: center; justify-content: space-between; }
+    .fc-label { font-size: 0.625rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted); }
+    .fc-index { font-family: monospace; font-size: 0.625rem; color: var(--muted); }
+    .fc-title { font-size: 1.125rem; font-weight: 600; margin-top: 0.25rem; }
+    .fc-desc { font-size: 0.875rem; color: var(--muted); margin-top: 0.25rem; }
+
+    /* STATS */
+    .stats { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(20,20,20,0.4); }
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; padding: 3rem 0; }
+    @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+    .stat-item { text-align: center; }
+    .stat-val { font-size: 2rem; font-weight: 700; }
+    @media (min-width: 640px) { .stat-val { font-size: 2.5rem; } }
+    .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 0.25rem; }
+
+    /* SECTIONS */
+    section { padding: 6rem 0; }
+    .section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--fg); }
+    .section-title { font-size: 2.25rem; font-weight: 700; margin-top: 0.75rem; }
+    @media (min-width: 640px) { .section-title { font-size: 3rem; } }
+    .section-desc { color: var(--muted); margin-top: 1rem; max-width: 36rem; }
+
+    /* SERVICES */
+    .services-grid { display: grid; gap: 1.5rem; margin-top: 3rem; }
+    @media (min-width: 768px) { .services-grid { grid-template-columns: 1.2fr 1fr; } }
+    .services-list { display: grid; gap: 0.75rem; }
+    @media (min-width: 640px) { .services-list { grid-template-columns: 1fr 1fr; } }
+    .services-list li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.875rem; }
+    .check { color: var(--fg); flex-shrink: 0; margin-top: 0.15rem; }
+    .mini-cards { display: grid; gap: 1rem; }
+    .mini-card { padding: 1.5rem; }
+    .mini-icon { width: 2.25rem; height: 2.25rem; display: grid; place-items: center; border: 1px solid var(--border); background: var(--bg-2); border-radius: 0.5rem; margin-bottom: 0.75rem; }
+    .mini-title { font-size: 1rem; font-weight: 600; }
+    .mini-desc { font-size: 0.875rem; color: var(--muted); margin-top: 0.25rem; }
+    .services-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--border); padding-top: 1.5rem; margin-top: 2rem; }
+
+    /* PROCESS */
+    .process-grid { display: grid; gap: 1rem; margin-top: 3rem; }
+    @media (min-width: 768px) { .process-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .process-grid { grid-template-columns: repeat(4, 1fr); } }
+    .process-card { padding: 1.5rem; }
+    .process-num { font-size: 2rem; font-weight: 700; color: var(--fg); }
+    .process-title { font-size: 1.125rem; font-weight: 600; margin-top: 0.75rem; }
+    .process-desc { font-size: 0.875rem; color: var(--muted); margin-top: 0.25rem; }
+
+    /* FPS COMPARISON */
+    .fps-section { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(20,20,20,0.3); }
+    .fps-grid { display: grid; gap: 2.5rem; margin-top: 3rem; }
+    @media (min-width: 900px) { .fps-grid { grid-template-columns: 1fr 1fr; align-items: center; } }
+    .fps-metrics { display: grid; }
+    .fps-metric { padding: 1.35rem 0; border-bottom: 1px solid var(--border); }
+    .fps-metric:first-child { padding-top: 0; }
+    .fps-metric:last-of-type { border-bottom: none; }
+    .fps-metric-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    .fps-metric-label { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+    .fps-metric-value { font-size: 1.5rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+    .fps-metric-desc { font-size: 0.8125rem; color: var(--muted); margin-top: 0.35rem; }
+    .fps-note { font-size: 0.75rem; color: var(--muted); margin-top: 1.75rem; opacity: 0.75; font-style: italic; }
+    .fps-chart-card { padding: 2rem; }
+    .fps-chart-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .fps-chart-eyebrow { font-size: 0.625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .fps-chart-base .fps-num { font-size: 1.75rem; font-weight: 700; margin-top: 0.25rem; font-family: 'Space Grotesk', sans-serif; }
+    .fps-chart-opt { text-align: right; }
+    .fps-chart-opt .fps-num { font-size: 2.5rem; font-weight: 700; margin-top: 0.25rem; font-family: 'Space Grotesk', sans-serif; }
+    .fps-chart-opt-tag { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); justify-content: flex-end; width: 100%; }
+    .fps-dot { width: 0.4rem; height: 0.4rem; border-radius: 999px; background: #fff; }
+    .fps-chart-svg-wrap { margin-top: 1.5rem; }
+    .fps-chart-bottom { display: flex; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 1rem; font-size: 0.625rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .fps-chart-bottom strong { color: var(--fg); display: block; font-size: 0.8125rem; margin-top: 0.2rem; letter-spacing: 0; text-transform: none; }
+    .fps-chart-bottom > div:last-child { text-align: right; }
+
+    /* TESTIMONIALS */
+    .testimonials { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(20,20,20,0.3); }
+    .testimonials-grid { display: grid; gap: 1.5rem; margin-top: 3rem; }
+    @media (min-width: 640px) { .testimonials-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .testimonials-grid { grid-template-columns: repeat(4, 1fr); } }
+    .testimonial { padding: 1.5rem; }
+    .testimonial-text { font-size: 0.875rem; line-height: 1.6; }
+    .testimonial-author { border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 1.5rem; }
+    .testimonial-author p:first-child { font-size: 0.875rem; font-weight: 600; }
+    .testimonial-author p:last-child { font-size: 0.75rem; color: var(--muted); }
+
+    /* FAQ */
+    .faq-grid { display: grid; gap: 3rem; margin-top: 3rem; }
+    @media (min-width: 768px) { .faq-grid { grid-template-columns: 1fr 1.4fr; } }
+    .faq-list { border: 1px solid var(--border); border-radius: 1rem; overflow: hidden; background: rgba(20,20,20,0.4); }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    summary { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; cursor: pointer; font-size: 0.875rem; font-weight: 500; list-style: none; }
+    summary:hover { background: rgba(255,255,255,0.04); }
+    summary::-webkit-details-marker { display: none; }
+    .chevron { transition: transform .2s; }
+    details[open] .chevron { transform: rotate(180deg); }
+    .faq-answer { padding: 0 1.5rem 1.25rem; font-size: 0.875rem; color: var(--muted); }
+
+    /* CTA */
+    .cta-card { position: relative; overflow: hidden; text-align: center; padding: 4rem 2rem; }
+    @media (min-width: 768px) { .cta-card { padding: 4rem; } }
+    .cta-glow { position: absolute; inset: 0; opacity: 0.4; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.12), transparent 60%); pointer-events: none; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 2.5rem 0; }
+    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 1rem; font-size: 0.875rem; color: var(--muted); }
+    @media (min-width: 640px) { .footer-inner { flex-direction: row; justify-content: space-between; } }
+    .footer-brand { display: flex; align-items: center; gap: 0.5rem; }
+    .footer-brand img { height: 1.75rem; width: 1.75rem; object-fit: contain; }
+
+    /* FLOATING CTA */
+    .floating-cta {
+      position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 40;
+      display: flex; align-items: center; gap: 0.5rem;
+      background: linear-gradient(135deg, #fff 0%, #bbb 100%); color: var(--brand-fg);
+      padding: 0.75rem 1.25rem; border-radius: 999px; font-weight: 600; font-size: 0.875rem;
+      box-shadow: 0 20px 60px -15px rgba(255,255,255,0.3);
+    }
+
+    /* CHAT MODAL */
+    .chat-overlay {
+      position: fixed; inset: 0; z-index: 50;
+      display: flex; align-items: flex-end; justify-content: center;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+    }
+    @media (min-width: 640px) { .chat-overlay { align-items: center; } }
+    .chat-modal {
+      width: 100%; max-width: 32rem; height: 92vh;
+      display: flex; flex-direction: column; overflow: hidden;
+      border-radius: 1rem 1rem 0 0;
+    }
+    @media (min-width: 640px) { .chat-modal { height: 640px; border-radius: 1rem; } }
+    .chat-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: var(--bg-2);
+    }
+    .chat-agent { display: flex; align-items: center; gap: 0.75rem; }
+    .chat-avatar { position: relative; width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border-radius: 999px; background: var(--bg-3); border: 1px solid var(--border); }
+    .chat-avatar img { width: 1.75rem; height: 1.75rem; object-fit: contain; }
+    .chat-status { position: absolute; bottom: -2px; right: -2px; width: 0.75rem; height: 0.75rem; border-radius: 999px; background: #34d399; border: 2px solid var(--bg-2); }
+    .chat-name { font-size: 0.875rem; font-weight: 600; }
+    .chat-sub { font-size: 0.75rem; color: var(--muted); }
+    .chat-close { background: transparent; color: var(--muted); padding: 0.5rem; border-radius: 0.375rem; }
+    .chat-close:hover { background: rgba(255,255,255,0.08); color: var(--fg); }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .msg { max-width: 85%; padding: 0.75rem 1rem; border-radius: 1rem; font-size: 0.875rem; line-height: 1.5; animation: fadeUp .4s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(8px)} to { opacity:1; transform:translateY(0)} }
+    .msg-bot { align-self: flex-start; background: var(--bg-3); border: 1px solid var(--border); border-bottom-left-radius: 0.25rem; }
+    .msg-user { align-self: flex-end; background: var(--fg); color: var(--brand-fg); border-bottom-right-radius: 0.25rem; }
+    .suggestions { display: flex; flex-wrap: wrap; gap: 0.5rem; padding-top: 0.25rem; }
+    .suggestion-btn { border: 1px solid var(--border); background: var(--bg-3); color: var(--muted); padding: 0.375rem 0.75rem; border-radius: 999px; font-size: 0.75rem; }
+    .suggestion-btn:hover { border-color: rgba(255,255,255,0.4); color: var(--fg); }
+    .summary-box { border: 1px solid var(--border); background: var(--bg-3); border-radius: 0.75rem; padding: 0.75rem; }
+    .summary-box h4 { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.5rem; }
+    .summary-box li { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.25rem; }
+    .chat-footer { border-top: 1px solid var(--border); background: var(--bg-2); padding: 0.75rem; }
+    .chat-form { display: flex; align-items: flex-end; gap: 0.5rem; }
+    .chat-input { flex: 1; min-height: 44px; max-height: 8rem; resize: none; border: 1px solid var(--border); background: var(--bg-3); color: var(--fg); border-radius: 0.75rem; padding: 0.625rem 0.875rem; font-size: 0.875rem; outline: none; }
+    .chat-input:focus { border-color: rgba(255,255,255,0.5); box-shadow: 0 0 0 3px rgba(255,255,255,0.1); }
+    .chat-send { width: 2.75rem; height: 2.75rem; display: grid; place-items: center; border-radius: 0.75rem; background: linear-gradient(135deg, #fff 0%, #bbb 100%); color: var(--brand-fg); }
+    .chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
+    .chat-step { text-align: center; font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 0.5rem; }
+    .whatsapp-btn { display: flex; width: 100%; align-items: center; justify-content: center; gap: 0.5rem; background: #25d366; color: #000; padding: 0.875rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; }
+
+    .hidden { display: none !important; }
+
+    /* --- clique sonoro + ripple --- */
+    .ripple-fx {
+      position: relative;
+      overflow: hidden;
+      transform: scale(1);
+      transition: transform .12s ease;
+    }
+    .ripple-fx:active { transform: scale(0.96); }
+    .ripple-fx::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle, rgba(255,255,255,.25) 0%, transparent 70%);
+      opacity: 0;
+      transform: scale(0);
+      pointer-events: none;
+    }
+    .ripple-fx.clicked::before {
+      animation: ripple-pop .45s ease-out forwards;
+    }
+    @keyframes ripple-pop {
+      0%   { opacity: .55; transform: scale(0); }
+      100% { opacity: 0;   transform: scale(2.2); }
+    }
+
+    /* LANGUAGE SELECT OVERLAY (first-visit) */
+    .lang-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      overflow-y: auto; padding: 3rem 1.25rem;
+    }
+    .lang-inner { max-width: 46rem; width: 100%; text-align: center; position: relative; }
+    .lang-eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg); margin-bottom: 1.75rem; }
+    .lang-title { font-size: 2.25rem; }
+    @media (min-width: 640px) { .lang-title { font-size: 3.25rem; } }
+    .lang-sub { margin-top: 0.85rem; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg); }
+    .lang-divider { width: 3rem; height: 1px; background: var(--border); margin: 2.25rem auto; }
+    .lang-instruction { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); margin-bottom: 2rem; }
+    .lang-cards { display: grid; gap: 1rem; grid-template-columns: 1fr; max-width: 34rem; margin-inline: auto; }
+    @media (min-width: 560px) { .lang-cards { grid-template-columns: 1fr 1fr; } }
+    .lang-card { padding: 1.75rem; text-align: left; cursor: pointer; transition: border-color .2s, transform .15s; background: rgba(20,20,20,0.5); }
+    .lang-card:hover { border-color: rgba(255,255,255,0.4); transform: translateY(-2px); }
+    .lang-card-tag { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); margin-bottom: 0.85rem; }
+    .lang-card-name-row { display: flex; align-items: center; gap: 0.6rem; }
+    .lang-flag { font-size: 0.625rem; font-weight: 700; border: 1px solid var(--border); padding: 0.1rem 0.4rem; border-radius: 0.25rem; color: var(--fg); }
+    .lang-card-name { font-size: 1.4rem; font-family: 'Space Grotesk', sans-serif; color: #ffffff; letter-spacing: -0.01em; }
+    .lang-card-line { width: 2rem; height: 1px; background: var(--border); margin-top: 1.1rem; }
+    .lang-footer-note { margin-top: 3rem; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); opacity: 0.75; }
+  
+    
+    
+    /* INVESTIMENTO block */
+    .invest-eyebrow { color: var(--fg) !important; opacity: 0.6; }
+    .invest-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: -0.03em; line-height: 1; font-size: clamp(2.5rem, 6vw, 4.5rem); margin-top: 1rem; }
+    .invest-title span { display: block; }
+    .invest-line-1 { color: var(--fg); }
+    .invest-line-2 { color: #4aa8ff; background: linear-gradient(180deg, #7dd3fc 0%, #3b82f6 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .invest-desc { margin-top: 1.5rem; max-width: 44rem; margin-inline: auto; color: var(--muted); font-style: italic; font-size: 1rem; line-height: 1.7; }
+    .invest-divider { width: 3rem; height: 1px; background: var(--border); margin: 2.5rem auto; }
+
+    /* FOOTER logo hero */
+    .footer-hero { text-align: center; padding: 4rem 0 2rem; border-top: 1px solid var(--border); }
+    .footer-hero img { height: 120px; width: auto; margin-inline: auto; opacity: 0.9; filter: drop-shadow(0 8px 40px rgba(255,255,255,0.08)); transition: opacity .2s, transform .3s; }
+    .footer-hero img:hover { opacity: 1; transform: translateY(-2px); }
+    .footer-hero-tag { margin-top: 1.25rem; font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--muted); }
+
+
+    /* OPT — O que é a otimização */
+    #otimizacao { padding-top: 5rem; }
+    .opt-badges { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+    .opt-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.9rem; border-radius: 999px; border: 1px solid var(--border); background: rgba(20,20,20,0.6); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg); font-family: 'Space Grotesk', sans-serif; }
+    .opt-badge .opt-badge-sign { font-weight: 800; font-size: 0.85rem; line-height: 1; }
+    .opt-badge--up .opt-badge-sign { color: #34d399; }
+    .opt-badge--down .opt-badge-sign { color: #f87171; }
+    .opt-grid { display: grid; gap: 1.25rem; margin-top: 2.5rem; grid-template-columns: 1fr; }
+    @media (min-width: 640px) { .opt-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .opt-grid { grid-template-columns: repeat(4, 1fr); } }
+    .opt-card { padding: 1.75rem; display: flex; flex-direction: column; gap: 0.6rem; transition: border-color .2s, transform .2s; }
+    .opt-card:hover { border-color: rgba(255,255,255,0.28); transform: translateY(-2px); }
+    .opt-icon { width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border: 1px solid var(--border); background: var(--bg-2); border-radius: 0.5rem; color: var(--fg); margin-bottom: 0.75rem; }
+    .opt-tag { display: inline-block; align-self: flex-start; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: 0.2rem 0.55rem; border-radius: 999px; }
+    .opt-title { font-size: 1.15rem; font-weight: 600; font-style: italic; margin-top: 0.5rem; }
+    .opt-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+    .opt-hi { color: #7dd3fc; }
+
+
+    /* CUSTOM WHITE CURSOR */
+    html, body, a, button, [role="button"], .ripple-fx, .lang-card, summary, .brand-btn, .secondary-btn, textarea, input { cursor: none !important; }
+    #cursorDot, #cursorRing { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; border-radius: 999px; mix-blend-mode: difference; }
+    #cursorDot { width: 6px; height: 6px; background: #fff; transform: translate(-50%,-50%); transition: width .15s ease, height .15s ease, background .15s ease; }
+    #cursorRing { width: 34px; height: 34px; border: 1.5px solid rgba(255,255,255,0.65); transform: translate(-50%,-50%); transition: transform .12s ease, width .2s ease, height .2s ease, border-color .2s ease; }
+    body.cursor-hover #cursorDot { width: 10px; height: 10px; }
+    body.cursor-hover #cursorRing { width: 48px; height: 48px; border-color: #fff; }
+    @media (hover: none) { #cursorDot, #cursorRing { display: none !important; } html, body, a, button { cursor: auto !important; } }
+
+  </style>
+</head>
+<body>
+
+  <!-- LANGUAGE SELECT OVERLAY -->
+  <div id="langOverlay" class="lang-overlay">
+    <div class="abstract-lines"></div>
+    <div class="lang-inner">
+      <p class="lang-eyebrow">GuTweaks · Pro Optimization</p>
+      <h1 class="lang-title" style="color:#fff"><span>Select Your Experience</span></h1>
+      <p class="lang-sub">Escolha seu idioma&nbsp; &middot; &nbsp;Choose your language</p>
+      <div class="lang-divider"></div>
+      <div class="lang-cards">
+        <button type="button" class="surface-card lang-card ripple-fx" onclick="setLanguage('pt')">
+          <p class="lang-card-tag">Brasil / Portugal</p>
+          <div class="lang-card-name-row"><span class="lang-flag">BR</span><span class="lang-card-name">Português</span></div>
+          <div class="lang-card-line"></div>
+        </button>
+        <button type="button" class="surface-card lang-card ripple-fx" onclick="setLanguage('en')">
+          <p class="lang-card-tag">International / EN</p>
+          <div class="lang-card-name-row"><span class="lang-flag">US</span><span class="lang-card-name">English</span></div>
+          <div class="lang-card-line"></div>
+        </button>
+      </div>
+      <p class="lang-footer-note">Otimização de PC de alta performance &nbsp;&middot;&nbsp; High-performance PC optimization</p>
+    </div>
+  </div>
+
+  <header>
+    <div class="container-x nav-inner">
+      <a href="#" class="logo">
+        <img src="/gutweaks-logo.png" alt="GuTweaks" />
+        <div class="logo-text">
+          <p>GuTweaks</p>
+          <p>Pro Optimization</p>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#servicos" data-i18n="nav.services">Serviços</a>
+        <a href="#processo" data-i18n="nav.process">Como funciona</a>
+        <a href="#dados" data-i18n="nav.data">Dados</a>
+        <a href="#depoimentos" data-i18n="nav.results">Resultados</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+        <a href="sobre.html" data-i18n="nav.about">Sobre Mim</a>
+      </nav>
+      <div class="nav-right">
+        <div class="lang-switch">
+          <button type="button" id="langBtnPt" class="ripple-fx" onclick="setLanguage('pt')">PT</button>
+          <button type="button" id="langBtnEn" class="ripple-fx" onclick="setLanguage('en')">EN</button>
+        </div>
+        <button class="brand-btn ripple-fx" onclick="openChat()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          <span data-i18n="nav.cta">Fazer orçamento</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="abstract-lines"></div>
+    <div class="hero-watermark"><img src="gutweaks-logo.png" alt="" /></div>
+    <div class="container-x hero-grid">
+      <div>
+        <div class="badge"><span class="dot"></span><span style="color:var(--muted)" data-i18n="hero.badge">Atendendo agora</span></div>
+        <h1><span class="gradient-text" data-i18n="hero.title1">Otimização profissional</span><br><span data-i18n="hero.title2">de PC ao extremo.</span></h1>
+        <p data-i18n="hero.desc">Ajustes de BIOS, overclock seguro, redução de input lag e estabilidade total. Atendimento 100% personalizado, feito sob medida pra sua máquina e o seu jogo.</p>
+        <div class="hero-actions">
+          <button class="brand-btn ripple-fx" onclick="openChat()">
+            <span data-i18n="hero.cta1">Fazer orçamento personalizado</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+          <a href="#servicos" class="secondary-btn ripple-fx" data-i18n="hero.cta2">Ver serviços</a>
+        </div>
+        <div class="hero-tags">
+          <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> <span data-i18n="hero.tag1">Overclock seguro</span></span>
+          <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> <span data-i18n="hero.tag2">Zero delay</span></span>
+          <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l2.35 8.36a.25.25 0 0 1-.04.2L20 12h-2"/><path d="M2 12h2.48a2 2 0 0 1 1.93 1.46l-2.35 8.36a.25.25 0 0 0 .04.2L4 12h2"/><path d="M12 2v20"/><path d="M12 8a4 4 0 0 1 4-4h0"/><path d="M12 16a4 4 0 0 0-4 4h0"/></svg> <span data-i18n="hero.tag3">Estabilidade total</span></span>
+        </div>
+      </div>
+      <div class="feature-cards">
+        <div class="surface-card feature-card">
+          <div class="fc-row">
+            <div class="fc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+            <div style="flex:1">
+              <div class="fc-meta"><span class="fc-label" data-i18n="feature1.label">Zero Delay</span><span class="fc-index">01</span></div>
+              <div class="fc-title" data-i18n="feature1.title">FPS alto e resposta imediata</div>
+              <div class="fc-desc" data-i18n="feature1.desc">Latência praticamente imperceptível — cada movimento traduzido em performance real.</div>
+            </div>
+          </div>
+        </div>
+        <div class="surface-card feature-card">
+          <div class="fc-row">
+            <div class="fc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/></svg></div>
+            <div style="flex:1">
+              <div class="fc-meta"><span class="fc-label" data-i18n="feature2.label">Estabilidade</span><span class="fc-index">02</span></div>
+              <div class="fc-title" data-i18n="feature2.title">Temperaturas sob controle</div>
+              <div class="fc-desc" data-i18n="feature2.desc">Sistema tunado sem travadas, sem stutter e sem esquentar em partidas longas.</div>
+            </div>
+          </div>
+        </div>
+        <div class="surface-card feature-card">
+          <div class="fc-row">
+            <div class="fc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg></div>
+            <div style="flex:1">
+              <div class="fc-meta"><span class="fc-label" data-i18n="feature3.label">Overclock</span><span class="fc-index">03</span></div>
+              <div class="fc-title" data-i18n="feature3.title">Máxima eficiência</div>
+              <div class="fc-desc" data-i18n="feature3.desc">Mais performance extraída da CPU, GPU e RAM com segurança total.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="otimizacao">
+    <div class="container-x">
+      <p class="section-label" data-i18n="opt.eyebrow">Engenharia de performance</p>
+      <h2 class="section-title"><span data-i18n="opt.title1">O que é a</span><br><span class="gradient-text" data-i18n="opt.title2">otimização?</span></h2>
+      <p class="section-desc" data-i18n="opt.desc">Cada ajuste tem um propósito: mais frames, menos delay, menos calor e mais anos de vida útil pro seu PC.</p>
+
+      <div class="opt-badges">
+        <span class="opt-badge opt-badge--up"><span class="opt-badge-sign">+</span> FPS</span>
+        <span class="opt-badge opt-badge--down"><span class="opt-badge-sign">−</span> INPUTLAG</span>
+        <span class="opt-badge opt-badge--down"><span class="opt-badge-sign">−</span> TEMPERATURA</span>
+        <span class="opt-badge opt-badge--up"><span class="opt-badge-sign">+</span> VIDA ÚTIL</span>
+      </div>
+
+      <div class="opt-grid">
+        <div class="surface-card opt-card">
+          <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></div>
+          <p class="opt-tag">Deep Tuning</p>
+          <h3 class="opt-title" data-i18n="opt.c1.title">Overclock saudável</h3>
+          <p class="opt-desc" data-i18n="opt.c1.desc">Via chamada de vídeo, vamos até a <span class="opt-hi">BIOS</span> da sua placa-mãe. Aumento a performance subindo as <span class="opt-hi">frequências</span> e reduzindo as temperaturas ao baixar as <span class="opt-hi">tensões</span>.</p>
+        </div>
+        <div class="surface-card opt-card">
+          <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+          <p class="opt-tag">Resposta rápida</p>
+          <h3 class="opt-title" data-i18n="opt.c2.title">Inputlag zero</h3>
+          <p class="opt-desc" data-i18n="opt.c2.desc">Instalação de um Windows 100% otimizado a partir do original da Microsoft. Sem programas e serviços inúteis travando seu PC. Acesso <span class="opt-hi">vitalício</span> a futuras versões.</p>
+        </div>
+        <div class="surface-card opt-card">
+          <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <p class="opt-tag">Para o seu conforto</p>
+          <h3 class="opt-title" data-i18n="opt.c3.title">Atendimento remoto</h3>
+          <p class="opt-desc" data-i18n="opt.c3.desc">O procedimento dura em média de 1h a 2h, de forma totalmente remota. Eu daqui, e você daí, podendo ver e interferir em tudo o que é feito.</p>
+        </div>
+        <div class="surface-card opt-card">
+          <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+          <p class="opt-tag">Autonomia</p>
+          <h3 class="opt-title" data-i18n="opt.c4.title">Depois, faça você mesmo!</h3>
+          <p class="opt-desc" data-i18n="opt.c4.desc">Você recebe um manual de cuidados práticos essenciais para manter a máquina voando sozinho, incluindo links de drivers e futuras atualizações. Total autonomia, sem mensalidades.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container-x stats-grid">
+      <div class="stat-item"><div class="stat-val gradient-text">+180</div><div class="stat-label" data-i18n="stats.label1">FPS de ganho médio</div></div>
+      <div class="stat-item"><div class="stat-val gradient-text">1500+</div><div class="stat-label" data-i18n="stats.label2">PCs otimizados</div></div>
+      <div class="stat-item"><div class="stat-val gradient-text">&lt;1ms</div><div class="stat-label" data-i18n="stats.label3">de input lag</div></div>
+      <div class="stat-item"><div class="stat-val gradient-text">100%</div><div class="stat-label" data-i18n="stats.label4">clientes satisfeitos</div></div>
+    </div>
+  </section>
+
+  <section id="servicos">
+    <div class="container-x">
+      <p class="section-label" data-i18n="services.label">Serviços</p>
+      <h2 class="section-title"><span data-i18n="services.title1">Cada máquina é única.</span><br><span style="color:var(--muted)" data-i18n="services.title2">Cada otimização também.</span></h2>
+      <p class="section-desc" data-i18n="services.desc">Você me conta a sua config e o que quer alcançar. Eu analiso o seu hardware e devolvo uma proposta técnica sob medida — sem pacote genérico, sem enrolação.</p>
+      <div class="services-grid">
+        <div class="surface-card" style="padding:2rem">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <h3 style="font-size:1.25rem;font-weight:600" data-i18n="services.cardTitle">Trabalhamos por orçamento</h3>
+          </div>
+          <ul class="services-list">
+            <li><span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span data-i18n="services.li1">Ajustes avançados de BIOS/UEFI</span></li>
+            <li><span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span data-i18n="services.li2">Overclock seguro de CPU, GPU e RAM</span></li>
+            <li><span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span data-i18n="services.li3">Regulação fina de tensões e PBO</span></li>
+            <li><span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span data-i18n="services.li4">Redução de temperaturas</span></li>
+            <li><span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span data-i18n="services.li5">Otimização completa do Windows</span></li>
+            <li><span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span data-i18n="services.li6">Affinity de núcleos e prioridades</span></li>
+            <li><span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span data-i18n="services.li7">Testes de estresse e estabilidade</span></li>
+            <li><span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span data-i18n="services.li8">Diagnóstico profundo de hardware</span></li>
+            <li><span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span data-i18n="services.li9">Tweaks de rede e input lag</span></li>
+            <li><span class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span> <span data-i18n="services.li10">Suporte pós-otimização</span></li>
+          </ul>
+          <div class="services-footer">
+            <div>
+              <p style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)" data-i18n="services.paymentLabel">Pagamento</p>
+              <p style="font-size:0.875rem;margin-top:0.25rem" data-i18n="services.paymentValue">PIX · Cartão · Internacional</p>
+            </div>
+            <button class="brand-btn ripple-fx" onclick="openChat()"><span data-i18n="nav.cta">Fazer orçamento</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="mini-cards">
+          <div class="surface-card mini-card">
+            <div class="mini-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
+            <h4 class="mini-title" data-i18n="mini1.title">Foco em competitivo</h4>
+            <p class="mini-desc" data-i18n="mini1.desc">Configuração pensada pra quem joga Fortnite, Valorant, CS2 e outros títulos onde cada frame conta.</p>
+          </div>
+          <div class="surface-card mini-card">
+            <div class="mini-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></div>
+            <h4 class="mini-title" data-i18n="mini2.title">100% seguro</h4>
+            <p class="mini-desc" data-i18n="mini2.desc">Sem risco pra sua máquina. Backup, testes de estabilidade e reversão sempre possível.</p>
+          </div>
+          <div class="surface-card mini-card">
+            <div class="mini-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></div>
+            <h4 class="mini-title" data-i18n="mini3.title">Atendimento direto</h4>
+            <p class="mini-desc" data-i18n="mini3.desc">Você fala diretamente comigo do começo ao fim, sem passar por atendente ou bot.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="processo">
+    <div class="container-x">
+      <p class="section-label" data-i18n="process.label">Processo</p>
+      <h2 class="section-title"><span data-i18n="process.title1">Simples, transparente,</span><br><span style="color:var(--muted)" data-i18n="process.title2">e sob medida.</span></h2>
+      <div class="process-grid">
+        <div class="surface-card process-card"><div class="process-num">01</div><div class="process-title" data-i18n="process1.title">Você abre o orçamento</div><div class="process-desc" data-i18n="process1.desc">Clica no botão, me passa a config do seu PC pelo chat e o que quer resolver.</div></div>
+        <div class="surface-card process-card"><div class="process-num">02</div><div class="process-title" data-i18n="process2.title">Analiso sua máquina</div><div class="process-desc" data-i18n="process2.desc">Estudo cada peça, sistema e uso, e monto uma proposta feita sob medida pra você.</div></div>
+        <div class="surface-card process-card"><div class="process-num">03</div><div class="process-title" data-i18n="process3.title">Agendamos e otimizo</div><div class="process-desc" data-i18n="process3.desc">Marcamos horário, faço a otimização remota com você acompanhando e testando ao vivo.</div></div>
+        <div class="surface-card process-card"><div class="process-num">04</div><div class="process-title" data-i18n="process4.title">Suporte contínuo</div><div class="process-desc" data-i18n="process4.desc">Depois da entrega, seguimos em contato pra ajuste fino e qualquer dúvida futura.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dados" class="fps-section">
+    <div class="container-x">
+      <p class="section-label" data-i18n="fps.label">Dados reais</p>
+      <h2 class="section-title"><span data-i18n="fps.title1">Comparativo de</span><br><span style="color:var(--muted)" data-i18n="fps.title2">performance.</span></h2>
+      <p class="section-desc" data-i18n="fps.desc">Antes e depois da otimização, medido em condições reais de jogo. É a diferença que você sente no primeiro clique.</p>
+
+      <div class="fps-grid">
+        <div class="fps-metrics">
+          <div class="fps-metric">
+            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m1.label">FPS</span><span class="fps-metric-value">+42%</span></div>
+            <p class="fps-metric-desc" data-i18n="fps.m1.desc">Aumento médio em títulos competitivos.</p>
+          </div>
+          <div class="fps-metric">
+            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m2.label">Temperatura</span><span class="fps-metric-value">-20%</span></div>
+            <p class="fps-metric-desc" data-i18n="fps.m2.desc">Consumo energético reduzido.</p>
+          </div>
+          <div class="fps-metric">
+            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m3.label">Latência</span><span class="fps-metric-value">-12ms</span></div>
+            <p class="fps-metric-desc" data-i18n="fps.m3.desc">Redução de input lag sistêmico.</p>
+          </div>
+          <div class="fps-metric">
+            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m4.label">Estabilidade</span><span class="fps-metric-value">100%</span></div>
+            <p class="fps-metric-desc" data-i18n="fps.m4.desc">Zero quedas bruscas (frame drops).</p>
+          </div>
+          <p class="fps-note" data-i18n="fps.note">*Nota: As métricas apresentadas representam médias obtidas em testes internos. Os ganhos reais são variáveis e dependem diretamente das especificações de hardware, refrigeração e condições físicas de cada computador.</p>
+        </div>
+
+        <div class="surface-card fps-chart-card">
+          <div class="fps-chart-top">
+            <div class="fps-chart-base">
+              <p class="fps-chart-eyebrow" data-i18n="fps.base">Base</p>
+              <p class="fps-num">680 <span style="font-size:0.75rem;color:var(--muted)">FPS</span></p>
+            </div>
+            <div class="fps-chart-opt">
+              <div class="fps-chart-opt-tag"><span class="fps-dot"></span><span data-i18n="fps.optimized">Otimizado</span></div>
+              <p class="fps-num">966 <span style="font-size:0.75rem;color:var(--muted)">FPS</span></p>
+            </div>
+          </div>
+          <div class="fps-chart-svg-wrap">
+            <svg viewBox="0 0 600 220" width="100%" style="display:block">
+              <line x1="0" y1="200" x2="600" y2="200" stroke="var(--border)" stroke-width="1"/>
+              <path d="M10,190 C120,185 220,150 320,95 C420,45 500,20 590,15" fill="none" stroke="var(--fg)" stroke-width="2.5"/>
+              <circle cx="10" cy="190" r="4" fill="var(--fg)"/>
+              <circle cx="590" cy="15" r="5" fill="var(--fg)"/>
+            </svg>
+          </div>
+          <div class="fps-chart-bottom">
+            <div>
+              <span data-i18n="fps.status">Status</span>
+              <strong data-i18n="fps.verified">Verificado</strong>
+            </div>
+            <div>
+              <span data-i18n="fps.lagReduction">Redução lag</span>
+              <strong>-14.2ms</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="depoimentos" class="testimonials">
+    <div class="container-x">
+      <p class="section-label" data-i18n="testimonials.label">Resultados reais</p>
+      <h2 class="section-title" data-i18n="testimonials.title">O que dizem sobre o serviço</h2>
+      <div class="testimonials-grid">
+        <figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial1.text">"Fortnite competitivo travava. Passou pra 240+ FPS estáveis e o input ficou instantâneo."</p><figcaption class="testimonial-author"><p>Arthur</p><p>i3-12400F + RTX 3050</p></figcaption></figure>
+        <figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial2.text">"Salto absurdo de FPS e o PC parou de esquentar. Trabalho impecável, valeu cada real."</p><figcaption class="testimonial-author"><p>Renan</p><p>Ryzen 5 5600 + GTX 1660S</p></figcaption></figure>
+        <figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial3.text">"Achei que meu PC não dava mais. Depois da otimização, virou outra máquina no Valorant."</p><figcaption class="testimonial-author"><p>Pietro</p><p>Ryzen 7 5700X + RX 6600</p></figcaption></figure>
+        <figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial4.text">"Suporte impecável, tudo explicado no processo. Já indiquei pra vários amigos do time."</p><figcaption class="testimonial-author"><p>Gabriel</p><p>i5-11400 + RTX 3060</p></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="container-x faq-grid">
+      <div>
+        <p class="section-label" data-i18n="faq.label">FAQ</p>
+        <h2 class="section-title"><span data-i18n="faq.title1">Perguntas</span><br><span data-i18n="faq.title2">frequentes</span></h2>
+        <p class="section-desc" data-i18n="faq.desc">Ficou alguma dúvida? Abre o orçamento e me pergunta direto no chat.</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item"><summary><span data-i18n="faq1.q">Como é feita a otimização?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq1.a">Feita remotamente, com acesso autorizado por você. Faço backup, ajustes de BIOS, otimização do Windows, overclock quando cabível e testes de estabilidade antes de entregar.</div></details>
+        <details class="faq-item"><summary><span data-i18n="faq2.q">Tem risco pra minha máquina?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq2.a">Não. Todo processo é reversível, sempre com backup e ajustes dentro dos limites seguros do seu hardware. Nada de tensões absurdas ou tweaks que comprometam a vida útil.</div></details>
+        <details class="faq-item"><summary><span data-i18n="faq3.q">Vocês acessam meus arquivos pessoais?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq3.a">Não. O acesso é focado só no que é necessário pra otimização. Seus arquivos pessoais não são abertos, movidos nem coletados.</div></details>
+        <details class="faq-item"><summary><span data-i18n="faq4.q">Quanto tempo demora?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq4.a">Depende da configuração e do que vamos ajustar. Em média entre 2h e 4h, com você acompanhando via call.</div></details>
+        <details class="faq-item"><summary><span data-i18n="faq5.q">Vocês entram em call durante a otimização?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq5.a">Sim. Todo o processo é feito com você presente na call, podendo testar antes e depois de cada ajuste.</div></details>
+        <details class="faq-item"><summary><span data-i18n="faq6.q">Tem garantia ou reembolso?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq6.a">Sim. Se algo não funcionar como acordado, ajustamos até ficar redondo. Caso não seja possível, o reembolso é analisado caso a caso.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container-x">
+      <div class="surface-card cta-card">
+        <div class="cta-glow"></div>
+        <div style="position:relative;z-index:1">
+          <p class="section-label invest-eyebrow" data-i18n="invest.eyebrow">Filosofia</p>
+          <h2 class="invest-title">
+            <span class="invest-line-1" data-i18n="invest.line1">Não um gasto.</span>
+            <span class="invest-line-2" data-i18n="invest.line2">Um investimento.</span>
+          </h2>
+          <p class="invest-desc" data-i18n="invest.desc">A otimização definitiva projetada tanto para quem busca o máximo de FPS e fluidez em jogos competitivos quanto para aceleração extrema em fluxos de trabalho e produtividade profissional. Sem recorrência, sem mensalidades.</p>
+          <div class="invest-divider"></div>
+          <h2 class="section-title" style="max-width:32rem;margin-inline:auto"><span data-i18n="cta.title1">Pronto pra extrair o</span> <span class="gradient-text" data-i18n="cta.titleGradient">máximo</span> <span data-i18n="cta.title2">do seu PC?</span></h2>
+          <p class="section-desc" style="max-width:28rem;margin-inline:auto;text-align:center" data-i18n="cta.desc">Abre o chat de orçamento, me passa sua config e agendamos hoje mesmo.</p>
+          <button class="brand-btn ripple-fx" style="margin-top:2rem" onclick="openChat()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            <span data-i18n="cta.button">Fazer orçamento personalizado</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-hero container-x">
+    <img src="/gutweaks-logo.png" alt="GuTweaks" />
+    <p class="footer-hero-tag">GuTweaks · Pro Optimization</p>
+  </div>
+
+  <footer>
+    <div class="container-x footer-inner">
+      <div class="footer-brand">
+        <img src="/gutweaks-logo.png" alt="GuTweaks" />
+        <span>© 2026 GuTweaks · Pro Optimization</span>
+      </div>
+      <span style="font-size:0.75rem" data-i18n="footer.tagline">Feito por gamer, pra gamer.</span>
+    </div>
+  </footer>
+
+  <button class="floating-cta ripple-fx" onclick="openChat()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+    <span data-i18n="floating.cta">Orçamento</span>
+  </button>
+
+  <!-- CHAT MODAL -->
+  <div id="chatOverlay" class="chat-overlay hidden" onclick="if(event.target===this) closeChat()">
+    <div class="surface-card chat-modal" role="dialog" aria-modal="true" aria-label="Orçamento personalizado">
+      <div class="chat-header">
+        <div class="chat-agent">
+          <div class="chat-avatar"><img src="/gutweaks-logo.png" alt="GuTweaks" /><span class="chat-status"></span></div>
+          <div><p class="chat-name" data-i18n="chat.name">Atendimento GuTweaks</p><p class="chat-sub" data-i18n="chat.sub">Online — resposta em minutos</p></div>
+        </div>
+        <button class="chat-close ripple-fx" onclick="closeChat()" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      </div>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-footer">
+        <a id="whatsappBtn" class="whatsapp-btn ripple-fx hidden" target="_blank" rel="noopener noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26 9.99 9.99 0 0 1 16.638-7.45c.026.025.05.05.074.076l.17.17a9.99 9.99 0 0 1 2.91 7.037 9.86 9.86 0 0 1-9.901 9.905M20.11 7.916a8.23 8.23 0 0 0-5.889-2.435 8.24 8.24 0 0 0-8.236 8.228 8.23 8.23 0 0 0 1.258 4.383l.18.288-.84 3.06 3.112-.816.19.113a8.22 8.22 0 0 0 4.225 1.159 8.24 8.24 0 0 0 8.236-8.228 8.21 8.21 0 0 0-2.436-5.752Z"/></svg>
+          <span id="waBtnLabel" data-i18n="chat.waButton">Enviar no WhatsApp e agendar</span>
+        </a>
+        <form id="chatForm" class="chat-form" onsubmit="return false">
+          <textarea id="chatInput" class="chat-input" rows="1" placeholder="Digite sua resposta..."></textarea>
+          <button type="button" id="chatSend" class="chat-send ripple-fx" aria-label="Enviar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
+        </form>
+        <p id="chatStep" class="chat-step">Etapa 1 de 12</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       I18N — traduções do site (PT / EN)
+    ========================================================= */
+    const I18N = {
+      pt: {
+        'meta.title': 'GuTweaks — Otimização profissional de PC gamer',
+        'meta.desc': 'Menos delay, mais frame. Otimização sob medida, ajustes de BIOS, overclock seguro e redução de input lag. Configuração personalizada, sem gambiarra.',
+        'nav.services': 'Serviços', 'nav.process': 'Como funciona', 'nav.data': 'Dados', 'nav.results': 'Resultados', 'nav.faq': 'FAQ', 'nav.about': 'Sobre Mim', 'nav.cta': 'Fazer orçamento',
+        'hero.badge': 'Atendendo agora',
+        'hero.title1': 'Otimização profissional', 'hero.title2': 'de PC ao extremo.',
+        'hero.desc': 'Ajustes de BIOS, overclock seguro, redução de input lag e estabilidade total. Atendimento 100% personalizado, feito sob medida pra sua máquina e o seu jogo.',
+        'hero.cta1': 'Fazer orçamento personalizado', 'hero.cta2': 'Ver serviços',
+        'hero.tag1': 'Overclock seguro', 'hero.tag2': 'Zero delay', 'hero.tag3': 'Estabilidade total',
+        'feature1.label': 'Zero Delay', 'feature1.title': 'FPS alto e resposta imediata', 'feature1.desc': 'Latência praticamente imperceptível — cada movimento traduzido em performance real.',
+        'feature2.label': 'Estabilidade', 'feature2.title': 'Temperaturas sob controle', 'feature2.desc': 'Sistema tunado sem travadas, sem stutter e sem esquentar em partidas longas.',
+        'feature3.label': 'Overclock', 'feature3.title': 'Máxima eficiência', 'feature3.desc': 'Mais performance extraída da CPU, GPU e RAM com segurança total.',
+        'stats.label1': 'FPS de ganho médio', 'stats.label2': 'PCs otimizados', 'stats.label3': 'de input lag', 'stats.label4': 'clientes satisfeitos',
+        'services.label': 'Serviços', 'services.title1': 'Cada máquina é única.', 'services.title2': 'Cada otimização também.',
+        'services.desc': 'Você me conta a sua config e o que quer alcançar. Eu analiso o seu hardware e devolvo uma proposta técnica sob medida — sem pacote genérico, sem enrolação.',
+        'services.cardTitle': 'Trabalhamos por orçamento',
+        'services.li1': 'Ajustes avançados de BIOS/UEFI', 'services.li2': 'Overclock seguro de CPU, GPU e RAM', 'services.li3': 'Regulação fina de tensões e PBO',
+        'services.li4': 'Redução de temperaturas', 'services.li5': 'Otimização completa do Windows', 'services.li6': 'Affinity de núcleos e prioridades',
+        'services.li7': 'Testes de estresse e estabilidade', 'services.li8': 'Diagnóstico profundo de hardware', 'services.li9': 'Tweaks de rede e input lag', 'services.li10': 'Suporte pós-otimização',
+        'services.paymentLabel': 'Pagamento', 'services.paymentValue': 'PIX · Cartão · Internacional',
+        'mini1.title': 'Foco em competitivo', 'mini1.desc': 'Configuração pensada pra quem joga Fortnite, Valorant, CS2 e outros títulos onde cada frame conta.',
+        'mini2.title': '100% seguro', 'mini2.desc': 'Sem risco pra sua máquina. Backup, testes de estabilidade e reversão sempre possível.',
+        'mini3.title': 'Atendimento direto', 'mini3.desc': 'Você fala diretamente comigo do começo ao fim, sem passar por atendente ou bot.',
+        'process.label': 'Processo', 'process.title1': 'Simples, transparente,', 'process.title2': 'e sob medida.',
+        'process1.title': 'Você abre o orçamento', 'process1.desc': 'Clica no botão, me passa a config do seu PC pelo chat e o que quer resolver.',
+        'process2.title': 'Analiso sua máquina', 'process2.desc': 'Estudo cada peça, sistema e uso, e monto uma proposta feita sob medida pra você.',
+        'process3.title': 'Agendamos e otimizo', 'process3.desc': 'Marcamos horário, faço a otimização remota com você acompanhando e testando ao vivo.',
+        'process4.title': 'Suporte contínuo', 'process4.desc': 'Depois da entrega, seguimos em contato pra ajuste fino e qualquer dúvida futura.',
+        'fps.label': 'Dados reais', 'fps.title1': 'Comparativo de', 'fps.title2': 'performance.',
+        'fps.desc': 'Antes e depois da otimização, medido em condições reais de jogo. É a diferença que você sente no primeiro clique.',
+        'fps.m1.label': 'FPS', 'fps.m1.desc': 'Aumento médio em títulos competitivos.',
+        'fps.m2.label': 'Temperatura', 'fps.m2.desc': 'Consumo energético reduzido.',
+        'fps.m3.label': 'Latência', 'fps.m3.desc': 'Redução de input lag sistêmico.',
+        'fps.m4.label': 'Estabilidade', 'fps.m4.desc': 'Zero quedas bruscas (frame drops).',
+        'fps.note': '*Nota: As métricas apresentadas representam médias obtidas em testes internos. Os ganhos reais são variáveis e dependem diretamente das especificações de hardware, refrigeração e condições físicas de cada computador.',
+        'fps.base': 'Base', 'fps.optimized': 'Otimizado', 'fps.status': 'Status', 'fps.verified': 'Verificado', 'fps.lagReduction': 'Redução lag',
+        'testimonials.label': 'Resultados reais', 'testimonials.title': 'O que dizem sobre o serviço',
+        'testimonial1.text': '"Fortnite competitivo travava. Passou pra 240+ FPS estáveis e o input ficou instantâneo."',
+        'testimonial2.text': '"Salto absurdo de FPS e o PC parou de esquentar. Trabalho impecável, valeu cada real."',
+        'testimonial3.text': '"Achei que meu PC não dava mais. Depois da otimização, virou outra máquina no Valorant."',
+        'testimonial4.text': '"Suporte impecável, tudo explicado no processo. Já indiquei pra vários amigos do time."',
+        'faq.label': 'FAQ', 'faq.title1': 'Perguntas', 'faq.title2': 'frequentes', 'faq.desc': 'Ficou alguma dúvida? Abre o orçamento e me pergunta direto no chat.',
+        'faq1.q': 'Como é feita a otimização?', 'faq1.a': 'Feita remotamente, com acesso autorizado por você. Faço backup, ajustes de BIOS, otimização do Windows, overclock quando cabível e testes de estabilidade antes de entregar.',
+        'faq2.q': 'Tem risco pra minha máquina?', 'faq2.a': 'Não. Todo processo é reversível, sempre com backup e ajustes dentro dos limites seguros do seu hardware. Nada de tensões absurdas ou tweaks que comprometam a vida útil.',
+        'faq3.q': 'Vocês acessam meus arquivos pessoais?', 'faq3.a': 'Não. O acesso é focado só no que é necessário pra otimização. Seus arquivos pessoais não são abertos, movidos nem coletados.',
+        'faq4.q': 'Quanto tempo demora?', 'faq4.a': 'Depende da configuração e do que vamos ajustar. Em média entre 2h e 4h, com você acompanhando via call.',
+        'faq5.q': 'Vocês entram em call durante a otimização?', 'faq5.a': 'Sim. Todo o processo é feito com você presente na call, podendo testar antes e depois de cada ajuste.',
+        'faq6.q': 'Tem garantia ou reembolso?', 'faq6.a': 'Sim. Se algo não funcionar como acordado, ajustamos até ficar redondo. Caso não seja possível, o reembolso é analisado caso a caso.',
+        'cta.title1': 'Pronto pra extrair o', 'cta.titleGradient': 'máximo', 'cta.title2': 'do seu PC?',
+        'cta.desc': 'Abre o chat de orçamento, me passa sua config e agendamos hoje mesmo.', 'cta.button': 'Fazer orçamento personalizado',
+        'footer.tagline': 'Feito por gamer, pra gamer.', 'floating.cta': 'Orçamento',
+        'chat.name': 'Atendimento GuTweaks', 'chat.sub': 'Online — resposta em minutos', 'chat.waButton': 'Enviar no WhatsApp e agendar'
+      },
+      en: {
+        'meta.title': 'GuTweaks — Professional gaming PC optimization',
+        'meta.desc': 'Less delay, more frames. Tailored optimization, BIOS tuning, safe overclocking and input lag reduction. Custom setup, no shortcuts.',
+        'nav.services': 'Services', 'nav.process': 'How it works', 'nav.data': 'Data', 'nav.results': 'Results', 'nav.faq': 'FAQ', 'nav.about': 'About Me', 'nav.cta': 'Get a quote',
+        'hero.badge': 'Online now',
+        'hero.title1': 'Professional PC optimization', 'hero.title2': 'taken to the extreme.',
+        'hero.desc': 'BIOS tuning, safe overclocking, input lag reduction and total stability. 100% personalized service, tailored to your machine and your game.',
+        'hero.cta1': 'Get a personalized quote', 'hero.cta2': 'See services',
+        'hero.tag1': 'Safe overclocking', 'hero.tag2': 'Zero delay', 'hero.tag3': 'Total stability',
+        'feature1.label': 'Zero Delay', 'feature1.title': 'High FPS and instant response', 'feature1.desc': 'Practically imperceptible latency — every move translated into real performance.',
+        'feature2.label': 'Stability', 'feature2.title': 'Temperatures under control', 'feature2.desc': 'A tuned system with no freezes, no stutter and no overheating in long sessions.',
+        'feature3.label': 'Overclock', 'feature3.title': 'Maximum efficiency', 'feature3.desc': 'More performance extracted from your CPU, GPU and RAM, fully safely.',
+        'stats.label1': 'average FPS gain', 'stats.label2': 'PCs optimized', 'stats.label3': 'input lag', 'stats.label4': 'satisfied clients',
+        'services.label': 'Services', 'services.title1': 'Every machine is unique.', 'services.title2': 'So is every optimization.',
+        'services.desc': "Tell me your setup and what you want to achieve. I analyze your hardware and put together a technical proposal tailored to you — no generic package, no runaround.",
+        'services.cardTitle': 'Custom quotes, every time',
+        'services.li1': 'Advanced BIOS/UEFI tuning', 'services.li2': 'Safe CPU, GPU and RAM overclocking', 'services.li3': 'Fine voltage and PBO tuning',
+        'services.li4': 'Temperature reduction', 'services.li5': 'Full Windows optimization', 'services.li6': 'Core affinity and process priority',
+        'services.li7': 'Stress and stability testing', 'services.li8': 'In-depth hardware diagnostics', 'services.li9': 'Network and input lag tweaks', 'services.li10': 'Post-optimization support',
+        'services.paymentLabel': 'Payment', 'services.paymentValue': 'PIX · Card · International',
+        'mini1.title': 'Built for competitive play', 'mini1.desc': 'Setup designed for Fortnite, Valorant, CS2 and other titles where every frame matters.',
+        'mini2.title': '100% safe', 'mini2.desc': 'No risk to your machine. Backup, stability testing and rollback always available.',
+        'mini3.title': 'Direct support', 'mini3.desc': 'You talk directly with me from start to finish, no agents, no bots.',
+        'process.label': 'Process', 'process.title1': 'Simple, transparent,', 'process.title2': 'and tailored to you.',
+        'process1.title': 'You request a quote', 'process1.desc': 'Click the button, send me your PC specs over chat and tell me what you want fixed.',
+        'process2.title': 'I analyze your machine', 'process2.desc': 'I study each component, your OS and your usage, and put together a tailored proposal.',
+        'process3.title': 'We schedule and optimize', 'process3.desc': 'We book a time, and I run the remote optimization while you watch and test live.',
+        'process4.title': 'Ongoing support', 'process4.desc': 'After delivery, we stay in touch for fine-tuning and any future questions.',
+        'fps.label': 'Real data', 'fps.title1': 'Performance', 'fps.title2': 'comparison.',
+        'fps.desc': 'Before and after optimization, measured under real in-game conditions. It\'s the difference you feel on the very first click.',
+        'fps.m1.label': 'FPS', 'fps.m1.desc': 'Average increase across competitive titles.',
+        'fps.m2.label': 'Temperature', 'fps.m2.desc': 'Reduced power draw.',
+        'fps.m3.label': 'Latency', 'fps.m3.desc': 'Reduction in system-wide input lag.',
+        'fps.m4.label': 'Stability', 'fps.m4.desc': 'Zero sudden frame drops.',
+        'fps.note': '*Note: The metrics shown represent averages from internal testing. Real gains vary and depend directly on each computer\'s hardware specs, cooling and physical condition.',
+        'fps.base': 'Base', 'fps.optimized': 'Optimized', 'fps.status': 'Status', 'fps.verified': 'Verified', 'fps.lagReduction': 'Lag reduction',
+        'testimonials.label': 'Real results', 'testimonials.title': 'What clients say about the service',
+        'testimonial1.text': '"Competitive Fortnite used to stutter. Now it\'s a stable 240+ FPS and input feels instant."',
+        'testimonial2.text': '"Massive FPS jump and the PC stopped overheating. Flawless work, worth every cent."',
+        'testimonial3.text': '"I thought my PC was done for. After the optimization it felt like a different machine in Valorant."',
+        'testimonial4.text': '"Flawless support, everything explained along the way. Already recommended it to my whole team."',
+        'faq.label': 'FAQ', 'faq.title1': 'Frequently', 'faq.title2': 'asked questions', 'faq.desc': 'Still have questions? Open the quote chat and ask me directly.',
+        'faq1.q': 'How is the optimization done?', 'faq1.a': 'It\'s done remotely, with access you authorize. I back up your system, tune the BIOS, optimize Windows, overclock where it makes sense, and run stability tests before handing it back.',
+        'faq2.q': 'Is there any risk to my machine?', 'faq2.a': 'No. The whole process is reversible, always with a backup and adjustments kept within your hardware\'s safe limits. No extreme voltages or tweaks that would hurt its lifespan.',
+        'faq3.q': 'Do you access my personal files?', 'faq3.a': 'No. Access is limited strictly to what\'s needed for the optimization. Your personal files are never opened, moved or collected.',
+        'faq4.q': 'How long does it take?', 'faq4.a': 'It depends on your setup and what needs adjusting. On average between 2 and 4 hours, with you following along on a call.',
+        'faq5.q': 'Do you stay on a call during the optimization?', 'faq5.a': 'Yes. The whole process happens with you present on the call, so you can test before and after every change.',
+        'faq6.q': 'Is there a warranty or refund?', 'faq6.a': 'Yes. If something doesn\'t work as agreed, we fix it until it\'s right. If that\'s not possible, refunds are evaluated case by case.',
+        'cta.title1': 'Ready to get the', 'cta.titleGradient': 'most', 'cta.title2': 'out of your PC?',
+        'cta.desc': 'Open the quote chat, send me your specs and let\'s schedule it for today.', 'cta.button': 'Get a personalized quote',
+        'footer.tagline': 'Built by a gamer, for gamers.', 'floating.cta': 'Get a quote',
+        'chat.name': 'GuTweaks Support', 'chat.sub': 'Online — reply within minutes', 'chat.waButton': 'Send on WhatsApp and schedule'
+      }
+    };
+
+    let currentLang = 'pt';
+
+    function applyTranslations(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[lang][key] !== undefined) el.textContent = I18N[lang][key];
+      });
+      document.getElementById('pageTitle').textContent = I18N[lang]['meta.title'];
+      document.getElementById('metaDesc').setAttribute('content', I18N[lang]['meta.desc']);
+      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+      document.getElementById('langBtnPt').classList.toggle('active', lang === 'pt');
+      document.getElementById('langBtnEn').classList.toggle('active', lang === 'en');
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      applyTranslations(lang);
+      try { localStorage.setItem('gutweaks_lang', lang); } catch(e) {}
+      document.getElementById('langOverlay').classList.add('hidden');
+    }
+
+    (function initLanguage(){
+      let saved = null;
+      try { saved = localStorage.getItem('gutweaks_lang'); } catch(e) {}
+      if (saved === 'pt' || saved === 'en') {
+        currentLang = saved;
+        applyTranslations(saved);
+        document.getElementById('langOverlay').classList.add('hidden');
+      } else {
+        // pré-preenche em português como padrão visual atrás do overlay
+        applyTranslations('pt');
+      }
+    })();
+
+    /* =========================================================
+       CHAT / ORÇAMENTO
+    ========================================================= */
+    const WHATSAPP_NUMBER = '5511980596585';
+
+    function getSteps(lang){
+      if (lang === 'en') return [
+        { key:'nome', q:'Hey! I\'m the quote assistant. Let\'s personalize this — what\'s your name?', placeholder:'Your name' },
+        { key:'uso', q:'Nice to meet you, {nome}! What\'s the main use for your PC?', placeholder:'Ex.: Competitive Fortnite, streaming, editing...', suggestions:['Competitive gaming (FPS)','Streaming + gaming','Editing / work','Mixed use'] },
+        { key:'cpu', q:'What\'s your processor (CPU)?', placeholder:'Ex.: Ryzen 5 5600, Intel i5-12400F...', suggestions:['Ryzen 5 5600','Ryzen 7 5700X3D','Intel i5-12400F','Intel i7-13700K','Not sure'] },
+        { key:'gpu', q:'And your graphics card (GPU)?', placeholder:'Ex.: RTX 3060, RX 6600...', suggestions:['RTX 3050','RTX 3060','RTX 4060','RX 6600','GTX 1660 Super','Not sure'] },
+        { key:'ram', q:'How much RAM (and speed, if you know it)?', placeholder:'Ex.: 16GB DDR4 3200MHz', suggestions:['8GB DDR4','16GB DDR4 3200MHz','32GB DDR4 3600MHz','32GB DDR5 6000MHz'] },
+        { key:'placa', q:'What\'s your motherboard (model, if you know it)?', placeholder:'Ex.: B550M, B760M, X670E...', suggestions:['Don\'t know the model'] },
+        { key:'armazenamento', q:'Where is Windows installed — SSD, HDD or NVMe?', placeholder:'Ex.: 1TB NVMe SSD', suggestions:['NVMe SSD','SATA SSD','HDD'] },
+        { key:'so', q:'Which operating system are you using?', placeholder:'Ex.: Windows 11 24H2', suggestions:['Windows 10','Windows 11','Windows 11 LTSC / IoT'] },
+        { key:'monitor', q:'What monitor / refresh rate (Hz)?', placeholder:'Ex.: 1080p 144Hz', suggestions:['1080p 60Hz','1080p 144Hz','1080p 240Hz','1440p 165Hz'] },
+        { key:'problemas', q:'What problems do you want solved today?', placeholder:'Ex.: Low FPS, stutter, input lag, high temps...', suggestions:['Low FPS','Stutter / freezing','Input lag / delay','Overheating','Nothing specific, just want performance'], multiline:true },
+        { key:'objetivo', q:'And what\'s your main goal with the optimization?', placeholder:'Ex.: Gain FPS in Fortnite, reduce delay in Valorant...', multiline:true },
+        { key:'orcamento', q:'Last one: do you have a budget in mind, or would you rather I send a tailored price?', placeholder:'Ex.: up to $30, no preference...', suggestions:['No preference','Up to $20','$20–$40','Above $40'] }
+      ];
+      return [
+        { key:'nome', q:'Salve! Sou o assistente de orçamento. Bora personalizar o seu atendimento — como você se chama?', placeholder:'Seu nome' },
+        { key:'uso', q:'Beleza, {nome}! Qual o uso principal do seu PC?', placeholder:'Ex.: Fortnite competitivo, streaming, edição...', suggestions:['Jogos competitivos (FPS)','Streaming + jogos','Edição / trabalho','Uso misto'] },
+        { key:'cpu', q:'Qual o seu processador (CPU)?', placeholder:'Ex.: Ryzen 5 5600, Intel i5-12400F...', suggestions:['Ryzen 5 5600','Ryzen 7 5700X3D','Intel i5-12400F','Intel i7-13700K','Não sei'] },
+        { key:'gpu', q:'E a placa de vídeo (GPU)?', placeholder:'Ex.: RTX 3060, RX 6600...', suggestions:['RTX 3050','RTX 3060','RTX 4060','RX 6600','GTX 1660 Super','Não sei'] },
+        { key:'ram', q:'Quanto de memória RAM (e a frequência, se souber)?', placeholder:'Ex.: 16GB DDR4 3200MHz', suggestions:['8GB DDR4','16GB DDR4 3200MHz','32GB DDR4 3600MHz','32GB DDR5 6000MHz'] },
+        { key:'placa', q:'Qual é a placa-mãe (se souber o modelo)?', placeholder:'Ex.: B550M, B760M, X670E...', suggestions:['Não sei o modelo'] },
+        { key:'armazenamento', q:'Onde o Windows está instalado — SSD, HD ou NVMe?', placeholder:'Ex.: SSD NVMe 1TB', suggestions:['SSD NVMe','SSD SATA','HD'] },
+        { key:'so', q:'Qual sistema operacional está usando?', placeholder:'Ex.: Windows 11 24H2', suggestions:['Windows 10','Windows 11','Windows 11 LTSC / IoT'] },
+        { key:'monitor', q:'Qual monitor / taxa de atualização (Hz)?', placeholder:'Ex.: 1080p 144Hz', suggestions:['1080p 60Hz','1080p 144Hz','1080p 240Hz','1440p 165Hz'] },
+        { key:'problemas', q:'Quais problemas você quer resolver hoje?', placeholder:'Ex.: FPS baixo, travadas, input lag, temperatura alta...', suggestions:['FPS baixo','Travadas / stutter','Input lag / delay','Superaquecimento','Nada específico, quero performance'], multiline:true },
+        { key:'objetivo', q:'E qual seu objetivo principal com a otimização?', placeholder:'Ex.: Ganhar FPS no Fortnite, reduzir delay no Valorant...', multiline:true },
+        { key:'orcamento', q:'Por fim: tem algum orçamento em mente ou prefere que eu te passe um valor sob medida?', placeholder:'Ex.: até R$150, sem preferência...', suggestions:['Sem preferência','Até R$100','R$100–R$200','Acima de R$200'] }
+      ];
+    }
+
+    let steps = getSteps(currentLang);
+    let stepIndex = 0, answers = {}, finished = false;
+    const overlay = document.getElementById('chatOverlay');
+    const messagesEl = document.getElementById('chatMessages');
+    const inputEl = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('chatSend');
+    const formEl = document.getElementById('chatForm');
+    const waBtn = document.getElementById('whatsappBtn');
+    const stepEl = document.getElementById('chatStep');
+
+    function interpolate(text){ return text.replace(/\{(\w+)\}/g, (_,k)=>answers[k]||''); }
+
+    function addMsg(role, text){
+      const div = document.createElement('div');
+      div.className = 'msg ' + (role==='bot'?'msg-bot':'msg-user');
+      div.textContent = text;
+      messagesEl.appendChild(div);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function renderSuggestions(){
+      const s = steps[stepIndex].suggestions;
+      if(!s || finished) return;
+      const wrap = document.createElement('div'); wrap.className='suggestions';
+      s.forEach(txt=>{
+        const b = document.createElement('button'); b.className='suggestion-btn'; b.type='button'; b.textContent=txt;
+        b.onclick = ()=> submit(txt);
+        wrap.appendChild(b);
+      });
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function stepLabel(){
+      return currentLang === 'en'
+        ? `Step ${Math.min(stepIndex+1, steps.length)} of ${steps.length}`
+        : `Etapa ${Math.min(stepIndex+1, steps.length)} de ${steps.length}`;
+    }
+
+    function ask(){
+      if(stepIndex >= steps.length) return finish();
+      addMsg('bot', interpolate(steps[stepIndex].q));
+      inputEl.placeholder = steps[stepIndex].placeholder || (currentLang==='en' ? 'Type your answer...' : 'Digite sua resposta...');
+      renderSuggestions();
+      stepEl.textContent = stepLabel();
+    }
+
+    function submit(value){
+      value = value.trim(); if(!value || finished) return;
+      addMsg('user', value);
+      answers[steps[stepIndex].key] = value;
+      // remove suggestion buttons
+      document.querySelectorAll('.suggestions').forEach(el=>el.remove());
+      stepIndex++;
+      if(stepIndex < steps.length){
+        setTimeout(ask, 300);
+      } else {
+        setTimeout(finish, 300);
+      }
+    }
+
+    function finish(){
+      finished = true;
+      const isEn = currentLang === 'en';
+      addMsg('bot', isEn
+        ? 'Perfect! Summary ready ✅ Click "Send on WhatsApp" to continue directly with me and schedule the optimization.'
+        : 'Perfeito! Resumo montado ✅ Clique em "Enviar no WhatsApp" pra continuar direto comigo e agendar a otimização.');
+      const sum = document.createElement('div'); sum.className='summary-box';
+      sum.innerHTML = `<h4>${isEn ? 'Summary sent to the specialist' : 'Resumo enviado ao especialista'}</h4><ul>`+
+        `<li>👤 ${answers.nome||'-'}</li>`+
+        `<li>🎯 ${answers.uso||'-'}</li>`+
+        `<li>🖥️ ${answers.cpu||'-'} · ${answers.gpu||'-'} · ${answers.ram||'-'}</li>`+
+        `<li>💰 ${answers.orcamento||'-'}</li>`+
+      '</ul>';
+      messagesEl.appendChild(sum);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      formEl.classList.add('hidden');
+      waBtn.classList.remove('hidden');
+      stepEl.textContent = stepLabel();
+
+      const lines = isEn ? [
+        '*New quote request — GuTweaks*','',
+        `👤 *Name:* ${answers.nome||'-'}`,
+        `🎯 *Main use:* ${answers.uso||'-'}`,'',
+        '*PC configuration*',
+        `• CPU: ${answers.cpu||'-'}`,
+        `• GPU: ${answers.gpu||'-'}`,
+        `• RAM: ${answers.ram||'-'}`,
+        `• Motherboard: ${answers.placa||'-'}`,
+        `• Storage: ${answers.armazenamento||'-'}`,
+        `• OS: ${answers.so||'-'}`,
+        `• Monitor: ${answers.monitor||'-'}`,'',
+        `⚠️ *Issues:* ${answers.problemas||'-'}`,
+        `🎯 *Goal:* ${answers.objetivo||'-'}`,
+        `💰 *Budget:* ${answers.orcamento||'-'}`
+      ] : [
+        '*Novo pedido de orçamento — GuTweaks*','',
+        `👤 *Nome:* ${answers.nome||'-'}`,
+        `🎯 *Uso principal:* ${answers.uso||'-'}`,'',
+        '*Configuração do PC*',
+        `• CPU: ${answers.cpu||'-'}`,
+        `• GPU: ${answers.gpu||'-'}`,
+        `• RAM: ${answers.ram||'-'}`,
+        `• Placa-mãe: ${answers.placa||'-'}`,
+        `• Armazenamento: ${answers.armazenamento||'-'}`,
+        `• SO: ${answers.so||'-'}`,
+        `• Monitor: ${answers.monitor||'-'}`,'',
+        `⚠️ *Problemas:* ${answers.problemas||'-'}`,
+        `🎯 *Objetivo:* ${answers.objetivo||'-'}`,
+        `💰 *Orçamento:* ${answers.orcamento||'-'}`
+      ];
+      waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+    }
+
+    function openChat(){
+      steps = getSteps(currentLang);
+      overlay.classList.remove('hidden');
+      stepIndex=0; answers={}; finished=false;
+      messagesEl.innerHTML='';
+      formEl.classList.remove('hidden');
+      waBtn.classList.add('hidden');
+      inputEl.value='';
+      ask();
+      setTimeout(()=>inputEl.focus(), 50);
+    }
+    function closeChat(){ overlay.classList.add('hidden'); }
+
+    // Abre o chat de orçamento automaticamente ao chegar com #orcamento na URL
+    // (usado pelo botão "Agendar otimização agora" da página Sobre Mim)
+    if (window.location.hash === '#orcamento') {
+      window.addEventListener('DOMContentLoaded', function(){
+        const langOverlay = document.getElementById('langOverlay');
+        if (langOverlay) langOverlay.classList.add('hidden');
+        openChat();
+        history.replaceState(null, '', window.location.pathname);
+      });
+    }
+
+    sendBtn.onclick = ()=> submit(inputEl.value);
+    inputEl.addEventListener('keydown', e=>{
+      if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submit(inputEl.value); }
+      if(e.key==='Escape') closeChat();
+    });
+    inputEl.addEventListener('input', function(){
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 128) + 'px';
+    });
+
+    /* --- som clean de clique (Web Audio API) --- */
+    (function(){
+      let ctx = null;
+      function resume(){
+        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+      }
+      function playClick(opts){
+        opts = opts || {};
+        const volume = opts.volume !== undefined ? opts.volume : 0.12;
+        const pitch  = opts.pitch  !== undefined ? opts.pitch  : 900;
+        const duration = opts.duration !== undefined ? opts.duration : 0.08;
+        resume();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(pitch, now);
+        osc.frequency.exponentialRampToValueAtTime(pitch * 0.6, now + duration);
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(volume, now + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration + 0.05);
+        setTimeout(() => { osc.disconnect(); gain.disconnect(); }, (duration + 0.1) * 1000);
+      }
+      function ripple(el){
+        if (!el.classList.contains('ripple-fx')) return;
+        el.classList.remove('clicked');
+        void el.offsetWidth; // reflow
+        el.classList.add('clicked');
+        setTimeout(() => el.classList.remove('clicked'), 460);
+      }
+      function handleInteractive(e){
+        const target = e.target.closest('button, a, summary, .ripple-fx');
+        if (!target) return;
+        // ignorar links externos que abrem nova aba já têm feedback nativo
+        playClick({ volume: 0.10, pitch: 950, duration: 0.07 });
+        ripple(target);
+      }
+      document.addEventListener('click', handleInteractive, true);
+    })();
+  </script>
+
+
+<div id="cursorRing"></div>
+<div id="cursorDot"></div>
+<script>
+(function(){
+  if (matchMedia('(hover: none)').matches) return;
+  var dot = document.getElementById('cursorDot');
+  var ring = document.getElementById('cursorRing');
+  var tx=0,ty=0,rx=0,ry=0;
+  document.addEventListener('mousemove', function(e){
+    tx = e.clientX; ty = e.clientY;
+    dot.style.transform = 'translate('+tx+'px,'+ty+'px) translate(-50%,-50%)';
+  });
+  (function loop(){
+    rx += (tx - rx) * 0.18;
+    ry += (ty - ry) * 0.18;
+    ring.style.transform = 'translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';
+    requestAnimationFrame(loop);
+  })();
+  var hoverSel = 'a,button,[role=button],summary,.ripple-fx,.lang-card,.opt-badge,textarea,input,.faq-item';
+  document.addEventListener('mouseover', function(e){ if(e.target.closest(hoverSel)) document.body.classList.add('cursor-hover'); });
+  document.addEventListener('mouseout',  function(e){ if(e.target.closest(hoverSel)) document.body.classList.remove('cursor-hover'); });
+  document.addEventListener('mouseleave', function(){ dot.style.opacity='0'; ring.style.opacity='0'; });
+  document.addEventListener('mouseenter', function(){ dot.style.opacity='1'; ring.style.opacity='1'; });
+})();
+</script>
+
+</body>
+</html>
