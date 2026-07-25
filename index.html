@@ -1101,6 +1101,17 @@
     }
     function closeChat(){ overlay.classList.add('hidden'); }
 
+    // Abre o chat de orçamento automaticamente ao chegar com #orcamento na URL
+    // (usado pelo botão "Agendar otimização agora" da página Sobre Mim)
+    if (window.location.hash === '#orcamento') {
+      window.addEventListener('DOMContentLoaded', function(){
+        const langOverlay = document.getElementById('langOverlay');
+        if (langOverlay) langOverlay.classList.add('hidden');
+        openChat();
+        history.replaceState(null, '', window.location.pathname);
+      });
+    }
+
     sendBtn.onclick = ()=> submit(inputEl.value);
     inputEl.addEventListener('keydown', e=>{
       if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submit(inputEl.value); }
