@@ -9,8 +9,8 @@
 <meta property="og:description" content="Mais de 1500 PCs otimizados. Engenharia de alta performance para gamers e criadores." />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="icon" type="image/png" href="assets/logo.png" />
-<link rel="apple-touch-icon" href="assets/logo.png" />
+<link rel="icon" type="image/png" href="/gutweaks-logo.png" />
+<link rel="apple-touch-icon" href="/gutweaks-logo.png" />
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   html,body{background:#0a0a0c;color:#fff;-webkit-font-smoothing:antialiased}
@@ -19,16 +19,40 @@
   .hero-glow{background:radial-gradient(1000px 500px at 50% -10%,rgba(255,255,255,0.08),transparent 60%)}
   .cta-glow{background:radial-gradient(700px 400px at 50% 0%,rgba(255,255,255,0.08),transparent 60%)}
   .sig{filter:invert(1) brightness(1.4)}
+  /* Padrão abstrato em CSS puro — não depende de nenhuma imagem extra */
+  .abstract-lines{
+    background-image:
+      linear-gradient(115deg, transparent 0 49.6%, rgba(255,255,255,0.07) 49.6% 49.9%, transparent 49.9%),
+      linear-gradient(115deg, transparent 0 29.6%, rgba(255,255,255,0.05) 29.6% 29.85%, transparent 29.85%),
+      linear-gradient(65deg, transparent 0 70%, rgba(255,255,255,0.06) 70% 70.25%, transparent 70.25%),
+      linear-gradient(65deg, transparent 0 85%, rgba(255,255,255,0.04) 85% 85.2%, transparent 85.2%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+  }
+  .grain-dots{
+    background-image: radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
 
 <!-- Background layers -->
-<div aria-hidden class="pointer-events-none fixed inset-0 z-0 opacity-[0.07]" style="background-image:url('assets/topo.png');background-size:900px auto;background-repeat:repeat;mix-blend-mode:screen"></div>
+<div aria-hidden class="pointer-events-none fixed inset-0 z-0 abstract-lines"></div>
+<div aria-hidden class="pointer-events-none fixed inset-0 z-0 opacity-40 grain-dots" style="mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%)"></div>
 <div aria-hidden class="pointer-events-none fixed inset-0 z-0 flex items-center justify-center">
-  <img src="assets/logo.png" alt="" class="w-[85vw] max-w-[900px] opacity-[0.035] blur-[1px] select-none" />
+  <img src="/gutweaks-logo.png" alt="" class="w-[70vw] max-w-[700px] opacity-[0.05] blur-[1px] select-none" />
 </div>
 <div aria-hidden class="pointer-events-none fixed inset-0 z-0 vignette"></div>
+
+<header class="relative z-10 border-b border-white/10">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+    <a href="index.html" class="flex items-center gap-2 text-[0.75rem] tracking-[0.2em] text-white/60 transition hover:text-white">
+      <span aria-hidden>&larr;</span> VOLTAR PARA O INÍCIO
+    </a>
+    <a href="index.html" class="text-[0.7rem] tracking-[0.3em] text-white/50 hover:text-white">GUSTAVOTWEAKS</a>
+  </div>
+</header>
 
 <main class="relative z-10">
 
@@ -164,7 +188,7 @@
       <h2 class="font-light text-3xl sm:text-5xl leading-[1.1] text-white">PERFORMANCE NÃO SE<br />PRESUME. SE MEDE.</h2>
       <p class="mx-auto mt-6 max-w-xl italic text-white/60"><span class="not-italic text-white">Assuma o controle real</span> sobre o seu hardware. Latência mínima, FPS estável, temperatura reduzida e resposta imediata.</p>
       <div class="mt-10">
-        <a href="#orcamento" class="inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-black transition hover:bg-white/90">
+        <a href="index.html#orcamento" class="inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-black transition hover:bg-white/90">
           Agendar otimização agora <span aria-hidden>&rarr;</span>
         </a>
       </div>
