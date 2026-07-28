@@ -9,8 +9,10 @@
 <meta property="og:description" content="Mais de 1500 PCs otimizados. Engenharia de alta performance para gamers e criadores." />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="icon" type="image/png" href="/gutweaks-logo.png" />
-<link rel="apple-touch-icon" href="/gutweaks-logo.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/gutweaks-logo.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/gutweaks-logo.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/gutweaks-logo.png" />
+<link rel="shortcut icon" href="/gutweaks-logo.png" />
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   html,body{background:#0a0a0c;color:#fff;-webkit-font-smoothing:antialiased}
@@ -28,29 +30,81 @@
       linear-gradient(65deg, transparent 0 85%, rgba(255,255,255,0.04) 85% 85.2%, transparent 85.2%);
     -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
     mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+    animation: linesDrift 22s ease-in-out infinite;
+  }
+  @keyframes linesDrift {
+    0%, 100% { transform: translate3d(0,0,0) scale(1); opacity: 1; }
+    50% { transform: translate3d(-1.2%, 0.8%, 0) scale(1.015); opacity: 0.85; }
   }
   .grain-dots{
     background-image: radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px);
     background-size: 26px 26px;
   }
+
+  /* Orbes de fundo, sutis, mono — mesma linguagem visual da home */
+  .bg-orbs { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .bg-orb { position: absolute; border-radius: 999px; filter: blur(90px); will-change: transform; }
+  .bg-orb--1 { width: 42rem; height: 42rem; top: -14rem; left: -8rem; background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%); animation: orbFloat1 26s ease-in-out infinite; }
+  .bg-orb--2 { width: 34rem; height: 34rem; top: 30%; right: -12rem; background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%); animation: orbFloat2 32s ease-in-out infinite; }
+  .bg-orb--3 { width: 30rem; height: 30rem; bottom: -10rem; left: 20%; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); animation: orbFloat3 28s ease-in-out infinite; }
+  @keyframes orbFloat1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(4%, 6%); } }
+  @keyframes orbFloat2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-5%, -4%); } }
+  @keyframes orbFloat3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(3%, -5%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .abstract-lines, .bg-orb { animation: none !important; }
+  }
+
+  /* Reveal suave ao rolar */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; transition: none !important; } }
+
+  /* Redes sociais no rodapé */
+  .social-links { display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
+  .social-link { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.6); transition: color .2s, border-color .2s, transform .2s, background .2s; }
+  .social-link:hover { color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); transform: translateY(-2px); }
+
+  /* Cursor customizado — traço único, sem atraso */
+  html, body, a, button, [role="button"] { cursor: none !important; }
+  #cursor {
+    position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none;
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.9);
+    mix-blend-mode: difference;
+    transform: translate(-50%,-50%);
+    transition: width .16s cubic-bezier(.2,.8,.2,1), height .16s cubic-bezier(.2,.8,.2,1), border-width .16s ease, background .16s ease;
+  }
+  body.cursor-hover #cursor { width: 40px; height: 40px; background: rgba(255,255,255,0.95); border-width: 0; }
+  body.cursor-active #cursor { width: 16px; height: 16px; }
+  @media (hover: none) { #cursor { display: none !important; } html, body, a, button { cursor: auto !important; } }
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
 
 <!-- Background layers -->
+<div aria-hidden class="bg-orbs">
+  <div class="bg-orb bg-orb--1"></div>
+  <div class="bg-orb bg-orb--2"></div>
+  <div class="bg-orb bg-orb--3"></div>
+</div>
 <div aria-hidden class="pointer-events-none fixed inset-0 z-0 abstract-lines"></div>
 <div aria-hidden class="pointer-events-none fixed inset-0 z-0 opacity-40 grain-dots" style="mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%)"></div>
 <div aria-hidden class="pointer-events-none fixed inset-0 z-0 flex items-center justify-center">
-  <img src="/gutweaks-logo.png" alt="" class="w-[70vw] max-w-[700px] opacity-[0.05] blur-[1px] select-none" />
+  <img src="/gutweaks-logo.png" alt="" class="w-[74vw] max-w-[760px] opacity-[0.055] blur-[1px] select-none" />
 </div>
 <div aria-hidden class="pointer-events-none fixed inset-0 z-0 vignette"></div>
+
+<div id="cursor"></div>
 
 <header class="relative z-10 border-b border-white/10">
   <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
     <a href="/" class="flex items-center gap-2 text-[0.75rem] tracking-[0.2em] text-white/60 transition hover:text-white">
       <span aria-hidden>&larr;</span> VOLTAR PARA O INÍCIO
     </a>
-    <a href="/" class="text-[0.7rem] tracking-[0.3em] text-white/50 hover:text-white">GUSTAVOTWEAKS</a>
+    <a href="/" class="flex items-center gap-2 text-[0.7rem] tracking-[0.3em] text-white/50 hover:text-white">
+      <img src="/gutweaks-logo.png" alt="" class="h-8 w-8 object-contain" />
+      GUSTAVOTWEAKS
+    </a>
   </div>
 </header>
 
@@ -112,7 +166,7 @@
   </section>
 
   <!-- MINHA HISTÓRIA -->
-  <section class="border-b border-white/10">
+  <section class="reveal border-b border-white/10">
     <div class="mx-auto grid max-w-6xl gap-16 px-6 py-24 md:grid-cols-[220px_1fr]">
       <div>
         <p class="sticky top-24 text-[0.65rem] tracking-[0.35em] text-white/40">O INÍCIO</p>
@@ -132,7 +186,7 @@
   </section>
 
   <!-- EVOLUÇÃO TÉCNICA -->
-  <section class="border-b border-white/10">
+  <section class="reveal border-b border-white/10">
     <div class="mx-auto max-w-6xl px-6 py-24">
       <p class="text-[0.65rem] tracking-[0.35em] text-white/40">A LINHA DO TEMPO</p>
       <h2 class="mt-4 font-light text-3xl sm:text-5xl text-white">EVOLUÇÃO <span class="italic text-white/70">TÉCNICA</span></h2>
@@ -182,7 +236,7 @@
   </section>
 
   <!-- CTA + ASSINATURA -->
-  <section class="relative overflow-hidden">
+  <section class="reveal relative overflow-hidden">
     <div class="pointer-events-none absolute inset-0 cta-glow"></div>
     <div class="mx-auto max-w-4xl px-6 py-28 text-center">
       <h2 class="font-light text-3xl sm:text-5xl leading-[1.1] text-white">PERFORMANCE NÃO SE<br />PRESUME. SE MEDE.</h2>
@@ -199,6 +253,105 @@
     </div>
   </section>
 
+  <!-- FOOTER -->
+  <footer class="reveal relative z-10 border-t border-white/10 py-14 text-center">
+    <img src="/gutweaks-logo.png" alt="GuTweaks" class="mx-auto h-16 w-16 object-contain opacity-90" />
+    <p class="mt-4 text-[0.65rem] tracking-[0.4em] text-white/40">GUTWEAKS · PRO OPTIMIZATION</p>
+    <div class="social-links mt-7">
+      <a class="social-link" href="https://www.instagram.com/gustavotweakss/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a class="social-link" href="https://www.youtube.com/@gutweaks" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.25Z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+      </a>
+      <a class="social-link" href="https://x.com/gustavotweaks" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
+    <p class="mt-8 text-[0.7rem] text-white/40">© 2026 GuTweaks · Pro Optimization</p>
+  </footer>
+
 </main>
+
+<script>
+  /* --- som de clique clean (Web Audio API) --- */
+  (function(){
+    let ctx = null;
+    function resume(){
+      if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if (ctx.state === 'suspended') ctx.resume();
+    }
+    function playClick(){
+      const volume = 0.07, pitch = 1500, duration = 0.035;
+      resume();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(pitch * 1.6, now);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(pitch, now);
+      osc.frequency.exponentialRampToValueAtTime(pitch * 0.85, now + duration);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(volume, now + 0.003);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      osc.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+      osc.start(now); osc.stop(now + duration + 0.02);
+
+      const noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 0.02, ctx.sampleRate);
+      const data = noiseBuf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+      const noise = ctx.createBufferSource();
+      noise.buffer = noiseBuf;
+      const noiseGain = ctx.createGain();
+      const noiseFilter = ctx.createBiquadFilter();
+      noiseFilter.type = 'highpass';
+      noiseFilter.frequency.setValueAtTime(2500, now);
+      noiseGain.gain.setValueAtTime(volume * 0.35, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.02);
+      noise.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(ctx.destination);
+      noise.start(now);
+
+      setTimeout(() => {
+        osc.disconnect(); gain.disconnect(); filter.disconnect();
+        noise.disconnect(); noiseGain.disconnect(); noiseFilter.disconnect();
+      }, (duration + 0.1) * 1000);
+    }
+    document.addEventListener('click', function(e){
+      if (e.target.closest('a, button, [role="button"]')) playClick();
+    }, true);
+  })();
+
+  /* --- cursor único, sem atraso, sem bolinha seguindo --- */
+  (function(){
+    if (matchMedia('(hover: none)').matches) return;
+    var cursor = document.getElementById('cursor');
+    if (!cursor) return;
+    document.addEventListener('mousemove', function(e){
+      cursor.style.transform = 'translate('+e.clientX+'px,'+e.clientY+'px) translate(-50%,-50%)';
+    });
+    var hoverSel = 'a,button,[role=button]';
+    document.addEventListener('mouseover', function(e){ if(e.target.closest(hoverSel)) document.body.classList.add('cursor-hover'); });
+    document.addEventListener('mouseout',  function(e){ if(e.target.closest(hoverSel)) document.body.classList.remove('cursor-hover'); });
+    document.addEventListener('mousedown', function(){ document.body.classList.add('cursor-active'); });
+    document.addEventListener('mouseup',   function(){ document.body.classList.remove('cursor-active'); });
+    document.addEventListener('mouseleave', function(){ cursor.style.opacity='0'; });
+    document.addEventListener('mouseenter', function(){ cursor.style.opacity='1'; });
+  })();
+
+  /* --- reveal suave ao rolar --- */
+  (function(){
+    var targets = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { targets.forEach(function(el){ el.classList.add('in-view'); }); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    targets.forEach(function(el){ io.observe(el); });
+  })();
+</script>
+
 </body>
 </html>
