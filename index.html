@@ -9,6 +9,10 @@
   <meta property="og:description" content="Menos delay, mais frame. Otimização sob medida, ajustes de BIOS, overclock seguro e redução de input lag." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/gutweaks-logo.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/gutweaks-logo.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/gutweaks-logo.png" />
+  <link rel="shortcut icon" href="/gutweaks-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -80,6 +84,38 @@
         linear-gradient(65deg, transparent 0 85%, rgba(255,255,255,0.04) 85% 85.2%, transparent 85.2%);
       -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
       mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+      animation: linesDrift 22s ease-in-out infinite;
+    }
+    @keyframes linesDrift {
+      0%, 100% { transform: translate3d(0,0,0) scale(1); opacity: 1; }
+      50% { transform: translate3d(-1.2%, 0.8%, 0) scale(1.015); opacity: 0.85; }
+    }
+
+    /* AMBIENT BACKGROUND ORBS (sutil, mono, sem cor chamativa) */
+    .bg-orbs { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+    .bg-orb {
+      position: absolute; border-radius: 999px; filter: blur(90px);
+      background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);
+      will-change: transform;
+    }
+    .bg-orb--1 { width: 42rem; height: 42rem; top: -14rem; left: -8rem; animation: orbFloat1 26s ease-in-out infinite; }
+    .bg-orb--2 { width: 34rem; height: 34rem; top: 30%; right: -12rem; background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%); animation: orbFloat2 32s ease-in-out infinite; }
+    .bg-orb--3 { width: 30rem; height: 30rem; bottom: -10rem; left: 20%; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); animation: orbFloat3 28s ease-in-out infinite; }
+    @keyframes orbFloat1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(4%, 6%); } }
+    @keyframes orbFloat2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-5%, -4%); } }
+    @keyframes orbFloat3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(3%, -5%); } }
+    @media (prefers-reduced-motion: reduce) {
+      .abstract-lines, .bg-orb { animation: none !important; }
+    }
+
+    /* REVEAL ao rolar — sutil, profissional */
+    section:not(.hero), .footer-hero {
+      opacity: 0; transform: translateY(26px);
+      transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
+    }
+    section:not(.hero).in-view, .footer-hero.in-view { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      section:not(.hero), .footer-hero { opacity: 1 !important; transform: none !important; transition: none !important; }
     }
 
     /* NAV */
@@ -91,7 +127,7 @@
     }
     .nav-inner { display: flex; height: 4rem; align-items: center; justify-content: space-between; gap: 1rem; }
     .logo { display: flex; align-items: center; gap: 0.75rem; }
-    .logo img { height: 2.5rem; width: 2.5rem; object-fit: contain; }
+    .logo img { height: 3.1rem; width: 3.1rem; object-fit: contain; }
     .logo-text p:first-child { font-size: 0.875rem; font-weight: 700; }
     .logo-text p:last-child { font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted); }
     .nav-links { display: none; align-items: center; gap: 2rem; font-size: 0.875rem; color: var(--muted); }
@@ -111,7 +147,7 @@
       opacity: 0.06; pointer-events: none; z-index: -1; display: none;
     }
     @media (min-width: 768px) { .hero-watermark { display: block; } }
-    .hero-watermark img { height: 520px; width: 520px; object-fit: contain; }
+    .hero-watermark img { height: 580px; width: 580px; object-fit: contain; }
     .hero-grid { display: grid; gap: 3rem; padding: 5rem 0; }
     @media (min-width: 768px) { .hero-grid { grid-template-columns: 1.1fr 1fr; padding: 7rem 0; } }
     .badge {
@@ -245,7 +281,7 @@
     .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 1rem; font-size: 0.875rem; color: var(--muted); }
     @media (min-width: 640px) { .footer-inner { flex-direction: row; justify-content: space-between; } }
     .footer-brand { display: flex; align-items: center; gap: 0.5rem; }
-    .footer-brand img { height: 1.75rem; width: 1.75rem; object-fit: contain; }
+    .footer-brand img { height: 2.25rem; width: 2.25rem; object-fit: contain; }
 
     /* FLOATING CTA */
     .floating-cta {
@@ -367,9 +403,18 @@
 
     /* FOOTER logo hero */
     .footer-hero { text-align: center; padding: 4rem 0 2rem; border-top: 1px solid var(--border); }
-    .footer-hero img { height: 120px; width: auto; margin-inline: auto; opacity: 0.9; filter: drop-shadow(0 8px 40px rgba(255,255,255,0.08)); transition: opacity .2s, transform .3s; }
+    .footer-hero img { height: 140px; width: auto; margin-inline: auto; opacity: 0.9; filter: drop-shadow(0 8px 40px rgba(255,255,255,0.08)); transition: opacity .2s, transform .3s; }
     .footer-hero img:hover { opacity: 1; transform: translateY(-2px); }
     .footer-hero-tag { margin-top: 1.25rem; font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--muted); }
+
+    /* SOCIAL LINKS */
+    .social-links { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-top: 1.75rem; }
+    .social-link {
+      display: grid; place-items: center; width: 2.75rem; height: 2.75rem;
+      border: 1px solid var(--border); border-radius: 999px; background: rgba(20,20,20,0.6);
+      color: var(--muted); transition: color .2s, border-color .2s, transform .2s, background .2s;
+    }
+    .social-link:hover { color: var(--fg); border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); transform: translateY(-2px); }
 
 
     /* OPT — O que é a otimização */
@@ -391,18 +436,29 @@
     .opt-hi { color: #7dd3fc; }
 
 
-    /* CUSTOM WHITE CURSOR */
+    /* CUSTOM CURSOR — traço único, sem atraso, sem "bola" seguindo o mouse */
     html, body, a, button, [role="button"], .ripple-fx, .lang-card, summary, .brand-btn, .secondary-btn, textarea, input { cursor: none !important; }
-    #cursorDot, #cursorRing { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; border-radius: 999px; mix-blend-mode: difference; }
-    #cursorDot { width: 6px; height: 6px; background: #fff; transform: translate(-50%,-50%); transition: width .15s ease, height .15s ease, background .15s ease; }
-    #cursorRing { width: 34px; height: 34px; border: 1.5px solid rgba(255,255,255,0.65); transform: translate(-50%,-50%); transition: transform .12s ease, width .2s ease, height .2s ease, border-color .2s ease; }
-    body.cursor-hover #cursorDot { width: 10px; height: 10px; }
-    body.cursor-hover #cursorRing { width: 48px; height: 48px; border-color: #fff; }
-    @media (hover: none) { #cursorDot, #cursorRing { display: none !important; } html, body, a, button { cursor: auto !important; } }
+    #cursor {
+      position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none;
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.9);
+      mix-blend-mode: difference;
+      transform: translate(-50%,-50%);
+      transition: width .16s cubic-bezier(.2,.8,.2,1), height .16s cubic-bezier(.2,.8,.2,1), border-width .16s ease, background .16s ease;
+    }
+    body.cursor-hover #cursor { width: 40px; height: 40px; background: rgba(255,255,255,0.95); border-width: 0; }
+    body.cursor-active #cursor { width: 16px; height: 16px; }
+    @media (hover: none) { #cursor { display: none !important; } html, body, a, button { cursor: auto !important; } }
 
   </style>
 </head>
 <body>
+
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="bg-orb bg-orb--1"></div>
+    <div class="bg-orb bg-orb--2"></div>
+    <div class="bg-orb bg-orb--3"></div>
+  </div>
 
   <!-- LANGUAGE SELECT OVERLAY -->
   <div id="langOverlay" class="lang-overlay">
@@ -749,6 +805,17 @@
   <div class="footer-hero container-x">
     <img src="/gutweaks-logo.png" alt="GuTweaks" />
     <p class="footer-hero-tag">GuTweaks · Pro Optimization</p>
+    <div class="social-links">
+      <a class="social-link ripple-fx" href="https://www.instagram.com/gustavotweakss/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a class="social-link ripple-fx" href="https://www.youtube.com/@gutweaks" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.25Z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+      </a>
+      <a class="social-link ripple-fx" href="https://x.com/gustavotweaks" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
   </div>
 
   <footer>
@@ -1131,24 +1198,51 @@
       }
       function playClick(opts){
         opts = opts || {};
-        const volume = opts.volume !== undefined ? opts.volume : 0.12;
-        const pitch  = opts.pitch  !== undefined ? opts.pitch  : 900;
-        const duration = opts.duration !== undefined ? opts.duration : 0.08;
+        const volume = opts.volume !== undefined ? opts.volume : 0.07;
+        const pitch  = opts.pitch  !== undefined ? opts.pitch  : 1500;
+        const duration = opts.duration !== undefined ? opts.duration : 0.035;
         resume();
         const now = ctx.currentTime;
+
+        // tom principal: curto, suave, sem "beep" perceptível
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(pitch * 1.6, now);
         osc.type = 'sine';
         osc.frequency.setValueAtTime(pitch, now);
-        osc.frequency.exponentialRampToValueAtTime(pitch * 0.6, now + duration);
+        osc.frequency.exponentialRampToValueAtTime(pitch * 0.85, now + duration);
         gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(volume, now + 0.005);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-        osc.connect(gain);
+        gain.gain.linearRampToValueAtTime(volume, now + 0.003);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+        osc.connect(filter);
+        filter.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + duration + 0.05);
-        setTimeout(() => { osc.disconnect(); gain.disconnect(); }, (duration + 0.1) * 1000);
+        osc.stop(now + duration + 0.02);
+
+        // leve "ar" percussivo pra dar sensação de clique físico, sem ficar áspero
+        const noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 0.02, ctx.sampleRate);
+        const data = noiseBuf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+        const noise = ctx.createBufferSource();
+        noise.buffer = noiseBuf;
+        const noiseGain = ctx.createGain();
+        const noiseFilter = ctx.createBiquadFilter();
+        noiseFilter.type = 'highpass';
+        noiseFilter.frequency.setValueAtTime(2500, now);
+        noiseGain.gain.setValueAtTime(volume * 0.35, now);
+        noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.02);
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(ctx.destination);
+        noise.start(now);
+
+        setTimeout(() => {
+          osc.disconnect(); gain.disconnect(); filter.disconnect();
+          noise.disconnect(); noiseGain.disconnect(); noiseFilter.disconnect();
+        }, (duration + 0.1) * 1000);
       }
       function ripple(el){
         if (!el.classList.contains('ripple-fx')) return;
@@ -1161,7 +1255,7 @@
         const target = e.target.closest('button, a, summary, .ripple-fx');
         if (!target) return;
         // ignorar links externos que abrem nova aba já têm feedback nativo
-        playClick({ volume: 0.10, pitch: 950, duration: 0.07 });
+        playClick();
         ripple(target);
       }
       document.addEventListener('click', handleInteractive, true);
@@ -1169,29 +1263,33 @@
   </script>
 
 
-<div id="cursorRing"></div>
-<div id="cursorDot"></div>
+<div id="cursor"></div>
 <script>
 (function(){
   if (matchMedia('(hover: none)').matches) return;
-  var dot = document.getElementById('cursorDot');
-  var ring = document.getElementById('cursorRing');
-  var tx=0,ty=0,rx=0,ry=0;
+  var cursor = document.getElementById('cursor');
   document.addEventListener('mousemove', function(e){
-    tx = e.clientX; ty = e.clientY;
-    dot.style.transform = 'translate('+tx+'px,'+ty+'px) translate(-50%,-50%)';
+    cursor.style.transform = 'translate('+e.clientX+'px,'+e.clientY+'px) translate(-50%,-50%)';
   });
-  (function loop(){
-    rx += (tx - rx) * 0.18;
-    ry += (ty - ry) * 0.18;
-    ring.style.transform = 'translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';
-    requestAnimationFrame(loop);
-  })();
   var hoverSel = 'a,button,[role=button],summary,.ripple-fx,.lang-card,.opt-badge,textarea,input,.faq-item';
   document.addEventListener('mouseover', function(e){ if(e.target.closest(hoverSel)) document.body.classList.add('cursor-hover'); });
   document.addEventListener('mouseout',  function(e){ if(e.target.closest(hoverSel)) document.body.classList.remove('cursor-hover'); });
-  document.addEventListener('mouseleave', function(){ dot.style.opacity='0'; ring.style.opacity='0'; });
-  document.addEventListener('mouseenter', function(){ dot.style.opacity='1'; ring.style.opacity='1'; });
+  document.addEventListener('mousedown', function(){ document.body.classList.add('cursor-active'); });
+  document.addEventListener('mouseup',   function(){ document.body.classList.remove('cursor-active'); });
+  document.addEventListener('mouseleave', function(){ cursor.style.opacity='0'; });
+  document.addEventListener('mouseenter', function(){ cursor.style.opacity='1'; });
+})();
+
+/* Reveal suave das seções ao rolar */
+(function(){
+  var targets = document.querySelectorAll('section:not(.hero), .footer-hero');
+  if (!('IntersectionObserver' in window)) { targets.forEach(function(el){ el.classList.add('in-view'); }); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  targets.forEach(function(el){ io.observe(el); });
 })();
 </script>
 
