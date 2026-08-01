@@ -1667,6 +1667,7 @@
   async function renderAdminTab(tab){
     const content = $('dashContent');
     if (!content) return;
+    try {
     if (tab === 'overview') {
       const leads = cache.leads || (cache.leads = await fetchAllLeads());
       const creators = cache.creators || (cache.creators = await fetchCreators());
@@ -1780,6 +1781,10 @@
           </tbody></table></div>
         </div>`;
     }
+    } catch(e) {
+      content.innerHTML = `<div class="surface-card gt-panel"><p class="gt-panel-title">Erro ao carregar</p><p style="color:var(--muted);font-size:0.85rem;line-height:1.7">${e.message || e}</p></div>`;
+      console.error('Erro em renderAdminTab("'+tab+'"):', e);
+    }
   }
 
   async function saveLeadSale(leadId){
@@ -1851,6 +1856,7 @@
 
   async function renderCreatorTab(tab){
     const content = $('dashContent');
+    try {
     const leads = cache.myLeads || (cache.myLeads = await fetchMyLeads(currentUser.uid));
     if (tab === 'overview') {
       const fechados = leads.filter(l=>l.saleValue);
@@ -1896,6 +1902,10 @@
           }).join('') : '<tr><td colspan="7" class="gt-empty">Ninguém usou seu cupom ainda.</td></tr>'}
           </tbody></table></div>
         </div>`;
+    }
+    } catch(e) {
+      content.innerHTML = `<div class="surface-card gt-panel"><p class="gt-panel-title">Erro ao carregar</p><p style="color:var(--muted);font-size:0.85rem;line-height:1.7">${e.message || e}</p></div>`;
+      console.error('Erro em renderCreatorTab("'+tab+'"):', e);
     }
   }
 
