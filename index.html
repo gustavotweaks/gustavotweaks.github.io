@@ -452,6 +452,64 @@
     body.cursor-active #cursor { width: 16px; height: 16px; }
     @media (hover: none) { #cursor { display: none !important; } html, body, a, button { cursor: auto !important; } }
 
+    /* =========================================================
+       CONTAS / DASHBOARDS (Auth + Firebase)
+    ========================================================= */
+    .acc-btn { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid var(--border); background: rgba(20,20,20,0.6); color: var(--fg); padding: 0.6rem 1rem; border-radius: var(--radius); font-weight: 600; font-size: 0.8rem; }
+    .acc-btn:hover { background: rgba(255,255,255,0.08); }
+
+    .gt-overlay {
+      position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.72); backdrop-filter: blur(6px); padding: 1.25rem;
+    }
+    .gt-overlay.hidden { display: none; }
+    .gt-modal { width: 100%; max-width: 26rem; padding: 2rem; position: relative; max-height: 90vh; overflow-y: auto; }
+    .gt-modal-close { position: absolute; top: 1rem; right: 1rem; width: 2rem; height: 2rem; display: grid; place-items: center; border-radius: 999px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--muted); }
+    .gt-modal-close:hover { color: var(--fg); }
+    .gt-title { font-size: 1.35rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif; margin-bottom: 0.35rem; }
+    .gt-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .gt-field { margin-bottom: 1rem; }
+    .gt-field label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.4rem; }
+    .gt-field input, .gt-field select, .gt-field textarea {
+      width: 100%; background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 0.5rem;
+      padding: 0.7rem 0.85rem; color: var(--fg); font-family: inherit; font-size: 0.875rem;
+    }
+    .gt-field input:focus, .gt-field select:focus, .gt-field textarea:focus { outline: none; border-color: rgba(255,255,255,0.4); }
+    .gt-error { font-size: 0.78rem; color: #f87171; margin-top: 0.75rem; min-height: 1em; }
+    .gt-success { font-size: 0.78rem; color: #34d399; margin-top: 0.75rem; min-height: 1em; }
+    .gt-switch-line { font-size: 0.8rem; color: var(--muted); margin-top: 1.25rem; text-align: center; }
+    .gt-switch-line button { color: var(--fg); font-weight: 600; text-decoration: underline; background: none; }
+
+    /* DASHBOARD PANEL */
+    .gt-dash-overlay { position: fixed; inset: 0; z-index: 210; background: var(--bg); overflow-y: auto; }
+    .gt-dash-overlay.hidden { display: none; }
+    .gt-dash-header { position: sticky; top: 0; z-index: 5; border-bottom: 1px solid var(--border); background: rgba(8,8,8,0.9); backdrop-filter: blur(16px); }
+    .gt-dash-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; max-width: 1200px; margin-inline: auto; }
+    .gt-dash-body { max-width: 1200px; margin-inline: auto; padding: 2rem 1.25rem 5rem; }
+    .gt-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .gt-tab { padding: 0.6rem 1.1rem; border-radius: 999px; border: 1px solid var(--border); background: rgba(20,20,20,0.6); font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+    .gt-tab.active { background: var(--fg); color: var(--brand-fg); border-color: transparent; }
+    .gt-stats-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2,1fr); margin-bottom: 2.5rem; }
+    @media (min-width: 700px) { .gt-stats-grid { grid-template-columns: repeat(4,1fr); } }
+    .gt-stat-card { padding: 1.35rem; }
+    .gt-stat-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+    .gt-stat-val { font-size: 1.9rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif; margin-top: 0.4rem; }
+    .gt-panel { padding: 1.5rem; margin-bottom: 1.5rem; }
+    .gt-panel-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 1.1rem; font-family: 'Space Grotesk', sans-serif; }
+    .gt-table-wrap { overflow-x: auto; }
+    table.gt-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    table.gt-table th { text-align: left; color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.08em; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    table.gt-table td { padding: 0.65rem 0.7rem; border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: top; }
+    table.gt-table tr:last-child td { border-bottom: none; }
+    .gt-pill { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .gt-pill.gt-pill--open { background: rgba(250, 204, 21, 0.15); color: #facc15; }
+    .gt-pill.gt-pill--closed { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+    .gt-mini-input { width: 6.5rem; background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 0.4rem; padding: 0.35rem 0.5rem; color: var(--fg); font-size: 0.78rem; }
+    .gt-small-btn { padding: 0.4rem 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: rgba(255,255,255,0.06); color: var(--fg); font-size: 0.72rem; font-weight: 600; }
+    .gt-small-btn:hover { background: rgba(255,255,255,0.12); }
+    .gt-empty { color: var(--muted); font-size: 0.85rem; padding: 1.5rem 0; text-align: center; }
+    .gt-inline-form { display: grid; gap: 0.85rem; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); align-items: end; }
+    .gt-coupon-tag { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 999px; border: 1px solid rgba(52,211,153,0.4); color: #34d399; background: rgba(52,211,153,0.08); }
   </style>
 </head>
 <body>
@@ -512,9 +570,54 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
           <span data-i18n="nav.cta">Fazer orçamento</span>
         </button>
+        <button id="acctBtn" class="acc-btn ripple-fx" onclick="GT.openAccountArea()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span id="acctBtnLabel">Entrar</span>
+        </button>
       </div>
     </div>
   </header>
+
+  <!-- ================= LOGIN MODAL ================= -->
+  <div id="loginOverlay" class="gt-overlay hidden" onclick="if(event.target===this) GT.closeLogin()">
+    <div class="surface-card gt-modal">
+      <button type="button" class="gt-modal-close ripple-fx" onclick="GT.closeLogin()">✕</button>
+      <p class="gt-title">Entrar na conta</p>
+      <p class="gt-sub">Acesso para administrador do site e criadores de conteúdo parceiros.</p>
+      <div class="gt-field">
+        <label>E-mail</label>
+        <input type="email" id="loginEmail" autocomplete="username" placeholder="seuemail@exemplo.com" />
+      </div>
+      <div class="gt-field">
+        <label>Senha</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" placeholder="••••••••" />
+      </div>
+      <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" onclick="GT.doLogin()">Entrar</button>
+      <p id="loginError" class="gt-error"></p>
+    </div>
+  </div>
+
+  <!-- ================= DASHBOARD (ADMIN / CRIADOR) ================= -->
+  <div id="dashOverlay" class="gt-dash-overlay hidden">
+    <div class="gt-dash-header">
+      <div class="gt-dash-header-inner">
+        <div class="logo">
+          <img src="/gutweaks-logo.png" alt="GuTweaks" />
+          <div class="logo-text">
+            <p id="dashTitle">Dashboard</p>
+            <p id="dashUserEmail">—</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:0.6rem">
+          <button type="button" class="secondary-btn ripple-fx" onclick="GT.closeDash()">Voltar ao site</button>
+          <button type="button" class="acc-btn ripple-fx" onclick="GT.doLogout()">Sair</button>
+        </div>
+      </div>
+    </div>
+    <div class="gt-dash-body" id="dashBody">
+      <p class="gt-empty">Carregando…</p>
+    </div>
+  </div>
 
   <section class="hero">
     <div class="abstract-lines"></div>
@@ -1025,6 +1128,7 @@
         { key:'monitor', q:'What monitor / refresh rate (Hz)?', placeholder:'Ex.: 1080p 144Hz', suggestions:['1080p 60Hz','1080p 144Hz','1080p 240Hz','1440p 165Hz'] },
         { key:'problemas', q:'What problems do you want solved today?', placeholder:'Ex.: Low FPS, stutter, input lag, high temps...', suggestions:['Low FPS','Stutter / freezing','Input lag / delay','Overheating','Nothing specific, just want performance'], multiline:true },
         { key:'objetivo', q:'And what\'s your main goal with the optimization?', placeholder:'Ex.: Gain FPS in Fortnite, reduce delay in Valorant...', multiline:true },
+        { key:'cupom', q:'Do you have a discount coupon code? Type it in, or tap "No coupon".', placeholder:'Ex.: FTNLUCCA', suggestions:['No coupon'], optional:true },
         { key:'orcamento', q:'Last one: do you have a budget in mind, or would you rather I send a tailored price?', placeholder:'Ex.: up to $30, no preference...', suggestions:['No preference','Up to $20','$20–$40','Above $40'] }
       ];
       return [
@@ -1039,6 +1143,7 @@
         { key:'monitor', q:'Qual monitor / taxa de atualização (Hz)?', placeholder:'Ex.: 1080p 144Hz', suggestions:['1080p 60Hz','1080p 144Hz','1080p 240Hz','1440p 165Hz'] },
         { key:'problemas', q:'Quais problemas você quer resolver hoje?', placeholder:'Ex.: FPS baixo, travadas, input lag, temperatura alta...', suggestions:['FPS baixo','Travadas / stutter','Input lag / delay','Superaquecimento','Nada específico, quero performance'], multiline:true },
         { key:'objetivo', q:'E qual seu objetivo principal com a otimização?', placeholder:'Ex.: Ganhar FPS no Fortnite, reduzir delay no Valorant...', multiline:true },
+        { key:'cupom', q:'Você tem um cupom de desconto? Digite o código ou toque em "Não tenho cupom".', placeholder:'Ex.: FTNLUCCA', suggestions:['Não tenho cupom'], optional:true },
         { key:'orcamento', q:'Por fim: tem algum orçamento em mente ou prefere que eu te passe um valor sob medida?', placeholder:'Ex.: até R$150, sem preferência...', suggestions:['Sem preferência','Até R$100','R$100–R$200','Acima de R$200'] }
       ];
     }
@@ -1104,24 +1209,42 @@
       }
     }
 
-    function finish(){
+    async function finish(){
       finished = true;
       const isEn = currentLang === 'en';
+
+      // normaliza o cupom digitado (ignora "Não tenho cupom" / "No coupon")
+      const rawCupom = (answers.cupom || '').trim();
+      const semCupomLabels = ['não tenho cupom','no coupon',''];
+      const cupomDigitado = semCupomLabels.includes(rawCupom.toLowerCase()) ? '' : rawCupom;
+
       addMsg('bot', isEn
         ? 'Perfect! Summary ready ✅ Click "Send on WhatsApp" to continue directly with me and schedule the optimization.'
         : 'Perfeito! Resumo montado ✅ Clique em "Enviar no WhatsApp" pra continuar direto comigo e agendar a otimização.');
+
+      // valida o cupom no Firestore (se houver)
+      let coupon = { valid: false, code: '', discountPercent: 0 };
+      if (cupomDigitado && window.GT && typeof window.GT.validateCoupon === 'function') {
+        try { coupon = await window.GT.validateCoupon(cupomDigitado); } catch(e) { coupon = { valid:false, code: cupomDigitado, discountPercent:0 }; }
+      }
+
       const sum = document.createElement('div'); sum.className='summary-box';
       sum.innerHTML = `<h4>${isEn ? 'Summary sent to the specialist' : 'Resumo enviado ao especialista'}</h4><ul>`+
         `<li>👤 ${answers.nome||'-'}</li>`+
         `<li>🎯 ${answers.uso||'-'}</li>`+
         `<li>🖥️ ${answers.cpu||'-'} · ${answers.gpu||'-'} · ${answers.ram||'-'}</li>`+
         `<li>💰 ${answers.orcamento||'-'}</li>`+
+        (coupon.valid ? `<li>🏷️ ${isEn ? 'Coupon' : 'Cupom'} <strong>${coupon.code}</strong> — 5% ${isEn ? 'off applied' : 'de desconto aplicado'}</li>` : (cupomDigitado ? `<li>⚠️ ${isEn ? `Coupon "${cupomDigitado}" not found` : `Cupom "${cupomDigitado}" não encontrado`}</li>` : '')) +
       '</ul>';
       messagesEl.appendChild(sum);
       messagesEl.scrollTop = messagesEl.scrollHeight;
       formEl.classList.add('hidden');
       waBtn.classList.remove('hidden');
       stepEl.textContent = stepLabel();
+
+      const couponLine = coupon.valid
+        ? (isEn ? `🏷️ *Coupon:* ${coupon.code} (5% discount)` : `🏷️ *Cupom:* ${coupon.code} (5% de desconto)`)
+        : (cupomDigitado ? (isEn ? `🏷️ *Coupon typed (not valid):* ${cupomDigitado}` : `🏷️ *Cupom digitado (não válido):* ${cupomDigitado}`) : '');
 
       const lines = isEn ? [
         '*New quote request — GuTweaks*','',
@@ -1137,7 +1260,8 @@
         `• Monitor: ${answers.monitor||'-'}`,'',
         `⚠️ *Issues:* ${answers.problemas||'-'}`,
         `🎯 *Goal:* ${answers.objetivo||'-'}`,
-        `💰 *Budget:* ${answers.orcamento||'-'}`
+        `💰 *Budget:* ${answers.orcamento||'-'}`,
+        ...(couponLine ? ['', couponLine] : [])
       ] : [
         '*Novo pedido de orçamento — GuTweaks*','',
         `👤 *Nome:* ${answers.nome||'-'}`,
@@ -1152,9 +1276,15 @@
         `• Monitor: ${answers.monitor||'-'}`,'',
         `⚠️ *Problemas:* ${answers.problemas||'-'}`,
         `🎯 *Objetivo:* ${answers.objetivo||'-'}`,
-        `💰 *Orçamento:* ${answers.orcamento||'-'}`
+        `💰 *Orçamento:* ${answers.orcamento||'-'}`,
+        ...(couponLine ? ['', couponLine] : [])
       ];
       waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+
+      // salva o lead no Firestore (para o dashboard do criador/admin)
+      if (window.GT && typeof window.GT.saveLead === 'function') {
+        window.GT.saveLead({ answers, coupon, lang: currentLang }).catch(()=>{});
+      }
     }
 
     function openChat(){
@@ -1293,6 +1423,416 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   targets.forEach(function(el){ io.observe(el); });
 })();
+</script>
+
+<!-- =========================================================
+     GT · CONTAS, CUPONS E DASHBOARDS (Firebase)
+     Substitua firebaseConfig pelos dados do SEU projeto Firebase.
+     Veja o arquivo firestore.rules e o guia de configuração enviados junto.
+========================================================= -->
+<script>
+  // placeholder de segurança: evita erro no botão "Entrar" caso o módulo
+  // abaixo ainda não tenha carregado (ex.: sem internet, config incompleta)
+  window.GT = window.GT || {
+    openAccountArea: function(){ alert('Configuração do Firebase pendente. Veja o guia enviado junto com o site (firestore.rules + instruções).'); }
+  };
+</script>
+<script type="module">
+  import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
+    createUserWithEmailAndPassword, setPersistence, browserLocalPersistence
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where,
+    getDocs, updateDoc, serverTimestamp, orderBy
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  /* ======================================================
+     1) CONFIGURAÇÃO — troque pelos dados do seu projeto
+     (Firebase Console > Configurações do projeto > Seus apps > SDK setup)
+  ====================================================== */
+  const firebaseConfig = {
+    apiKey: "COLE_AQUI_SUA_apiKey",
+    authDomain: "COLE_AQUI.firebaseapp.com",
+    projectId: "COLE_AQUI",
+    storageBucket: "COLE_AQUI.appspot.com",
+    messagingSenderId: "COLE_AQUI",
+    appId: "COLE_AQUI"
+  };
+
+  // contas "semente" — precisam existir em Authentication > Users
+  // (crie manualmente no Console com esses e-mails/senhas)
+  const OWNER_EMAIL = 'gustavotweaks@gmail.com';
+  const CREATOR_SEED = { email: 'ftnlucca@gmail.com', code: 'FTNLUCCA', discountPercent: 5, commissionPercent: 25 };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  setPersistence(auth, browserLocalPersistence).catch(()=>{});
+
+  let currentUser = null;
+  let currentProfile = null;
+  let activeAdminTab = 'overview';
+  let activeCreatorTab = 'overview';
+  const cache = { leads: null, creators: null, coupons: null, myLeads: null };
+
+  const $ = (id) => document.getElementById(id);
+  function money(v){ if (v===null||v===undefined||v==='') return '—'; return 'R$ ' + Number(v).toFixed(2).replace('.', ','); }
+  function fmtDate(ts){
+    try{
+      if (!ts) return '—';
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    }catch(e){ return '—'; }
+  }
+
+  /* ================= LOGIN / LOGOUT ================= */
+  function openLogin(){ $('loginError').textContent=''; $('loginOverlay').classList.remove('hidden'); }
+  function closeLogin(){ $('loginOverlay').classList.add('hidden'); }
+  function openDash(){ $('dashOverlay').classList.remove('hidden'); renderDashboard(); }
+  function closeDash(){ $('dashOverlay').classList.add('hidden'); }
+  function openAccountArea(){ currentUser ? openDash() : openLogin(); }
+
+  async function doLogin(){
+    const email = $('loginEmail').value.trim();
+    const password = $('loginPassword').value;
+    $('loginError').textContent = '';
+    if(!email || !password){ $('loginError').textContent = 'Preencha e-mail e senha.'; return; }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      closeLogin();
+    } catch(e){
+      $('loginError').textContent = 'E-mail ou senha inválidos.';
+    }
+  }
+  async function doLogout(){ await signOut(auth); closeDash(); }
+
+  /* ================= BOOTSTRAP DE PERFIL ================= */
+  async function ensureProfile(user){
+    const ref = doc(db, 'users', user.uid);
+    const snap = await getDoc(ref);
+    if (snap.exists()) return snap.data();
+
+    let profile = null;
+    if (user.email === OWNER_EMAIL) {
+      profile = { email: user.email, role: 'admin', createdAt: serverTimestamp() };
+    } else if (user.email === CREATOR_SEED.email) {
+      profile = {
+        email: user.email, role: 'creator',
+        couponCode: CREATOR_SEED.code,
+        discountPercent: CREATOR_SEED.discountPercent,
+        commissionPercent: CREATOR_SEED.commissionPercent,
+        createdAt: serverTimestamp()
+      };
+    } else {
+      return null; // conta sem perfil pré-autorizado — sem acesso a dashboard
+    }
+    await setDoc(ref, profile);
+
+    if (profile.role === 'creator') {
+      const couponRef = doc(db, 'coupons', profile.couponCode);
+      const couponSnap = await getDoc(couponRef);
+      if (!couponSnap.exists()) {
+        await setDoc(couponRef, {
+          code: profile.couponCode, ownerUid: user.uid,
+          discountPercent: profile.discountPercent, commissionPercent: profile.commissionPercent,
+          active: true, createdAt: serverTimestamp()
+        });
+      }
+    }
+    return profile;
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+    if (user) {
+      currentProfile = await ensureProfile(user).catch(()=>null);
+      $('acctBtnLabel').textContent = currentProfile ? 'Minha conta' : (user.email || 'Conta');
+    } else {
+      currentProfile = null;
+      $('acctBtnLabel').textContent = 'Entrar';
+      cache.leads = cache.creators = cache.coupons = cache.myLeads = null;
+    }
+  });
+
+  /* ================= CUPOM (usado no chat de orçamento) ================= */
+  async function validateCoupon(codeRaw){
+    const code = (codeRaw||'').trim().toUpperCase();
+    if (!code) return { valid:false, code:'', discountPercent:0 };
+    try {
+      const snap = await getDoc(doc(db, 'coupons', code));
+      if (snap.exists() && snap.data().active) {
+        const d = snap.data();
+        return { valid:true, code, discountPercent: d.discountPercent||0, commissionPercent: d.commissionPercent||0, ownerUid: d.ownerUid||null };
+      }
+    } catch(e) {}
+    return { valid:false, code, discountPercent:0 };
+  }
+
+  /* ================= SALVAR LEAD (formulário de orçamento) ================= */
+  async function saveLead({ answers, coupon, lang }){
+    const data = {
+      nome: answers.nome || '', uso: answers.uso || '', cpu: answers.cpu || '', gpu: answers.gpu || '',
+      ram: answers.ram || '', placa: answers.placa || '', armazenamento: answers.armazenamento || '',
+      so: answers.so || '', monitor: answers.monitor || '', problemas: answers.problemas || '',
+      objetivo: answers.objetivo || '', orcamentoTexto: answers.orcamento || '',
+      couponCode: coupon.valid ? coupon.code : (answers.cupom || ''),
+      couponValid: !!coupon.valid,
+      ownerUid: coupon.valid ? (coupon.ownerUid || null) : null,
+      discountPercent: coupon.valid ? (coupon.discountPercent||0) : null,
+      commissionPercent: coupon.valid ? (coupon.commissionPercent||0) : null,
+      lang: lang || 'pt', status: 'novo', saleValue: null,
+      createdAt: serverTimestamp()
+    };
+    await addDoc(collection(db, 'leads'), data);
+  }
+
+  /* ================= ADMIN: CRIAR CONTA DE CRIADOR ================= */
+  async function createCreatorAccount({ email, password, code, discountPercent, commissionPercent }){
+    const secondaryApp = initializeApp(firebaseConfig, 'Secondary-' + Date.now());
+    const secondaryAuth = getAuth(secondaryApp);
+    try {
+      const cred = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+      const uid = cred.user.uid;
+      await setDoc(doc(db, 'users', uid), {
+        email, role: 'creator', couponCode: code.toUpperCase(),
+        discountPercent, commissionPercent, createdAt: serverTimestamp()
+      });
+      await setDoc(doc(db, 'coupons', code.toUpperCase()), {
+        code: code.toUpperCase(), ownerUid: uid, discountPercent, commissionPercent,
+        active: true, createdAt: serverTimestamp()
+      });
+      await signOut(secondaryAuth);
+      return { ok:true };
+    } catch(e){
+      return { ok:false, error: e.message };
+    } finally {
+      deleteApp(secondaryApp).catch(()=>{});
+    }
+  }
+
+  /* ================= FETCHERS ================= */
+  async function fetchAllLeads(){
+    const snap = await getDocs(query(collection(db,'leads'), orderBy('createdAt','desc')));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+  async function fetchCreators(){
+    const snap = await getDocs(query(collection(db,'users'), where('role','==','creator')));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+  async function fetchCoupons(){
+    const snap = await getDocs(collection(db,'coupons'));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+  async function fetchMyLeads(uid){
+    const snap = await getDocs(query(collection(db,'leads'), where('ownerUid','==',uid), orderBy('createdAt','desc')));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+
+  /* ================= RENDER: PAINEL PRINCIPAL ================= */
+  async function renderDashboard(){
+    if (!currentUser) { closeDash(); openLogin(); return; }
+    $('dashUserEmail').textContent = currentUser.email;
+    if (!currentProfile) {
+      $('dashTitle').textContent = 'Sem acesso';
+      $('dashBody').innerHTML = '<p class="gt-empty">Essa conta não tem um perfil de dashboard configurado. Fale com o administrador do site.</p>';
+      return;
+    }
+    if (currentProfile.role === 'admin') { $('dashTitle').textContent = 'Painel do Administrador'; await renderAdminDash(); }
+    else { $('dashTitle').textContent = 'Painel do Criador de Conteúdo'; await renderCreatorDash(); }
+  }
+
+  /* ================= ADMIN ================= */
+  function adminTabsHtml(){
+    const tabs = [['overview','Visão geral'],['creators','Criadores de conteúdo'],['leads','Leads / Orçamentos'],['coupons','Cupons']];
+    return '<div class="gt-tabs">' + tabs.map(([k,label]) =>
+      `<button type="button" class="gt-tab ${activeAdminTab===k?'active':''} ripple-fx" onclick="GT.switchAdminTab('${k}')">${label}</button>`
+    ).join('') + '</div>';
+  }
+  async function renderAdminDash(){
+    $('dashBody').innerHTML = adminTabsHtml() + '<div id="dashContent"><p class="gt-empty">Carregando…</p></div>';
+    await renderAdminTab(activeAdminTab);
+  }
+  async function switchAdminTab(tab){ activeAdminTab = tab; await renderAdminDash(); }
+
+  async function renderAdminTab(tab){
+    const content = $('dashContent');
+    if (!content) return;
+    if (tab === 'overview') {
+      const leads = cache.leads || (cache.leads = await fetchAllLeads());
+      const creators = cache.creators || (cache.creators = await fetchCreators());
+      const withCoupon = leads.filter(l=>l.couponValid);
+      const totalComissao = withCoupon.reduce((s,l)=> s + (l.saleValue ? (l.saleValue*(l.commissionPercent||25)/100) : 0), 0);
+      const totalVendasFechadas = leads.filter(l=>l.saleValue).reduce((s,l)=>s+Number(l.saleValue),0);
+      content.innerHTML = `
+        <div class="gt-stats-grid">
+          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Total de leads</p><p class="gt-stat-val">${leads.length}</p></div>
+          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Leads com cupom</p><p class="gt-stat-val">${withCoupon.length}</p></div>
+          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Criadores ativos</p><p class="gt-stat-val">${creators.length}</p></div>
+          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Comissões a pagar</p><p class="gt-stat-val">${money(totalComissao)}</p></div>
+        </div>
+        <div class="surface-card gt-panel">
+          <p class="gt-panel-title">Resumo</p>
+          <p style="color:var(--muted);font-size:0.85rem;line-height:1.7">
+            Total já vendido (leads com valor lançado): <strong style="color:var(--fg)">${money(totalVendasFechadas)}</strong><br/>
+            Vá em <strong style="color:var(--fg)">Leads / Orçamentos</strong> para lançar o valor final de cada venda — a comissão de cada criador é calculada automaticamente.
+          </p>
+        </div>`;
+    } else if (tab === 'creators') {
+      const creators = cache.creators || (cache.creators = await fetchCreators());
+      content.innerHTML = `
+        <div class="surface-card gt-panel">
+          <p class="gt-panel-title">Criar novo criador de conteúdo</p>
+          <div class="gt-inline-form">
+            <div class="gt-field"><label>E-mail</label><input id="newCreatorEmail" type="email" placeholder="parceiro@email.com"/></div>
+            <div class="gt-field"><label>Senha</label><input id="newCreatorPass" type="text" placeholder="Senha de acesso"/></div>
+            <div class="gt-field"><label>Código do cupom</label><input id="newCreatorCode" type="text" placeholder="EX: FULANOBOOST"/></div>
+            <div class="gt-field"><label>Desconto p/ cliente (%)</label><input id="newCreatorDiscount" type="number" value="5"/></div>
+            <div class="gt-field"><label>Comissão do criador (%)</label><input id="newCreatorCommission" type="number" value="25"/></div>
+            <button type="button" class="brand-btn ripple-fx" onclick="GT.submitCreateCreator()">Criar conta</button>
+          </div>
+          <p id="createCreatorMsg" class="gt-error"></p>
+        </div>
+        <div class="surface-card gt-panel">
+          <p class="gt-panel-title">Criadores cadastrados</p>
+          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>E-mail</th><th>Cupom</th><th>Desconto</th><th>Comissão</th></tr></thead><tbody>
+          ${creators.length ? creators.map(c=>`<tr><td>${c.email}</td><td><span class="gt-coupon-tag">${c.couponCode||'-'}</span></td><td>${c.discountPercent||0}%</td><td>${c.commissionPercent||0}%</td></tr>`).join('') : '<tr><td colspan="4" class="gt-empty">Nenhum criador cadastrado ainda.</td></tr>'}
+          </tbody></table></div>
+        </div>`;
+    } else if (tab === 'leads') {
+      const leads = cache.leads || (cache.leads = await fetchAllLeads());
+      content.innerHTML = `
+        <div class="surface-card gt-panel">
+          <p class="gt-panel-title">Todos os leads / orçamentos</p>
+          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Cupom</th><th>Orçamento pedido</th><th>Status</th><th>Valor da venda</th><th>Comissão</th><th></th></tr></thead><tbody>
+          ${leads.length ? leads.map(l=>{
+            const commission = l.saleValue ? (l.saleValue*(l.commissionPercent||25)/100) : null;
+            return `<tr>
+              <td>${fmtDate(l.createdAt)}</td>
+              <td>${l.nome||'-'}</td>
+              <td>${l.couponValid ? `<span class="gt-coupon-tag">${l.couponCode}</span>` : (l.couponCode || '—')}</td>
+              <td>${l.orcamentoTexto||'-'}</td>
+              <td><span class="gt-pill ${l.saleValue?'gt-pill--closed':'gt-pill--open'}">${l.saleValue?'Fechado':'Novo'}</span></td>
+              <td><input class="gt-mini-input" type="number" step="0.01" id="sale_${l.id}" value="${l.saleValue||''}" placeholder="0,00"/></td>
+              <td>${money(commission)}</td>
+              <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.saveLeadSale('${l.id}')">Salvar</button></td>
+            </tr>`;
+          }).join('') : '<tr><td colspan="8" class="gt-empty">Nenhum lead recebido ainda.</td></tr>'}
+          </tbody></table></div>
+        </div>`;
+    } else if (tab === 'coupons') {
+      const coupons = cache.coupons || (cache.coupons = await fetchCoupons());
+      content.innerHTML = `
+        <div class="surface-card gt-panel">
+          <p class="gt-panel-title">Cupons de desconto</p>
+          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Código</th><th>Desconto</th><th>Comissão</th><th>Status</th><th></th></tr></thead><tbody>
+          ${coupons.length ? coupons.map(c=>`<tr>
+            <td><span class="gt-coupon-tag">${c.code}</span></td>
+            <td>${c.discountPercent||0}%</td>
+            <td>${c.commissionPercent||0}%</td>
+            <td>${c.active?'Ativo':'Inativo'}</td>
+            <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.toggleCoupon('${c.id}', ${!c.active})">${c.active?'Desativar':'Ativar'}</button></td>
+          </tr>`).join('') : '<tr><td colspan="5" class="gt-empty">Nenhum cupom cadastrado.</td></tr>'}
+          </tbody></table></div>
+        </div>`;
+    }
+  }
+
+  async function saveLeadSale(leadId){
+    const input = $('sale_'+leadId);
+    const val = input.value !== '' ? Number(input.value) : null;
+    await updateDoc(doc(db,'leads',leadId), { saleValue: val, status: val ? 'fechado' : 'novo' });
+    cache.leads = null;
+    await renderAdminTab('leads');
+  }
+  async function toggleCoupon(code, newActive){
+    await updateDoc(doc(db,'coupons',code), { active: newActive });
+    cache.coupons = null;
+    await renderAdminTab('coupons');
+  }
+  async function submitCreateCreator(){
+    const email = $('newCreatorEmail').value.trim();
+    const pass = $('newCreatorPass').value;
+    const code = $('newCreatorCode').value.trim().toUpperCase();
+    const discount = Number($('newCreatorDiscount').value)||0;
+    const commission = Number($('newCreatorCommission').value)||0;
+    const msg = $('createCreatorMsg');
+    msg.className='gt-error'; msg.textContent='';
+    if(!email||!pass||!code){ msg.textContent='Preencha e-mail, senha e código do cupom.'; return; }
+    msg.textContent='Criando conta…';
+    const res = await createCreatorAccount({ email, password: pass, code, discountPercent: discount, commissionPercent: commission });
+    if (res.ok) {
+      msg.className='gt-success'; msg.textContent='Conta criada com sucesso!';
+      cache.creators = null; cache.coupons = null;
+      await renderAdminTab('creators');
+    } else {
+      msg.textContent = 'Erro: ' + res.error;
+    }
+  }
+
+  /* ================= CRIADOR DE CONTEÚDO ================= */
+  function creatorTabsHtml(){
+    const tabs = [['overview','Minhas estatísticas'],['leads','Meus leads']];
+    return '<div class="gt-tabs">' + tabs.map(([k,label]) =>
+      `<button type="button" class="gt-tab ${activeCreatorTab===k?'active':''} ripple-fx" onclick="GT.switchCreatorTab('${k}')">${label}</button>`
+    ).join('') + '</div>';
+  }
+  async function renderCreatorDash(){
+    $('dashBody').innerHTML = creatorTabsHtml() + '<div id="dashContent"><p class="gt-empty">Carregando…</p></div>';
+    await renderCreatorTab(activeCreatorTab);
+  }
+  async function switchCreatorTab(tab){ activeCreatorTab = tab; await renderCreatorDash(); }
+
+  async function renderCreatorTab(tab){
+    const content = $('dashContent');
+    const leads = cache.myLeads || (cache.myLeads = await fetchMyLeads(currentUser.uid));
+    if (tab === 'overview') {
+      const fechados = leads.filter(l=>l.saleValue);
+      const totalComissao = fechados.reduce((s,l)=> s + (l.saleValue*(l.commissionPercent||currentProfile.commissionPercent||25)/100), 0);
+      content.innerHTML = `
+        <div class="gt-stats-grid">
+          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Seu cupom</p><p class="gt-stat-val">${currentProfile.couponCode}</p></div>
+          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Total de leads</p><p class="gt-stat-val">${leads.length}</p></div>
+          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Vendas fechadas</p><p class="gt-stat-val">${fechados.length}</p></div>
+          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Comissão total</p><p class="gt-stat-val">${money(totalComissao)}</p></div>
+        </div>
+        <div class="surface-card gt-panel">
+          <p class="gt-panel-title">Como funciona</p>
+          <p style="color:var(--muted);font-size:0.85rem;line-height:1.7">
+            Todo cliente que digitar o cupom <strong style="color:var(--fg)">${currentProfile.couponCode}</strong> no orçamento ganha ${currentProfile.discountPercent}% de desconto e aparece aqui.
+            Quando o administrador lança o valor final da venda, sua comissão de ${currentProfile.commissionPercent}% é calculada automaticamente.
+          </p>
+        </div>`;
+    } else {
+      content.innerHTML = `
+        <div class="surface-card gt-panel">
+          <p class="gt-panel-title">Leads que usaram seu cupom</p>
+          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Uso</th><th>Orçamento pedido</th><th>Status</th><th>Valor da venda</th><th>Sua comissão</th></tr></thead><tbody>
+          ${leads.length ? leads.map(l=>{
+            const commission = l.saleValue ? (l.saleValue*(l.commissionPercent||currentProfile.commissionPercent||25)/100) : null;
+            return `<tr>
+              <td>${fmtDate(l.createdAt)}</td>
+              <td>${l.nome||'-'}</td>
+              <td>${l.uso||'-'}</td>
+              <td>${l.orcamentoTexto||'-'}</td>
+              <td><span class="gt-pill ${l.saleValue?'gt-pill--closed':'gt-pill--open'}">${l.saleValue?'Fechado':'Novo'}</span></td>
+              <td>${money(l.saleValue)}</td>
+              <td>${money(commission)}</td>
+            </tr>`;
+          }).join('') : '<tr><td colspan="7" class="gt-empty">Ninguém usou seu cupom ainda.</td></tr>'}
+          </tbody></table></div>
+        </div>`;
+    }
+  }
+
+  /* ================= EXPÕE PARA OS onclick="" DO HTML ================= */
+  window.GT = {
+    openAccountArea, closeLogin, doLogin, doLogout, closeDash,
+    validateCoupon, saveLead,
+    switchAdminTab, saveLeadSale, toggleCoupon, submitCreateCreator,
+    switchCreatorTab
+  };
 </script>
 
 </body>
