@@ -1716,7 +1716,7 @@
       content.innerHTML = `
         <div class="surface-card gt-panel">
           <p class="gt-panel-title">Todos os leads / orçamentos</p>
-          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Cupom</th><th>Orçamento pedido</th><th>Status</th><th>Valor da venda</th><th>Comissão</th><th></th></tr></thead><tbody>
+          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Cupom</th><th>Orçamento pedido</th><th>Status</th><th>Valor da venda</th><th>Comissão</th><th></th><th></th></tr></thead><tbody>
           ${leads.length ? leads.map(l=>{
             const commission = l.saleValue ? (l.saleValue*(l.commissionPercent||25)/100) : null;
             return `<tr>
@@ -1728,8 +1728,9 @@
               <td><input class="gt-mini-input" type="number" step="0.01" id="sale_${l.id}" value="${l.saleValue||''}" placeholder="0,00"/></td>
               <td>${money(commission)}</td>
               <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.saveLeadSale('${l.id}')">Salvar</button></td>
+              <td><button type="button" class="gt-small-btn ripple-fx" style="background:#3a1414;color:#ff8080" onclick="GT.deleteLead('${l.id}')">Apagar</button></td>
             </tr>`;
-          }).join('') : '<tr><td colspan="8" class="gt-empty">Nenhum lead recebido ainda.</td></tr>'}
+          }).join('') : '<tr><td colspan="9" class="gt-empty">Nenhum lead recebido ainda.</td></tr>'}
           </tbody></table></div>
         </div>`;
     } else if (tab === 'manual') {
@@ -1791,6 +1792,12 @@
     const input = $('sale_'+leadId);
     const val = input.value !== '' ? Number(input.value) : null;
     await updateDoc(doc(db,'leads',leadId), { saleValue: val, status: val ? 'fechado' : 'novo' });
+    cache.leads = null;
+    await renderAdminTab('leads');
+  }
+  async function deleteLead(leadId){
+    if (!confirm('Tem certeza que quer apagar esse lead? Essa ação não pode ser desfeita.')) return;
+    await deleteDoc(doc(db,'leads',leadId));
     cache.leads = null;
     await renderAdminTab('leads');
   }
@@ -1913,7 +1920,7 @@
   window.GT = {
     openAccountArea, closeLogin, doLogin, doLogout, closeDash,
     validateCoupon, saveLead,
-    switchAdminTab, saveLeadSale, toggleCoupon, submitCreateCreator,
+    switchAdminTab, saveLeadSale, deleteLead, toggleCoupon, submitCreateCreator,
     submitManualEarning, deleteManualEarning,
     switchCreatorTab
   };
