@@ -338,6 +338,11 @@
     .chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
     .chat-step { text-align: center; font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 0.5rem; }
     .whatsapp-btn { display: flex; width: 100%; align-items: center; justify-content: center; gap: 0.5rem; background: #25d366; color: #000; padding: 0.875rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; }
+    .post-finish-actions { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
+    .cancel-agendamento-btn { width: 100%; padding: 0.75rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.8rem; background: transparent; border: 1px solid rgba(248,113,113,0.35); color: #f87171; }
+    .cancel-reason-box { display: flex; flex-direction: column; width: 100%; }
+    .cancel-reason-title { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+    .cancel-done-msg { font-size: 0.85rem; color: var(--fg); text-align: center; padding: 0.5rem 0; }
 
     .hidden { display: none !important; }
 
@@ -950,10 +955,18 @@
       </div>
       <div id="chatMessages" class="chat-messages"></div>
       <div class="chat-footer">
-        <a id="whatsappBtn" class="whatsapp-btn ripple-fx hidden" target="_blank" rel="noopener noreferrer">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26 9.99 9.99 0 0 1 16.638-7.45c.026.025.05.05.074.076l.17.17a9.99 9.99 0 0 1 2.91 7.037 9.86 9.86 0 0 1-9.901 9.905M20.11 7.916a8.23 8.23 0 0 0-5.889-2.435 8.24 8.24 0 0 0-8.236 8.228 8.23 8.23 0 0 0 1.258 4.383l.18.288-.84 3.06 3.112-.816.19.113a8.22 8.22 0 0 0 4.225 1.159 8.24 8.24 0 0 0 8.236-8.228 8.21 8.21 0 0 0-2.436-5.752Z"/></svg>
-          <span id="waBtnLabel" data-i18n="chat.waButton">Enviar no WhatsApp e agendar</span>
-        </a>
+        <div id="postFinishActions" class="post-finish-actions hidden">
+          <a id="whatsappBtn" class="whatsapp-btn ripple-fx" target="_blank" rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26 9.99 9.99 0 0 1 16.638-7.45c.026.025.05.05.074.076l.17.17a9.99 9.99 0 0 1 2.91 7.037 9.86 9.86 0 0 1-9.901 9.905M20.11 7.916a8.23 8.23 0 0 0-5.889-2.435 8.24 8.24 0 0 0-8.236 8.228 8.23 8.23 0 0 0 1.258 4.383l.18.288-.84 3.06 3.112-.816.19.113a8.22 8.22 0 0 0 4.225 1.159 8.24 8.24 0 0 0 8.236-8.228 8.21 8.21 0 0 0-2.436-5.752Z"/></svg>
+            <span id="waBtnLabel" data-i18n="chat.waButton">Enviar no WhatsApp e agendar</span>
+          </a>
+          <button type="button" id="cancelBtn" class="cancel-agendamento-btn ripple-fx">Cancelar agendamento</button>
+        </div>
+        <div id="cancelReasonBox" class="cancel-reason-box hidden">
+          <p class="cancel-reason-title">Sem problemas! Só me conta rapidinho por que você decidiu cancelar:</p>
+          <textarea id="cancelReasonInput" class="chat-input" rows="2" placeholder="Ex.: mudei de ideia, vou fazer manualmente, achei caro..."></textarea>
+          <button type="button" id="cancelReasonSend" class="brand-btn ripple-fx" style="width:100%;margin-top:0.5rem">Enviar e cancelar</button>
+        </div>
         <form id="chatForm" class="chat-form" onsubmit="return false">
           <textarea id="chatInput" class="chat-input" rows="1" placeholder="Digite sua resposta..."></textarea>
           <button type="button" id="chatSend" class="chat-send ripple-fx" aria-label="Enviar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
@@ -1115,6 +1128,18 @@
     ========================================================= */
     const WHATSAPP_NUMBER = '5511957460235';
 
+    // Cupom aplicado automaticamente via link personalizado (?cupom=CODIGO)
+    // — usado pelos links que os criadores de conteúdo compartilham com o público deles
+    function getRefCupomFromUrl(){
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const fromUrl = (params.get('cupom') || '').trim();
+        if (fromUrl) { sessionStorage.setItem('gutweaks_ref_cupom', fromUrl); return fromUrl; }
+        return (sessionStorage.getItem('gutweaks_ref_cupom') || '').trim();
+      } catch(e) { return ''; }
+    }
+    const REF_CUPOM = getRefCupomFromUrl();
+
     function getSteps(lang){
       if (lang === 'en') return [
         { key:'nome', q:'Hey! I\'m the quote assistant. Let\'s personalize this — what\'s your name?', placeholder:'Your name' },
@@ -1149,7 +1174,8 @@
     }
 
     let steps = getSteps(currentLang);
-    let stepIndex = 0, answers = {}, finished = false;
+    if (REF_CUPOM) steps = steps.filter(s => s.key !== 'cupom');
+    let stepIndex = 0, answers = {}, finished = false, currentLeadId = null;
     const overlay = document.getElementById('chatOverlay');
     const messagesEl = document.getElementById('chatMessages');
     const inputEl = document.getElementById('chatInput');
@@ -1214,7 +1240,8 @@
       const isEn = currentLang === 'en';
 
       // normaliza o cupom digitado (ignora "Não tenho cupom" / "No coupon")
-      const rawCupom = (answers.cupom || '').trim();
+      // — se veio de um link personalizado, usa o cupom do link direto, sem precisar perguntar
+      const rawCupom = (REF_CUPOM || answers.cupom || '').trim();
       const semCupomLabels = ['não tenho cupom','no coupon',''];
       const cupomDigitado = semCupomLabels.includes(rawCupom.toLowerCase()) ? '' : rawCupom;
 
@@ -1239,7 +1266,7 @@
       messagesEl.appendChild(sum);
       messagesEl.scrollTop = messagesEl.scrollHeight;
       formEl.classList.add('hidden');
-      waBtn.classList.remove('hidden');
+      document.getElementById('postFinishActions').classList.remove('hidden');
       stepEl.textContent = stepLabel();
 
       const couponLine = coupon.valid
@@ -1282,23 +1309,57 @@
       waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
 
       // salva o lead no Firestore (para o dashboard do criador/admin)
+      currentLeadId = null;
       if (window.GT && typeof window.GT.saveLead === 'function') {
-        window.GT.saveLead({ answers, coupon, lang: currentLang }).catch(()=>{});
+        try { currentLeadId = await window.GT.saveLead({ answers, coupon, lang: currentLang }); }
+        catch(e) { currentLeadId = null; }
       }
     }
 
     function openChat(){
       steps = getSteps(currentLang);
+      if (REF_CUPOM) steps = steps.filter(s => s.key !== 'cupom');
       overlay.classList.remove('hidden');
-      stepIndex=0; answers={}; finished=false;
+      stepIndex=0; answers={}; finished=false; currentLeadId=null;
       messagesEl.innerHTML='';
       formEl.classList.remove('hidden');
-      waBtn.classList.add('hidden');
+      document.getElementById('postFinishActions').classList.add('hidden');
+      const reasonBox = document.getElementById('cancelReasonBox');
+      reasonBox.classList.add('hidden');
+      reasonBox.innerHTML = `
+        <p class="cancel-reason-title">Sem problemas! Só me conta rapidinho por que você decidiu cancelar:</p>
+        <textarea id="cancelReasonInput" class="chat-input" rows="2" placeholder="Ex.: mudei de ideia, vou fazer manualmente, achei caro..."></textarea>
+        <button type="button" id="cancelReasonSend" class="brand-btn ripple-fx" style="width:100%;margin-top:0.5rem">Enviar e cancelar</button>`;
+      document.getElementById('cancelReasonSend').onclick = sendCancelReason;
       inputEl.value='';
+      if (REF_CUPOM) {
+        addMsg('bot', currentLang==='en'
+          ? `🏷️ Coupon ${REF_CUPOM} automatically applied — 5% off!`
+          : `🏷️ Cupom ${REF_CUPOM} aplicado automaticamente — 5% de desconto!`);
+      }
       ask();
       setTimeout(()=>inputEl.focus(), 50);
     }
     function closeChat(){ overlay.classList.add('hidden'); }
+
+    document.getElementById('cancelBtn').onclick = function(){
+      document.getElementById('postFinishActions').classList.add('hidden');
+      document.getElementById('cancelReasonBox').classList.remove('hidden');
+      const r = document.getElementById('cancelReasonInput');
+      if (r) r.focus();
+    };
+
+    async function sendCancelReason(){
+      const input = document.getElementById('cancelReasonInput');
+      const reason = input ? input.value.trim() : '';
+      const btn = document.getElementById('cancelReasonSend');
+      if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+      if (currentLeadId && window.GT && typeof window.GT.saveCancelReason === 'function') {
+        try { await window.GT.saveCancelReason(currentLeadId, reason); } catch(e) {}
+      }
+      document.getElementById('cancelReasonBox').innerHTML =
+        `<p class="cancel-done-msg">${currentLang==='en' ? 'No worries — thanks for letting us know. Feel free to come back anytime! 👋' : 'Sem problema — obrigado por avisar! Quando quiser, é só voltar aqui. 👋'}</p>`;
+    }
 
     // Abre o chat de orçamento automaticamente ao chegar com #orcamento na URL
     // (usado pelo botão "Agendar otimização agora" da página Sobre Mim)
@@ -1475,7 +1536,36 @@
   let currentProfile = null;
   let activeAdminTab = 'overview';
   let activeCreatorTab = 'overview';
-  const cache = { leads: null, creators: null, coupons: null, myLeads: null, manual: null, myManual: null };
+  const cache = { leads: null, creators: null, coupons: null, myLeads: null, manual: null, myManual: null, linkClicks: null, myLinkClicks: null };
+
+  /* ================= LINK PERSONALIZADO (?cupom=CODIGO) ================= */
+  // registra 1 clique por sessão de navegador quando alguém chega pelo link
+  // personalizado de um criador (ex.: seusite.com/?cupom=FTNLUCCA#orcamento)
+  async function logLinkClick(codeRaw){
+    const code = (codeRaw||'').trim().toUpperCase();
+    if (!code) return;
+    let ownerUid = null;
+    try {
+      const snap = await getDoc(doc(db,'coupons',code));
+      if (snap.exists()) ownerUid = snap.data().ownerUid || null;
+    } catch(e) {}
+    await addDoc(collection(db,'linkClicks'), {
+      couponCode: code, ownerUid, createdAt: serverTimestamp(),
+      path: window.location.pathname
+    });
+  }
+  (function registerLinkClickOnce(){
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const fromUrl = (params.get('cupom')||'').trim().toUpperCase();
+      if (fromUrl) sessionStorage.setItem('gutweaks_ref_cupom', fromUrl);
+      const code = fromUrl || (sessionStorage.getItem('gutweaks_ref_cupom')||'').trim().toUpperCase();
+      if (code && !sessionStorage.getItem('gutweaks_ref_logged_'+code)) {
+        sessionStorage.setItem('gutweaks_ref_logged_'+code, '1');
+        logLinkClick(code).catch(()=>{});
+      }
+    } catch(e) {}
+  })();
 
   const $ = (id) => document.getElementById(id);
   function money(v){ if (v===null||v===undefined||v==='') return '—'; return 'R$ ' + Number(v).toFixed(2).replace('.', ','); }
@@ -1485,6 +1575,18 @@
       const d = ts.toDate ? ts.toDate() : new Date(ts);
       return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
     }catch(e){ return '—'; }
+  }
+  function creatorLinkUrl(code){
+    return window.location.origin + window.location.pathname + '?cupom=' + encodeURIComponent(code) + '#orcamento';
+  }
+  async function copyCreatorLink(code){
+    const url = creatorLinkUrl(code);
+    try {
+      await navigator.clipboard.writeText(url);
+      alert('Link copiado!\n' + url);
+    } catch(e) {
+      prompt('Copie o link abaixo:', url);
+    }
   }
 
   /* ================= LOGIN / LOGOUT ================= */
@@ -1552,7 +1654,7 @@
     } else {
       currentProfile = null;
       $('acctBtnLabel').textContent = 'Entrar';
-      cache.leads = cache.creators = cache.coupons = cache.myLeads = cache.manual = cache.myManual = null;
+      cache.leads = cache.creators = cache.coupons = cache.myLeads = cache.manual = cache.myManual = cache.linkClicks = cache.myLinkClicks = null;
     }
   });
 
@@ -1585,7 +1687,18 @@
       lang: lang || 'pt', status: 'novo', saleValue: null,
       createdAt: serverTimestamp()
     };
-    await addDoc(collection(db, 'leads'), data);
+    const ref = await addDoc(collection(db, 'leads'), data);
+    return ref.id;
+  }
+
+  /* ================= CANCELAMENTO DE AGENDAMENTO (feito pelo próprio cliente) ================= */
+  async function saveCancelReason(leadId, reason){
+    if (!leadId) return;
+    await updateDoc(doc(db,'leads',leadId), {
+      cancelled: true,
+      cancelReason: (reason||'').trim().slice(0,500),
+      cancelledAt: serverTimestamp()
+    });
   }
 
   /* ================= ADMIN: CRIAR CONTA DE CRIADOR ================= */
@@ -1637,6 +1750,14 @@
     const snap = await getDocs(query(collection(db,'leads'), where('ownerUid','==',uid), orderBy('createdAt','desc')));
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
   }
+  async function fetchLinkClicks(){
+    const snap = await getDocs(query(collection(db,'linkClicks'), orderBy('createdAt','desc')));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+  async function fetchMyLinkClicks(uid){
+    const snap = await getDocs(query(collection(db,'linkClicks'), where('ownerUid','==',uid)));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
 
   /* ================= RENDER: PAINEL PRINCIPAL ================= */
   async function renderDashboard(){
@@ -1673,6 +1794,7 @@
       const creators = cache.creators || (cache.creators = await fetchCreators());
       const withCoupon = leads.filter(l=>l.couponValid);
       const manual = cache.manual || (cache.manual = await fetchManualEarnings());
+      const linkClicks = cache.linkClicks || (cache.linkClicks = await fetchLinkClicks());
       const totalManual = manual.reduce((s,m)=> s + Number(m.amount||0), 0);
       const totalComissao = withCoupon.reduce((s,l)=> s + (l.saleValue ? (l.saleValue*(l.commissionPercent||25)/100) : 0), 0) + totalManual;
       const totalVendasFechadas = leads.filter(l=>l.saleValue).reduce((s,l)=>s+Number(l.saleValue),0);
@@ -1681,6 +1803,7 @@
           <div class="surface-card gt-stat-card"><p class="gt-stat-label">Total de leads</p><p class="gt-stat-val">${leads.length}</p></div>
           <div class="surface-card gt-stat-card"><p class="gt-stat-label">Leads com cupom</p><p class="gt-stat-val">${withCoupon.length}</p></div>
           <div class="surface-card gt-stat-card"><p class="gt-stat-label">Criadores ativos</p><p class="gt-stat-val">${creators.length}</p></div>
+          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Cliques em links</p><p class="gt-stat-val">${linkClicks.length}</p></div>
           <div class="surface-card gt-stat-card"><p class="gt-stat-label">Comissões a pagar</p><p class="gt-stat-val">${money(totalComissao)}</p></div>
         </div>
         <div class="surface-card gt-panel">
@@ -1692,6 +1815,8 @@
         </div>`;
     } else if (tab === 'creators') {
       const creators = cache.creators || (cache.creators = await fetchCreators());
+      const linkClicks = cache.linkClicks || (cache.linkClicks = await fetchLinkClicks());
+      const clicksFor = (code) => linkClicks.filter(c => (c.couponCode||'').toUpperCase() === (code||'').toUpperCase()).length;
       content.innerHTML = `
         <div class="surface-card gt-panel">
           <p class="gt-panel-title">Criar novo criador de conteúdo</p>
@@ -1707,8 +1832,15 @@
         </div>
         <div class="surface-card gt-panel">
           <p class="gt-panel-title">Criadores cadastrados</p>
-          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>E-mail</th><th>Cupom</th><th>Desconto</th><th>Comissão</th></tr></thead><tbody>
-          ${creators.length ? creators.map(c=>`<tr><td>${c.email}</td><td><span class="gt-coupon-tag">${c.couponCode||'-'}</span></td><td>${c.discountPercent||0}%</td><td>${c.commissionPercent||0}%</td></tr>`).join('') : '<tr><td colspan="4" class="gt-empty">Nenhum criador cadastrado ainda.</td></tr>'}
+          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>E-mail</th><th>Cupom</th><th>Desconto</th><th>Comissão</th><th>Cliques no link</th><th>Link personalizado</th></tr></thead><tbody>
+          ${creators.length ? creators.map(c=>`<tr>
+            <td>${c.email}</td>
+            <td><span class="gt-coupon-tag">${c.couponCode||'-'}</span></td>
+            <td>${c.discountPercent||0}%</td>
+            <td>${c.commissionPercent||0}%</td>
+            <td>${clicksFor(c.couponCode)}</td>
+            <td>${c.couponCode ? `<button type="button" class="gt-small-btn ripple-fx" onclick="GT.copyCreatorLink('${c.couponCode}')">Copiar link</button>` : '—'}</td>
+          </tr>`).join('') : '<tr><td colspan="6" class="gt-empty">Nenhum criador cadastrado ainda.</td></tr>'}
           </tbody></table></div>
         </div>`;
     } else if (tab === 'leads') {
@@ -1724,7 +1856,9 @@
               <td>${l.nome||'-'}</td>
               <td>${l.couponValid ? `<span class="gt-coupon-tag">${l.couponCode}</span>` : (l.couponCode || '—')}</td>
               <td>${l.orcamentoTexto||'-'}</td>
-              <td><span class="gt-pill ${l.saleValue?'gt-pill--closed':'gt-pill--open'}">${l.saleValue?'Fechado':'Novo'}</span></td>
+              <td>${l.cancelled
+                  ? `<span class="gt-pill" style="background:rgba(248,113,113,0.12);color:#f87171;border-color:rgba(248,113,113,0.35)" title="${(l.cancelReason||'').replace(/"/g,'&quot;')}">Cancelado</span>`
+                  : `<span class="gt-pill ${l.saleValue?'gt-pill--closed':'gt-pill--open'}">${l.saleValue?'Fechado':'Novo'}</span>`}</td>
               <td><input class="gt-mini-input" type="number" step="0.01" id="sale_${l.id}" value="${l.saleValue||''}" placeholder="0,00"/></td>
               <td>${money(commission)}</td>
               <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.saveLeadSale('${l.id}')">Salvar</button></td>
@@ -1868,14 +2002,23 @@
     if (tab === 'overview') {
       const fechados = leads.filter(l=>l.saleValue);
       const manual = cache.myManual || (cache.myManual = await fetchMyManualEarnings(currentUser.uid));
+      const myClicks = cache.myLinkClicks || (cache.myLinkClicks = await fetchMyLinkClicks(currentUser.uid));
       const totalManual = manual.reduce((s,m)=> s + Number(m.amount||0), 0);
       const totalComissao = fechados.reduce((s,l)=> s + (l.saleValue*(l.commissionPercent||currentProfile.commissionPercent||25)/100), 0) + totalManual;
       content.innerHTML = `
         <div class="gt-stats-grid">
           <div class="surface-card gt-stat-card"><p class="gt-stat-label">Seu cupom</p><p class="gt-stat-val">${currentProfile.couponCode}</p></div>
           <div class="surface-card gt-stat-card"><p class="gt-stat-label">Total de leads</p><p class="gt-stat-val">${leads.length}</p></div>
+          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Cliques no seu link</p><p class="gt-stat-val">${myClicks.length}</p></div>
           <div class="surface-card gt-stat-card"><p class="gt-stat-label">Vendas fechadas</p><p class="gt-stat-val">${fechados.length}</p></div>
           <div class="surface-card gt-stat-card"><p class="gt-stat-label">Comissão total</p><p class="gt-stat-val">${money(totalComissao)}</p></div>
+        </div>
+        <div class="surface-card gt-panel">
+          <p class="gt-panel-title">Seu link personalizado</p>
+          <p style="color:var(--muted);font-size:0.85rem;line-height:1.7;margin-bottom:0.75rem">
+            Compartilhe esse link com quem te assiste — quem clicar já entra direto no orçamento com o cupom <strong style="color:var(--fg)">${currentProfile.couponCode}</strong> aplicado, sem precisar digitar nada.
+          </p>
+          <button type="button" class="gt-small-btn ripple-fx" onclick="GT.copyCreatorLink('${currentProfile.couponCode}')">Copiar meu link</button>
         </div>
         <div class="surface-card gt-panel">
           <p class="gt-panel-title">Suas vendas (venda por venda)</p>
@@ -1902,7 +2045,9 @@
               <td>${l.nome||'-'}</td>
               <td>${l.uso||'-'}</td>
               <td>${l.orcamentoTexto||'-'}</td>
-              <td><span class="gt-pill ${l.saleValue?'gt-pill--closed':'gt-pill--open'}">${l.saleValue?'Fechado':'Novo'}</span></td>
+              <td>${l.cancelled
+                  ? `<span class="gt-pill" style="background:rgba(248,113,113,0.12);color:#f87171;border-color:rgba(248,113,113,0.35)" title="${(l.cancelReason||'').replace(/"/g,'&quot;')}">Cancelado</span>`
+                  : `<span class="gt-pill ${l.saleValue?'gt-pill--closed':'gt-pill--open'}">${l.saleValue?'Fechado':'Novo'}</span>`}</td>
               <td>${money(l.saleValue)}</td>
               <td>${money(commission)}</td>
             </tr>`;
@@ -1919,7 +2064,7 @@
   /* ================= EXPÕE PARA OS onclick="" DO HTML ================= */
   window.GT = {
     openAccountArea, closeLogin, doLogin, doLogout, closeDash,
-    validateCoupon, saveLead,
+    validateCoupon, saveLead, saveCancelReason, logLinkClick, copyCreatorLink,
     switchAdminTab, saveLeadSale, deleteLead, toggleCoupon, submitCreateCreator,
     submitManualEarning, deleteManualEarning,
     switchCreatorTab
