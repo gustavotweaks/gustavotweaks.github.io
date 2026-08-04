@@ -393,6 +393,12 @@
     .chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
     .chat-step { text-align: center; font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 0.5rem; }
     .whatsapp-btn { display: flex; width: 100%; align-items: center; justify-content: center; gap: 0.5rem; background: #25d366; color: #000; padding: 0.875rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; }
+    .whatsapp-btn.wa-attention { animation: waGlow 1.4s ease-in-out infinite; }
+    @keyframes waGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.55); } 50% { box-shadow: 0 0 0 12px rgba(37,211,102,0); } }
+    .wa-fallback-note { font-size: 0.78rem; color: var(--muted); text-align: center; line-height: 1.5; margin: 0; }
+    .wa-copy-row { display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex-wrap: wrap; }
+    .wa-copy-num-btn { padding: 0.5rem 0.8rem; border-radius: 0.6rem; font-weight: 600; font-size: 0.78rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: var(--fg); }
+    .wa-copy-num-btn:hover { background: rgba(255,255,255,0.1); }
     .post-finish-actions { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
     .cancel-agendamento-btn { width: 100%; padding: 0.75rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.8rem; background: transparent; border: 1px solid rgba(248,113,113,0.35); color: #f87171; }
     .cancel-reason-box { display: flex; flex-direction: column; width: 100%; }
@@ -1092,6 +1098,10 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26 9.99 9.99 0 0 1 16.638-7.45c.026.025.05.05.074.076l.17.17a9.99 9.99 0 0 1 2.91 7.037 9.86 9.86 0 0 1-9.901 9.905M20.11 7.916a8.23 8.23 0 0 0-5.889-2.435 8.24 8.24 0 0 0-8.236 8.228 8.23 8.23 0 0 0 1.258 4.383l.18.288-.84 3.06 3.112-.816.19.113a8.22 8.22 0 0 0 4.225 1.159 8.24 8.24 0 0 0 8.236-8.228 8.21 8.21 0 0 0-2.436-5.752Z"/></svg>
             <span id="waBtnLabel" data-i18n="chat.waButton">Enviar no WhatsApp e agendar</span>
           </a>
+          <p id="waFallbackNote" class="wa-fallback-note hidden"></p>
+          <div id="waCopyRow" class="wa-copy-row hidden">
+            <button type="button" id="waCopyBtn" class="wa-copy-num-btn ripple-fx"></button>
+          </div>
           <button type="button" id="cancelBtn" class="cancel-agendamento-btn ripple-fx">Cancelar agendamento</button>
         </div>
         <div id="cancelReasonBox" class="cancel-reason-box hidden">
@@ -1316,7 +1326,18 @@
     const sendBtn = document.getElementById('chatSend');
     const formEl = document.getElementById('chatForm');
     const waBtn = document.getElementById('whatsappBtn');
+    const waFallbackNote = document.getElementById('waFallbackNote');
+    const waCopyRow = document.getElementById('waCopyRow');
+    const waCopyBtn = document.getElementById('waCopyBtn');
     const stepEl = document.getElementById('chatStep');
+
+    // detecta navegadores embutidos (Instagram, TikTok, Facebook, etc.) que costumam
+    // falhar ao abrir o app do WhatsApp — nesses casos avisamos o cliente em vez de
+    // tentar um redirecionamento automático que provavelmente vai falhar
+    function isInAppBrowser(){
+      const ua = navigator.userAgent || '';
+      return /Instagram|FBAN|FBAV|FB_IAB|TikTok|Line\/|MicroMessenger|Snapchat/i.test(ua);
+    }
 
     function interpolate(text){ return text.replace(/\{(\w+)\}/g, (_,k)=>answers[k]||''); }
 
@@ -1369,6 +1390,28 @@
       }
     }
 
+    function buildWaLines(isEn, answers, couponLine){
+      return isEn ? [
+        '*New quote request — GuTweaks*','',
+        `👤 *Name:* ${answers.nome||'-'}`,
+        `🛠️ *Service:* ${answers.servico||'-'}`,
+        `🖥️ *PC:* ${answers.configuracao||'-'}`,
+        `🎯 *Goal:* ${answers.objetivo||'-'}`,
+        ...(couponLine ? ['', couponLine] : [])
+      ] : [
+        '*Novo pedido de orçamento — GuTweaks*','',
+        `👤 *Nome:* ${answers.nome||'-'}`,
+        `🛠️ *Serviço:* ${answers.servico||'-'}`,
+        `🖥️ *PC:* ${answers.configuracao||'-'}`,
+        `🎯 *Objetivo:* ${answers.objetivo||'-'}`,
+        ...(couponLine ? ['', couponLine] : [])
+      ];
+    }
+
+    function waLink(text){
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+    }
+
     async function finish(){
       finished = true;
       const isEn = currentLang === 'en';
@@ -1379,9 +1422,53 @@
       const semCupomLabels = ['não tenho cupom','no coupon',''];
       const cupomDigitado = semCupomLabels.includes(rawCupom.toLowerCase()) ? '' : rawCupom;
 
-      addMsg('bot', isEn
-        ? 'Perfect! Summary ready ✅ Click "Send on WhatsApp" to continue directly with me and schedule the optimization.'
-        : 'Perfeito! Resumo montado ✅ Clique em "Enviar no WhatsApp" pra continuar direto comigo e agendar a otimização.');
+      // monta a mensagem imediatamente (sem esperar validação de cupom / salvar lead)
+      // e já deixa o link pronto no botão e tenta abrir o WhatsApp na hora, o mais perto
+      // possível do clique do usuário — assim navegadores não bloqueiam o redirecionamento
+      const draftLine = cupomDigitado
+        ? (isEn ? `🏷️ *Coupon typed:* ${cupomDigitado}` : `🏷️ *Cupom digitado:* ${cupomDigitado}`)
+        : '';
+      const draftText = buildWaLines(isEn, answers, draftLine).join('\n');
+      const draftLink = waLink(draftText);
+      waBtn.href = draftLink;
+
+      const inApp = isInAppBrowser();
+      let autoOpened = false;
+      if (!inApp) {
+        try {
+          const popup = window.open(draftLink, '_blank');
+          autoOpened = !!(popup && !popup.closed);
+        } catch(e) { autoOpened = false; }
+      }
+
+      formEl.classList.add('hidden');
+      document.getElementById('postFinishActions').classList.remove('hidden');
+      stepEl.textContent = stepLabel();
+
+      waFallbackNote.classList.add('hidden');
+      waCopyRow.classList.add('hidden');
+      waBtn.classList.remove('wa-attention');
+
+      if (inApp) {
+        addMsg('bot', isEn
+          ? "Perfect! ✅ Since you're inside an app browser (Instagram/TikTok/etc.), WhatsApp usually won't open directly here. Tap the button below, or open this page in your regular browser (Chrome/Safari) and try again."
+          : 'Perfeito! ✅ Como você tá dentro de um navegador de app (Instagram/TikTok/etc.), o WhatsApp geralmente não abre direto por aqui. Toca no botão abaixo, ou abre essa página no seu navegador normal (Chrome/Safari) e tenta de novo.');
+        waFallbackNote.textContent = isEn
+          ? 'If nothing happens, copy the number below and send the message yourself:'
+          : 'Se nada acontecer, copia o número abaixo e manda a mensagem você mesmo:';
+        waFallbackNote.classList.remove('hidden');
+        waCopyRow.classList.remove('hidden');
+        waBtn.classList.add('wa-attention');
+      } else if (autoOpened) {
+        addMsg('bot', isEn
+          ? 'Perfect! ✅ I just opened WhatsApp in a new tab with everything filled in — just hit send there to talk to me directly. Didn\'t open? Tap the green button below.'
+          : 'Perfeito! ✅ Acabei de abrir o WhatsApp numa nova aba com tudo preenchido — é só apertar enviar por lá pra falar comigo direto. Não abriu? Toca no botão verde abaixo.');
+      } else {
+        addMsg('bot', isEn
+          ? 'Perfect! Summary ready ✅ Your browser blocked the automatic redirect, so tap the green button below to open WhatsApp and send it to me.'
+          : 'Perfeito! Resumo montado ✅ Seu navegador bloqueou o redirecionamento automático, então toca no botão verde abaixo pra abrir o WhatsApp e me mandar.');
+        waBtn.classList.add('wa-attention');
+      }
 
       // valida o cupom no Firestore (se houver)
       let coupon = { valid: false, code: '', discountPercent: 0 };
@@ -1399,30 +1486,26 @@
       '</ul>';
       messagesEl.appendChild(sum);
       messagesEl.scrollTop = messagesEl.scrollHeight;
-      formEl.classList.add('hidden');
-      document.getElementById('postFinishActions').classList.remove('hidden');
-      stepEl.textContent = stepLabel();
 
+      // atualiza o link do botão (e o botão de copiar) com o texto final, já com o cupom validado —
+      // vale pra quem ainda não clicou no botão / não conseguiu abrir automaticamente
       const couponLine = coupon.valid
         ? (isEn ? `🏷️ *Coupon:* ${coupon.code} (5% discount)` : `🏷️ *Cupom:* ${coupon.code} (5% de desconto)`)
         : (cupomDigitado ? (isEn ? `🏷️ *Coupon typed (not valid):* ${cupomDigitado}` : `🏷️ *Cupom digitado (não válido):* ${cupomDigitado}`) : '');
 
-      const lines = isEn ? [
-        '*New quote request — GuTweaks*','',
-        `👤 *Name:* ${answers.nome||'-'}`,
-        `🛠️ *Service:* ${answers.servico||'-'}`,
-        `🖥️ *PC:* ${answers.configuracao||'-'}`,
-        `🎯 *Goal:* ${answers.objetivo||'-'}`,
-        ...(couponLine ? ['', couponLine] : [])
-      ] : [
-        '*Novo pedido de orçamento — GuTweaks*','',
-        `👤 *Nome:* ${answers.nome||'-'}`,
-        `🛠️ *Serviço:* ${answers.servico||'-'}`,
-        `🖥️ *PC:* ${answers.configuracao||'-'}`,
-        `🎯 *Objetivo:* ${answers.objetivo||'-'}`,
-        ...(couponLine ? ['', couponLine] : [])
-      ];
-      waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+      const finalText = buildWaLines(isEn, answers, couponLine).join('\n');
+      waBtn.href = waLink(finalText);
+
+      const displayNumber = '+' + WHATSAPP_NUMBER.replace(/^55/, '55 ').replace(/(\d{2})(\d{5})(\d{4})$/, '$1 $2-$3');
+      waCopyBtn.textContent = isEn ? `📋 Copy number (${displayNumber})` : `📋 Copiar número (${displayNumber})`;
+      waCopyBtn.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(finalText);
+          waCopyBtn.textContent = isEn ? '✅ Message copied! Paste it in WhatsApp' : '✅ Mensagem copiada! Cola no WhatsApp';
+        } catch(e) {
+          waCopyBtn.textContent = isEn ? `📋 ${displayNumber} (copy manually)` : `📋 ${displayNumber} (copie manualmente)`;
+        }
+      };
 
       // salva o lead no Firestore (para o dashboard do criador/admin)
       currentLeadId = null;
@@ -1440,6 +1523,9 @@
       messagesEl.innerHTML='';
       formEl.classList.remove('hidden');
       document.getElementById('postFinishActions').classList.add('hidden');
+      waFallbackNote.classList.add('hidden');
+      waCopyRow.classList.add('hidden');
+      waBtn.classList.remove('wa-attention');
       const reasonBox = document.getElementById('cancelReasonBox');
       reasonBox.classList.add('hidden');
       reasonBox.innerHTML = `
