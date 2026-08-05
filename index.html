@@ -714,12 +714,61 @@
         </a>
       </div>
 
-      <div id="ticketSuccessWrap" class="hidden">
-        <p class="gt-title">Chamado aberto! ✅</p>
-        <p class="gt-sub">Recebi seu chamado <strong id="ticketSuccessId"></strong> e já vou dar uma olhada. Normalmente respondo por aqui em pouco tempo.</p>
-        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:0.9rem">Se for algo urgente, essa é a <strong style="color:var(--fg)">segunda opção</strong>: falar comigo agora no WhatsApp.</p>
-        <a id="ticketWaBtn" class="secondary-btn ripple-fx" target="_blank" rel="noopener noreferrer" style="width:100%;justify-content:center;margin-bottom:0.6rem;text-decoration:none">Ou falar agora no WhatsApp</a>
-        <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" onclick="closeTicket()">Fechar</button>
+    </div>
+  </div>
+
+  <!-- ================= CHAT AO VIVO (conversa privada cliente ↔ Gustavo) ================= -->
+  <div id="liveChatOverlay" class="chat-overlay hidden" onclick="if(event.target===this) GT.closeLiveChat()">
+    <div class="surface-card chat-modal" role="dialog" aria-modal="true" aria-label="Conversa com Gustavo">
+      <div class="chat-header">
+        <div class="chat-agent">
+          <div class="chat-avatar"><img src="/gutweaks-logo.png" alt="GuTweaks" /><span class="chat-status"></span></div>
+          <div>
+            <p class="chat-name">Gustavo · GuTweaks</p>
+            <p class="chat-sub">Chamado <strong id="liveChatCode">#000000</strong> · só você e eu vemos essa conversa</p>
+          </div>
+        </div>
+        <button class="chat-close ripple-fx" onclick="GT.closeLiveChat()" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      </div>
+      <div id="liveChatMessages" class="chat-messages"></div>
+      <div class="chat-footer">
+        <form id="liveChatForm" class="chat-form" onsubmit="return false">
+          <textarea id="liveChatInput" class="chat-input" rows="1" placeholder="Digite sua mensagem..."></textarea>
+          <button type="button" id="liveChatSend" class="chat-send ripple-fx" aria-label="Enviar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
+        </form>
+        <p style="font-size:0.68rem;color:var(--muted);text-align:center;margin-top:0.6rem">
+          Pode fechar essa janela sem perder nada — sua conversa continua salva, é só voltar pelo botão flutuante.
+          Se for urgente, <a id="liveChatWaLink" href="#" target="_blank" rel="noopener noreferrer" style="color:var(--muted);text-decoration:underline">fala agora no WhatsApp</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botão flutuante pra voltar a uma conversa já aberta neste navegador -->
+  <button id="liveChatFab" class="floating-cta ripple-fx hidden" style="right:auto;left:1.25rem" onclick="GT.reopenLiveChat()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span>Sua conversa</span>
+  </button>
+
+  <!-- ================= CHAT AO VIVO (visão do administrador) ================= -->
+  <div id="adminChatOverlay" class="chat-overlay hidden" style="z-index:220" onclick="if(event.target===this) GT.closeAdminChat()">
+    <div class="surface-card chat-modal" role="dialog" aria-modal="true" aria-label="Chat com cliente">
+      <div class="chat-header">
+        <div class="chat-agent">
+          <div class="chat-avatar"><img src="/gutweaks-logo.png" alt="GuTweaks" /><span class="chat-status"></span></div>
+          <div>
+            <p class="chat-name" id="adminChatName">Cliente</p>
+            <p class="chat-sub">Chamado <strong id="adminChatCode">#000000</strong> · conversa privada</p>
+          </div>
+        </div>
+        <button class="chat-close ripple-fx" onclick="GT.closeAdminChat()" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      </div>
+      <div id="adminChatMessages" class="chat-messages"></div>
+      <div class="chat-footer">
+        <form id="adminChatForm" class="chat-form" onsubmit="return false">
+          <textarea id="adminChatInput" class="chat-input" rows="1" placeholder="Responder ao cliente..."></textarea>
+          <button type="button" id="adminChatSend" class="chat-send ripple-fx" aria-label="Enviar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button>
+        </form>
       </div>
     </div>
   </div>
@@ -1578,7 +1627,6 @@
     /* ================= CHAMADO DE SUPORTE (TICKET) ================= */
     const ticketOverlay = document.getElementById('ticketOverlay');
     const ticketFormWrap = document.getElementById('ticketFormWrap');
-    const ticketSuccessWrap = document.getElementById('ticketSuccessWrap');
     const ticketError = document.getElementById('ticketError');
     const ticketSubmitBtn = document.getElementById('ticketSubmitBtn');
 
@@ -1586,7 +1634,6 @@
       const isOrcamento = mode === 'orcamento';
       ticketOverlay.classList.remove('hidden');
       ticketFormWrap.classList.remove('hidden');
-      ticketSuccessWrap.classList.add('hidden');
       ticketError.textContent = '';
       document.getElementById('ticketNome').value = '';
       document.getElementById('ticketContato').value = '';
@@ -1642,17 +1689,196 @@
       try {
         const ticketId = await window.GT.saveTicket({ nome, contato, categoria, mensagem, cupom, isOrcamento, lang: currentLang });
         const shortId = '#' + ticketId.slice(-6).toUpperCase();
-        document.getElementById('ticketSuccessId').textContent = shortId;
         const waText = `*Chamado de suporte ${shortId} — GuTweaks*\n\n👤 *Nome:* ${nome}\n📞 *Contato:* ${contato}\n🗂️ *Categoria:* ${categoria}\n📝 *Detalhes:* ${mensagem}` + (cupom ? `\n🏷️ *Cupom:* ${cupom}` : '');
-        document.getElementById('ticketWaBtn').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
-        ticketFormWrap.classList.add('hidden');
-        ticketSuccessWrap.classList.remove('hidden');
+
+        // joga a mensagem que a pessoa já escreveu no formulário como a primeira
+        // mensagem da conversa em tempo real (assim ela não precisa repetir nada)
+        if (window.GT && typeof window.GT.sendTicketMessage === 'function') {
+          try { await window.GT.sendTicketMessage(ticketId, 'client', mensagem); } catch(e) {}
+        }
+
+        closeTicket();
+        GT.openLiveChat(ticketId, shortId, waText);
+        ticketSubmitBtn.disabled = false;
+        ticketSubmitBtn.textContent = 'Abrir chamado';
       } catch(e) {
         ticketError.textContent = 'Não consegui abrir o chamado agora. Tenta de novo em instantes, ou fala direto no WhatsApp.';
         ticketSubmitBtn.disabled = false;
         ticketSubmitBtn.textContent = 'Abrir chamado';
       }
     }
+
+    /* ================= CHAT AO VIVO (cliente) ================= */
+    let liveChatUnsub = null;
+    let liveChatTicketId = null;
+    const liveChatOverlay = document.getElementById('liveChatOverlay');
+    const liveChatMessages = document.getElementById('liveChatMessages');
+    const liveChatInput = document.getElementById('liveChatInput');
+    const liveChatSendBtn = document.getElementById('liveChatSend');
+    const liveChatWaLink = document.getElementById('liveChatWaLink');
+
+    function renderLiveChatMessages(msgs){
+      liveChatMessages.innerHTML = '';
+      if (!msgs || !msgs.length) {
+        const div = document.createElement('div');
+        div.className = 'msg msg-bot';
+        div.textContent = 'Recebi seu chamado! Pode escrever aqui mesmo que eu te respondo assim que possível.';
+        liveChatMessages.appendChild(div);
+      } else {
+        msgs.forEach(m => {
+          const div = document.createElement('div');
+          div.className = 'msg ' + (m.sender === 'client' ? 'msg-user' : 'msg-bot');
+          div.textContent = m.text || '';
+          liveChatMessages.appendChild(div);
+        });
+      }
+      liveChatMessages.scrollTop = liveChatMessages.scrollHeight;
+    }
+
+    function openLiveChatFn(ticketId, shortId, waText){
+      liveChatTicketId = ticketId;
+      try { localStorage.setItem('gutweaks_chat_ticket', ticketId); } catch(e) {}
+      document.getElementById('liveChatCode').textContent = shortId || ('#' + ticketId.slice(-6).toUpperCase());
+      liveChatWaLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText || ('*Chamado ' + (shortId||'') + ' — GuTweaks*'))}`;
+      liveChatOverlay.classList.remove('hidden');
+      document.getElementById('liveChatFab').classList.add('hidden');
+      if (liveChatUnsub) { liveChatUnsub(); liveChatUnsub = null; }
+      if (window.GT && typeof window.GT.listenTicketMessages === 'function') {
+        liveChatUnsub = window.GT.listenTicketMessages(ticketId, renderLiveChatMessages);
+      }
+      if (window.GT && typeof window.GT.markTicketReadByClient === 'function') {
+        window.GT.markTicketReadByClient(ticketId).catch(()=>{});
+      }
+      setTimeout(()=> liveChatInput.focus(), 200);
+    }
+
+    function closeLiveChatFn(){
+      liveChatOverlay.classList.add('hidden');
+      const fab = document.getElementById('liveChatFab');
+      try { if (localStorage.getItem('gutweaks_chat_ticket')) fab.classList.remove('hidden'); } catch(e) {}
+      // mantém o listener ativo em segundo plano pra atualizar o botão flutuante; se
+      // preferir economizar leituras, dá pra cancelar aqui com liveChatUnsub()
+    }
+
+    function reopenLiveChatFn(){
+      let id = null;
+      try { id = localStorage.getItem('gutweaks_chat_ticket'); } catch(e) {}
+      if (id) openLiveChatFn(id, null, null);
+    }
+
+    async function sendLiveChatMessageFn(){
+      const text = liveChatInput.value;
+      if (!text.trim() || !liveChatTicketId) return;
+      liveChatInput.value = '';
+      liveChatInput.style.height = 'auto';
+      liveChatSendBtn.disabled = true;
+      try {
+        if (window.GT && typeof window.GT.sendTicketMessage === 'function') {
+          await window.GT.sendTicketMessage(liveChatTicketId, 'client', text);
+        }
+      } catch(e) {}
+      liveChatSendBtn.disabled = false;
+      liveChatInput.focus();
+    }
+
+    liveChatSendBtn.onclick = sendLiveChatMessageFn;
+    liveChatInput.addEventListener('keydown', e=>{
+      if (e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendLiveChatMessageFn(); }
+      if (e.key==='Escape') closeLiveChatFn();
+    });
+    liveChatInput.addEventListener('input', function(){
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 128) + 'px';
+    });
+
+    // se a pessoa já tem uma conversa aberta neste navegador (voltou depois de
+    // fechar a aba, por exemplo), mostra o botão flutuante pra ela continuar
+    window.addEventListener('DOMContentLoaded', function(){
+      let savedId = null;
+      try { savedId = localStorage.getItem('gutweaks_chat_ticket'); } catch(e) {}
+      if (savedId) document.getElementById('liveChatFab').classList.remove('hidden');
+    });
+    // Nota: openLiveChatFn/closeLiveChatFn/reopenLiveChatFn são funções globais
+    // (declaradas com "function" neste script clássico), por isso o módulo Firebase
+    // mais abaixo consegue referenciá-las ao montar o objeto final window.GT.
+
+    /* ================= CHAT AO VIVO (visão do administrador) ================= */
+    let adminChatUnsub = null;
+    let adminChatTicketId = null;
+    const adminChatOverlay = document.getElementById('adminChatOverlay');
+    const adminChatMessages = document.getElementById('adminChatMessages');
+    const adminChatInput = document.getElementById('adminChatInput');
+    const adminChatSendBtn = document.getElementById('adminChatSend');
+
+    function renderAdminChatMessages(msgs){
+      adminChatMessages.innerHTML = '';
+      if (!msgs || !msgs.length) {
+        const div = document.createElement('div');
+        div.className = 'msg msg-bot';
+        div.textContent = 'Ainda sem mensagens nesse chamado.';
+        adminChatMessages.appendChild(div);
+      } else {
+        msgs.forEach(m => {
+          const div = document.createElement('div');
+          // do ponto de vista do admin: mensagem dele mesmo cai à direita (msg-user),
+          // mensagem do cliente cai à esquerda (msg-bot)
+          div.className = 'msg ' + (m.sender === 'admin' ? 'msg-user' : 'msg-bot');
+          div.textContent = m.text || '';
+          adminChatMessages.appendChild(div);
+        });
+      }
+      adminChatMessages.scrollTop = adminChatMessages.scrollHeight;
+    }
+
+    function openAdminChatFn(ticketId, nome){
+      adminChatTicketId = ticketId;
+      document.getElementById('adminChatName').textContent = nome || 'Cliente';
+      document.getElementById('adminChatCode').textContent = '#' + ticketId.slice(-6).toUpperCase();
+      adminChatOverlay.classList.remove('hidden');
+      if (adminChatUnsub) { adminChatUnsub(); adminChatUnsub = null; }
+      if (window.GT && typeof window.GT.listenTicketMessages === 'function') {
+        adminChatUnsub = window.GT.listenTicketMessages(ticketId, renderAdminChatMessages);
+      }
+      if (window.GT && typeof window.GT.markTicketReadByAdmin === 'function') {
+        window.GT.markTicketReadByAdmin(ticketId).catch(()=>{});
+      }
+      setTimeout(()=> adminChatInput.focus(), 200);
+    }
+
+    function closeAdminChatFn(){
+      adminChatOverlay.classList.add('hidden');
+      if (adminChatUnsub) { adminChatUnsub(); adminChatUnsub = null; }
+      adminChatTicketId = null;
+      // atualiza a listinha de chamados (pra refletir "lido"/status mais recente)
+      if (window.GT && typeof window.GT.switchAdminTab === 'function') {
+        try { window.GT.switchAdminTab('tickets'); } catch(e) {}
+      }
+    }
+
+    async function sendAdminChatMessageFn(){
+      const text = adminChatInput.value;
+      if (!text.trim() || !adminChatTicketId) return;
+      adminChatInput.value = '';
+      adminChatInput.style.height = 'auto';
+      adminChatSendBtn.disabled = true;
+      try {
+        if (window.GT && typeof window.GT.sendTicketMessage === 'function') {
+          await window.GT.sendTicketMessage(adminChatTicketId, 'admin', text);
+        }
+      } catch(e) {}
+      adminChatSendBtn.disabled = false;
+      adminChatInput.focus();
+    }
+
+    adminChatSendBtn.onclick = sendAdminChatMessageFn;
+    adminChatInput.addEventListener('keydown', e=>{
+      if (e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendAdminChatMessageFn(); }
+      if (e.key==='Escape') closeAdminChatFn();
+    });
+    adminChatInput.addEventListener('input', function(){
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 128) + 'px';
+    });
 
     document.getElementById('cancelBtn').onclick = function(){
       document.getElementById('postFinishActions').classList.add('hidden');
@@ -1904,7 +2130,7 @@
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import {
     getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where,
-    getDocs, updateDoc, deleteDoc, serverTimestamp, orderBy
+    getDocs, updateDoc, deleteDoc, serverTimestamp, orderBy, onSnapshot
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   /* ======================================================
@@ -2195,6 +2421,42 @@
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
   }
 
+  /* ================= CHAT EM TEMPO REAL DO CHAMADO (só cliente + admin) =================
+     Cada chamado (tickets/{id}) ganha uma subcoleção "messages" com o histórico da
+     conversa. O cliente não faz login — o próprio ID do chamado (gerado pelo Firestore,
+     praticamente impossível de adivinhar) funciona como a "chave" de acesso à conversa
+     dele. As regras de segurança (firestore.rules) devem impedir listar/ler o chamado
+     de outra pessoa sem saber o ID exato. Veja o arquivo firestore.rules enviado junto. */
+  function ticketMessagesCol(ticketId){
+    return collection(db, 'tickets', ticketId, 'messages');
+  }
+  async function sendTicketMessage(ticketId, sender, text){
+    const clean = (text||'').trim().slice(0,2000);
+    if (!ticketId || !clean) return;
+    await addDoc(ticketMessagesCol(ticketId), {
+      sender: sender === 'admin' ? 'admin' : 'client', // nunca confia em outro valor
+      text: clean,
+      createdAt: serverTimestamp()
+    });
+    const patch = { lastMessageAt: serverTimestamp(), lastMessageText: clean, lastMessageBy: sender };
+    if (sender === 'admin') { patch.unreadForClient = true; patch.unreadForAdmin = false; if (!patch.status) patch.status = 'andamento'; patch.status = 'andamento'; }
+    else { patch.unreadForAdmin = true; }
+    try { await updateDoc(doc(db,'tickets',ticketId), patch); } catch(e) {}
+  }
+  function listenTicketMessages(ticketId, cb){
+    const q = query(ticketMessagesCol(ticketId), orderBy('createdAt','asc'));
+    return onSnapshot(q, snap => cb(snap.docs.map(d => ({ id:d.id, ...d.data() }))), err => console.error('Erro no chat em tempo real:', err));
+  }
+  function listenTicketDoc(ticketId, cb){
+    return onSnapshot(doc(db,'tickets',ticketId), snap => cb(snap.exists() ? { id:snap.id, ...snap.data() } : null), err => console.error('Erro ao observar chamado:', err));
+  }
+  async function markTicketReadByAdmin(ticketId){
+    try { await updateDoc(doc(db,'tickets',ticketId), { unreadForAdmin: false }); } catch(e) {}
+  }
+  async function markTicketReadByClient(ticketId){
+    try { await updateDoc(doc(db,'tickets',ticketId), { unreadForClient: false }); } catch(e) {}
+  }
+
   /* ================= RENDER: PAINEL PRINCIPAL ================= */
   async function renderDashboard(){
     if (!currentUser) { closeDash(); openLogin(); return; }
@@ -2364,11 +2626,11 @@
       content.innerHTML = `
         <div class="surface-card gt-panel">
           <p class="gt-panel-title">Chamados de suporte</p>
-          <p style="color:var(--muted);font-size:0.8rem;line-height:1.6;margin-bottom:1rem">Só você (administrador) enxerga esses chamados. Os clientes só veem a confirmação de que abriram o chamado.</p>
+          <p style="color:var(--muted);font-size:0.8rem;line-height:1.6;margin-bottom:1rem">Só você (administrador) enxerga essa lista. Cada chamado tem uma conversa em tempo real com o cliente — clique em <strong style="color:var(--fg)">💬 Chat</strong> pra ver e responder.</p>
           <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Contato</th><th>Categoria</th><th>Problema</th><th>Status</th><th></th></tr></thead><tbody>
           ${tickets.length ? tickets.map(t=>`<tr>
             <td>${fmtDate(t.createdAt)}</td>
-            <td>${escapeHtml(t.nome)||'-'}</td>
+            <td>${escapeHtml(t.nome)||'-'}${t.unreadForAdmin ? ' <span class="gt-pill" style="background:rgba(248,113,113,0.15);color:#f87171">Nova msg</span>' : ''}</td>
             <td>${escapeHtml(t.contato)||'-'}</td>
             <td>${escapeHtml(t.categoria)||'-'}</td>
             <td style="max-width:22rem;white-space:pre-wrap">${escapeHtml(t.mensagem)||'-'}</td>
@@ -2380,7 +2642,10 @@
                 <option value="resolvido" ${t.status==='resolvido'?'selected':''}>Resolvido</option>
               </select>
             </td>
-            <td><button type="button" class="gt-small-btn ripple-fx" style="background:#3a1414;color:#ff8080" onclick="GT.deleteTicket('${t.id}')">Apagar</button></td>
+            <td style="display:flex;flex-direction:column;gap:0.4rem">
+              <button type="button" class="gt-small-btn ripple-fx" onclick="GT.openAdminChat('${t.id}', '${(t.nome||'').replace(/'/g,"\\'")}')">💬 Chat</button>
+              <button type="button" class="gt-small-btn ripple-fx" style="background:#3a1414;color:#ff8080" onclick="GT.deleteTicket('${t.id}')">Apagar</button>
+            </td>
           </tr>`).join('') : '<tr><td colspan="7" class="gt-empty">Nenhum chamado aberto ainda.</td></tr>'}
           </tbody></table></div>
         </div>`;
@@ -2548,7 +2813,16 @@
     switchAdminTab, saveLeadSale, deleteLead, toggleCoupon, submitCreateCreator,
     submitManualEarning, deleteManualEarning,
     switchCreatorTab,
-    saveTicket, updateTicketStatus, deleteTicket
+    saveTicket, updateTicketStatus, deleteTicket,
+    sendTicketMessage, listenTicketMessages, listenTicketDoc,
+    markTicketReadByAdmin, markTicketReadByClient,
+    // funções do chat ao vivo (declaradas no script clássico, acima do módulo —
+    // como são "function" normais, ficam disponíveis em window/global daqui)
+    openLiveChat: (typeof openLiveChatFn === 'function') ? openLiveChatFn : function(){},
+    closeLiveChat: (typeof closeLiveChatFn === 'function') ? closeLiveChatFn : function(){},
+    reopenLiveChat: (typeof reopenLiveChatFn === 'function') ? reopenLiveChatFn : function(){},
+    openAdminChat: (typeof openAdminChatFn === 'function') ? openAdminChatFn : function(){},
+    closeAdminChat: (typeof closeAdminChatFn === 'function') ? closeAdminChatFn : function(){}
   };
 </script>
 
