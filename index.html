@@ -585,7 +585,7 @@
     .gt-inline-form { display: grid; gap: 0.85rem; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); align-items: end; }
     .gt-coupon-tag { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 999px; border: 1px solid rgba(52,211,153,0.4); color: #34d399; background: rgba(52,211,153,0.08); }
   
-    /* ============ SOCIAL DOCK (Discord + WhatsApp) ============ */
+    /* ============ SOCIAL DOCK (WhatsApp) ============ */
     .social-dock {
       position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 60;
       display: flex; flex-direction: column; gap: 0.65rem; align-items: flex-end;
@@ -598,10 +598,8 @@
       animation: dockIn .5s cubic-bezier(.2,.8,.2,1) both;
     }
     .social-dock a:nth-child(1) { animation-delay: .05s; }
-    .social-dock a:nth-child(2) { animation-delay: .15s; }
     @keyframes dockIn { from { opacity:0; transform: translateY(14px) scale(.85);} to { opacity:1; transform:none; } }
     .social-dock a:hover { transform: translateY(-3px) scale(1.06); filter: saturate(1.15); }
-    .social-dock .sd-discord { background: linear-gradient(135deg,#5865F2,#4048c8); }
     .social-dock .sd-whatsapp { background: linear-gradient(135deg,#25d366,#128c47); }
     .social-dock a::after {
       content: attr(data-tip); position: absolute; right: calc(100% + 0.6rem); top: 50%;
@@ -657,6 +655,84 @@
     .chat-send:not(:disabled):hover { transform: scale(1.06); }
     .chat-step { letter-spacing: 0.14em; opacity: .75; }
     .gt-modal { border-radius: 1.25rem; animation: modalIn .35s cubic-bezier(.2,.8,.2,1); }
+
+    /* ============ HEADER REFINADO (tipografia + respiro) ============ */
+    .container-x { max-width: 1340px; padding-inline: 1.75rem; }
+    @media (min-width: 1200px) { .container-x { padding-inline: 2.5rem; } }
+    .nav-inner { height: 4.9rem; gap: 2rem; }
+    .logo { margin-left: -0.6rem; gap: 0.55rem; }
+    .logo img { height: 3.4rem; width: 3.4rem; }
+    .logo-text p:first-child { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; letter-spacing: -0.025em; }
+    .logo-text p:last-child { font-size: 0.56rem; letter-spacing: 0.34em; }
+    .nav-links { font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.01em; gap: 2.1rem; }
+    @media (min-width: 1280px) { .nav-links { gap: 2.75rem; } }
+    .nav-links a { position: relative; padding-block: 0.4rem; transition: color .2s ease; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+    .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+    .nav-right { gap: 0.9rem; }
+
+    /* ============ STATS ANIMADOS ============ */
+    .stat-val { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.03em; }
+    .stat-item.in-view .stat-val { animation: statPop .9s cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes statPop { 0% { transform: translateY(14px) scale(.94); filter: blur(6px); opacity: 0; } 100% { transform: none; filter: blur(0); opacity: 1; } }
+    .stat-item .stat-label { transition: color .3s ease; }
+    .stat-item:hover .stat-label { color: var(--fg); }
+    .stats-grid { position: relative; }
+    @media (prefers-reduced-motion: reduce) { .stat-item.in-view .stat-val { animation: none; } }
+
+    /* ============ CONTATO EM OUTRAS REDES (opcional) ============ */
+    .wa-inline-legacy { display: none !important; }
+    .alt-contact-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.55rem; width: 100%;
+      margin-top: 0.85rem; padding: 0.875rem 1.5rem; border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.05);
+      color: var(--fg); font-weight: 600; font-size: 0.875rem; font-family: inherit;
+      transition: background .2s ease, border-color .2s ease, transform .15s ease;
+    }
+    .alt-contact-btn:hover { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.45); transform: translateY(-2px); }
+    .alt-contact-hint { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-align: center; margin-top: 0.85rem; }
+    .net-list { display: grid; gap: 0.85rem; margin-top: 0.35rem; }
+    .net-card {
+      display: flex; align-items: center; gap: 0.9rem; padding: 1rem 1.1rem; border-radius: 0.9rem;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.035); color: var(--fg);
+      transition: transform .18s ease, border-color .2s ease, background .2s ease;
+    }
+    .net-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.075); }
+    .net-card--discord:hover { border-color: rgba(88,101,242,0.75); }
+    .net-card--wa:hover { border-color: rgba(37,211,102,0.75); }
+    .net-icon { width: 2.6rem; height: 2.6rem; border-radius: 0.7rem; display: grid; place-items: center; flex-shrink: 0; color: #fff; }
+    .net-icon--discord { background: linear-gradient(135deg,#5865F2,#4048c8); }
+    .net-icon--wa { background: linear-gradient(135deg,#25d366,#128c47); }
+    .net-icon svg { width: 1.35rem; height: 1.35rem; }
+    .net-name { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 700; }
+    .net-desc { font-size: 0.75rem; color: var(--muted); margin-top: 0.15rem; }
+    .net-arrow { margin-left: auto; color: var(--muted); }
+
+    /* ===== NAV: sem quebra de linha, respiro equilibrado ===== */
+    .nav-inner { gap: 1.5rem; flex-wrap: nowrap; }
+    .logo { flex-shrink: 0; white-space: nowrap; }
+    .logo-text p { white-space: nowrap; }
+    .nav-links { display: none; white-space: nowrap; flex: 1 1 auto; justify-content: center; gap: 1.35rem; font-size: 0.78rem; }
+    @media (min-width: 1024px) { .nav-links { display: flex; } }
+    @media (min-width: 1200px) { .nav-links { gap: 1.9rem; font-size: 0.8rem; } }
+    @media (min-width: 1400px) { .nav-links { gap: 2.4rem; } }
+    .nav-right { flex-shrink: 0; white-space: nowrap; }
+    .nav-right .brand-btn { white-space: nowrap; padding: 0.75rem 1.15rem; }
+
+    /* ===== cartões de redes: texto empilhado ===== */
+    .net-card > span:not(.net-icon) { display: flex; flex-direction: column; min-width: 0; }
+    .net-name, .net-desc { display: block; }
+
+    /* ===== NAV: ajuste fino para telas médias ===== */
+    @media (min-width: 1024px) and (max-width: 1399px) {
+      .container-x { padding-inline: 1.25rem; }
+      .nav-inner { gap: 1rem; }
+      .nav-links { gap: 1.15rem; font-size: 0.75rem; }
+      .nav-right { gap: 0.55rem; }
+      .nav-right .brand-btn { padding: 0.65rem 0.9rem; font-size: 0.78rem; }
+      .nav-right .acc-btn { padding: 0.55rem 0.75rem; font-size: 0.78rem; }
+      .logo img { height: 2.9rem; width: 2.9rem; }
+    }
 </style>
 </head>
 <body>
@@ -782,11 +858,52 @@
         </div>
         <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" id="ticketSubmitBtn" onclick="submitTicket()">Abrir chamado</button>
         <p id="ticketError" class="gt-error"></p>
-        <a id="ticketWaInline" class="ripple-fx" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;gap:0.4rem;margin-top:0.75rem;font-size:0.72rem;color:var(--muted);text-decoration:underline;text-underline-offset:2px">
+        <button type="button" class="alt-contact-btn ripple-fx" onclick="openNetworks()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.17L4 17.17V4Z"/><path d="M8 9h8"/><path d="M8 12.5h5"/></svg>
+          <span>Entrar em contato em outras redes (opcional)</span>
+        </button>
+        <p class="alt-contact-hint">Opção 2 · Discord e WhatsApp</p>
+        <a id="ticketWaInline" class="ripple-fx wa-inline-legacy" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;gap:0.4rem;margin-top:0.75rem;font-size:0.72rem;color:var(--muted);text-decoration:underline;text-underline-offset:2px">
           <span data-i18n="chat.waOptionLabel">Opção 2 (opcional):</span> <span>falar agora no WhatsApp</span>
         </a>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ================= OUTRAS REDES (opcional) ================= -->
+  <div id="networksOverlay" class="gt-overlay hidden" onclick="if(event.target===this) closeNetworks()">
+    <div class="surface-card gt-modal">
+      <button type="button" class="gt-modal-close ripple-fx" onclick="closeNetworks()">&#10005;</button>
+      <p class="gt-title">Falar em outras redes</p>
+      <p class="gt-sub">Prefere conversar direto? Escolha um canal oficial abaixo — atendimento pelo Discord ou WhatsApp Business.</p>
+      <div class="net-list">
+        <a class="net-card net-card--discord ripple-fx" href="https://discord.gg/8PUFNEDxNU" target="_blank" rel="noopener noreferrer">
+          <span class="net-icon net-icon--discord"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.319 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127c-.598.35-1.22.645-1.873.891a.077.077 0 0 0-.041.107c.36.699.772 1.364 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg></span>
+          <span>
+            <span class="net-name">Discord — Embaixadores FTNLUCCA</span>
+            <span class="net-desc">Comunidade oficial dos embaixadores</span>
+          </span>
+          <svg class="net-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+        </a>
+        <a class="net-card net-card--discord ripple-fx" href="https://discord.gg/UzRMyTgwa5" target="_blank" rel="noopener noreferrer">
+          <span class="net-icon net-icon--discord"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.319 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127c-.598.35-1.22.645-1.873.891a.077.077 0 0 0-.041.107c.36.699.772 1.364 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg></span>
+          <span>
+            <span class="net-name">Discord — GustavoTweaks (oficial)</span>
+            <span class="net-desc">Servidor oficial do GuTweaks</span>
+          </span>
+          <svg class="net-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+        </a>
+        <a class="net-card net-card--wa ripple-fx" href="https://api.whatsapp.com/send/?phone=5511957460235&amp;text=%2ANovo+pedido+de+or%C3%A7amento+%E2%80%94+GuTweaks%2A&amp;type=phone_number&amp;app_absent=0" target="_blank" rel="noopener noreferrer">
+          <span class="net-icon net-icon--wa"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Zm-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Z"/></svg></span>
+          <span>
+            <span class="net-name">WhatsApp Business</span>
+            <span class="net-desc">Atendimento direto comigo</span>
+          </span>
+          <svg class="net-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+        </a>
+      </div>
+      <p class="alt-contact-hint">Resposta normalmente em poucos minutos</p>
     </div>
   </div>
 
@@ -970,7 +1087,7 @@
     <div class="container-x stats-grid">
       <div class="stat-item"><div class="stat-val gradient-text" data-count="180" data-prefix="+">+180</div><div class="stat-label" data-i18n="stats.label1">FPS de ganho médio</div></div>
       <div class="stat-item"><div class="stat-val gradient-text" data-count="2000" data-suffix="+">2000+</div><div class="stat-label" data-i18n="stats.label2">PCs otimizados</div></div>
-      <div class="stat-item"><div class="stat-val gradient-text">&lt;1ms</div><div class="stat-label" data-i18n="stats.label3">de input lag</div></div>
+      <div class="stat-item"><div class="stat-val gradient-text" data-count="1" data-prefix="&lt;" data-suffix="ms">&lt;1ms</div><div class="stat-label" data-i18n="stats.label3">de input lag</div></div>
       <div class="stat-item"><div class="stat-val gradient-text" data-count="100" data-suffix="%">100%</div><div class="stat-label" data-i18n="stats.label4">clientes satisfeitos</div></div>
     </div>
   </section>
@@ -1434,11 +1551,13 @@
         const key = el.getAttribute('data-i18n');
         if (I18N[lang][key] !== undefined) el.textContent = I18N[lang][key];
       });
-      document.getElementById('pageTitle').textContent = I18N[lang]['meta.title'];
-      document.getElementById('metaDesc').setAttribute('content', I18N[lang]['meta.desc']);
+      var _t = document.getElementById('pageTitle');
+      if (_t) _t.textContent = I18N[lang]['meta.title']; else document.title = I18N[lang]['meta.title'];
+      var _d = document.getElementById('metaDesc') || document.querySelector('meta[name="description"]');
+      if (_d) _d.setAttribute('content', I18N[lang]['meta.desc']);
       document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
-      document.getElementById('langBtnPt').classList.toggle('active', lang === 'pt');
-      document.getElementById('langBtnEn').classList.toggle('active', lang === 'en');
+      var _bp = document.getElementById('langBtnPt'); if (_bp) _bp.classList.toggle('active', lang === 'pt');
+      var _be = document.getElementById('langBtnEn'); if (_be) _be.classList.toggle('active', lang === 'en');
     }
 
     function setLanguage(lang) {
@@ -2901,11 +3020,8 @@
 </script>
 
 
-  <!-- ================= REDES OFICIAIS (canto inferior direito) ================= -->
-  <div class="social-dock" aria-label="Redes oficiais GuTweaks">
-    <a class="sd-discord" href="https://discord.gg/UzRMyTgwa5" target="_blank" rel="noopener noreferrer" data-tip="Discord oficial" aria-label="Discord oficial">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3c-.2.36-.43.84-.59 1.22a18.27 18.27 0 0 0-4.94 0A12.6 12.6 0 0 0 10.43 3a19.74 19.74 0 0 0-3.76 1.37C3.29 9.4 2.37 14.3 2.83 19.13A19.9 19.9 0 0 0 8.86 22c.49-.66.92-1.36 1.29-2.1-.71-.27-1.39-.6-2.03-.99.17-.13.34-.26.5-.4a14.2 14.2 0 0 0 12.1 0c.16.14.33.27.5.4-.64.39-1.32.72-2.03.99.37.74.8 1.44 1.29 2.1a19.86 19.86 0 0 0 6.03-2.87c.55-5.6-.93-10.46-3.19-14.76ZM9.68 16.2c-1.18 0-2.15-1.09-2.15-2.42 0-1.34.95-2.43 2.15-2.43 1.21 0 2.18 1.1 2.16 2.43 0 1.33-.95 2.42-2.16 2.42Zm7.95 0c-1.18 0-2.15-1.09-2.15-2.42 0-1.34.95-2.43 2.15-2.43 1.21 0 2.18 1.1 2.16 2.43 0 1.33-.95 2.42-2.16 2.42Z"/></svg>
-    </a>
+  <!-- ================= WHATSAPP OFICIAL (canto inferior direito) ================= -->
+  <div class="social-dock" aria-label="WhatsApp oficial GuTweaks">
     <a class="sd-whatsapp" href="https://api.whatsapp.com/send/?phone=5511957460235&text=%2ANovo+pedido+de+or%C3%A7amento+%E2%80%94+GuTweaks%2A&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" data-tip="Falar no WhatsApp" aria-label="WhatsApp oficial">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Zm-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Zm8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
     </a>
@@ -2979,6 +3095,12 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
   })();
+  </script>
+  <script>
+  function openNetworks(){ var el=document.getElementById('networksOverlay'); if(el) el.classList.remove('hidden'); }
+  function closeNetworks(){ var el=document.getElementById('networksOverlay'); if(el) el.classList.add('hidden'); }
+  window.openNetworks = openNetworks; window.closeNetworks = closeNetworks;
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeNetworks(); });
   </script>
 </body>
 </html>
