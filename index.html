@@ -584,7 +584,80 @@
     .gt-empty { color: var(--muted); font-size: 0.85rem; padding: 1.5rem 0; text-align: center; }
     .gt-inline-form { display: grid; gap: 0.85rem; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); align-items: end; }
     .gt-coupon-tag { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 999px; border: 1px solid rgba(52,211,153,0.4); color: #34d399; background: rgba(52,211,153,0.08); }
-  </style>
+  
+    /* ============ SOCIAL DOCK (Discord + WhatsApp) ============ */
+    .social-dock {
+      position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 60;
+      display: flex; flex-direction: column; gap: 0.65rem; align-items: flex-end;
+    }
+    .social-dock a {
+      position: relative; width: 3.25rem; height: 3.25rem; display: grid; place-items: center;
+      border-radius: 999px; color: #fff; border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 14px 34px -12px rgba(0,0,0,0.9);
+      transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, filter .25s ease;
+      animation: dockIn .5s cubic-bezier(.2,.8,.2,1) both;
+    }
+    .social-dock a:nth-child(1) { animation-delay: .05s; }
+    .social-dock a:nth-child(2) { animation-delay: .15s; }
+    @keyframes dockIn { from { opacity:0; transform: translateY(14px) scale(.85);} to { opacity:1; transform:none; } }
+    .social-dock a:hover { transform: translateY(-3px) scale(1.06); filter: saturate(1.15); }
+    .social-dock .sd-discord { background: linear-gradient(135deg,#5865F2,#4048c8); }
+    .social-dock .sd-whatsapp { background: linear-gradient(135deg,#25d366,#128c47); }
+    .social-dock a::after {
+      content: attr(data-tip); position: absolute; right: calc(100% + 0.6rem); top: 50%;
+      transform: translateY(-50%) translateX(6px); white-space: nowrap;
+      background: var(--bg-3); color: var(--fg); border: 1px solid var(--border);
+      font-size: 0.72rem; font-weight: 600; padding: 0.35rem 0.6rem; border-radius: 0.5rem;
+      opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+    }
+    .social-dock a:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
+    .social-dock a::before {
+      content: ""; position: absolute; inset: 0; border-radius: 999px;
+      box-shadow: 0 0 0 0 currentColor; opacity: .45; animation: dockPulse 2.6s ease-out infinite;
+    }
+    @keyframes dockPulse { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,.35);} 70%,100% { box-shadow: 0 0 0 14px rgba(255,255,255,0);} }
+    .social-dock svg { width: 1.5rem; height: 1.5rem; }
+    /* deixa o CTA flutuante ao lado do dock, sem sobrepor */
+    .floating-cta { right: 5.75rem !important; box-shadow: 0 18px 44px -18px rgba(255,255,255,0.45); transition: transform .25s ease; }
+    .floating-cta:hover { transform: translateY(-3px); }
+    @media (max-width: 520px) {
+      .social-dock { gap: 0.5rem; }
+      .social-dock a { width: 2.9rem; height: 2.9rem; }
+      .floating-cta { right: 5rem !important; padding: 0.65rem 1rem; font-size: 0.8rem; }
+    }
+
+    /* ============ REVEAL ON SCROLL ============ */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); will-change: opacity, transform; }
+    .reveal.in-view { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; } }
+    .stat-val { font-variant-numeric: tabular-nums; transition: text-shadow .3s ease; }
+    .stat-item { transition: transform .3s ease; }
+    .stat-item:hover { transform: translateY(-4px); }
+
+    /* ============ ORÇAMENTO / CHAT — DESIGN CLEAN ============ */
+    .chat-overlay { background: rgba(4,4,4,0.78); backdrop-filter: blur(10px); }
+    .chat-modal {
+      max-width: 34rem; border-radius: 1.25rem;
+      background: linear-gradient(180deg, #101010 0%, #0a0a0a 100%);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 40px 120px -30px rgba(0,0,0,0.95);
+      animation: modalIn .35s cubic-bezier(.2,.8,.2,1);
+    }
+    @keyframes modalIn { from { opacity:0; transform: translateY(18px) scale(.985);} to { opacity:1; transform:none;} }
+    .chat-header { padding: 1rem 1.15rem; background: rgba(255,255,255,0.025); border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .chat-name { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; letter-spacing: -0.01em; }
+    .chat-messages { padding: 1.25rem; gap: 0.85rem; scroll-behavior: smooth; }
+    .msg { border-radius: 1.1rem; padding: 0.8rem 1.05rem; box-shadow: 0 8px 24px -18px rgba(0,0,0,.9); }
+    .msg-bot { background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.08); }
+    .suggestion-btn { transition: transform .18s ease, border-color .18s ease, color .18s ease; }
+    .suggestion-btn:hover { transform: translateY(-2px); }
+    .chat-footer { padding: 0.9rem 1rem 1rem; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.07); }
+    .chat-input { border-radius: 0.9rem; padding: 0.75rem 1rem; background: rgba(255,255,255,0.04); }
+    .chat-send { border-radius: 0.9rem; transition: transform .2s ease; }
+    .chat-send:not(:disabled):hover { transform: scale(1.06); }
+    .chat-step { letter-spacing: 0.14em; opacity: .75; }
+    .gt-modal { border-radius: 1.25rem; animation: modalIn .35s cubic-bezier(.2,.8,.2,1); }
+</style>
 </head>
 <body>
 
@@ -895,10 +968,10 @@
 
   <section class="stats">
     <div class="container-x stats-grid">
-      <div class="stat-item"><div class="stat-val gradient-text">+180</div><div class="stat-label" data-i18n="stats.label1">FPS de ganho médio</div></div>
-      <div class="stat-item"><div class="stat-val gradient-text">1500+</div><div class="stat-label" data-i18n="stats.label2">PCs otimizados</div></div>
+      <div class="stat-item"><div class="stat-val gradient-text" data-count="180" data-prefix="+">+180</div><div class="stat-label" data-i18n="stats.label1">FPS de ganho médio</div></div>
+      <div class="stat-item"><div class="stat-val gradient-text" data-count="2000" data-suffix="+">2000+</div><div class="stat-label" data-i18n="stats.label2">PCs otimizados</div></div>
       <div class="stat-item"><div class="stat-val gradient-text">&lt;1ms</div><div class="stat-label" data-i18n="stats.label3">de input lag</div></div>
-      <div class="stat-item"><div class="stat-val gradient-text">100%</div><div class="stat-label" data-i18n="stats.label4">clientes satisfeitos</div></div>
+      <div class="stat-item"><div class="stat-val gradient-text" data-count="100" data-suffix="%">100%</div><div class="stat-label" data-i18n="stats.label4">clientes satisfeitos</div></div>
     </div>
   </section>
 
@@ -1373,6 +1446,7 @@
       applyTranslations(lang);
       try { localStorage.setItem('gutweaks_lang', lang); } catch(e) {}
       document.getElementById('langOverlay').classList.add('hidden');
+      window.dispatchEvent(new CustomEvent('gutweaks:site-ready'));
     }
 
     (function initLanguage(){
@@ -2826,5 +2900,85 @@
   };
 </script>
 
+
+  <!-- ================= REDES OFICIAIS (canto inferior direito) ================= -->
+  <div class="social-dock" aria-label="Redes oficiais GuTweaks">
+    <a class="sd-discord" href="https://discord.gg/UzRMyTgwa" target="_blank" rel="noopener noreferrer" data-tip="Discord oficial" aria-label="Discord oficial">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3c-.2.36-.43.84-.59 1.22a18.27 18.27 0 0 0-4.94 0A12.6 12.6 0 0 0 10.43 3a19.74 19.74 0 0 0-3.76 1.37C3.29 9.4 2.37 14.3 2.83 19.13A19.9 19.9 0 0 0 8.86 22c.49-.66.92-1.36 1.29-2.1-.71-.27-1.39-.6-2.03-.99.17-.13.34-.26.5-.4a14.2 14.2 0 0 0 12.1 0c.16.14.33.27.5.4-.64.39-1.32.72-2.03.99.37.74.8 1.44 1.29 2.1a19.86 19.86 0 0 0 6.03-2.87c.55-5.6-.93-10.46-3.19-14.76ZM9.68 16.2c-1.18 0-2.15-1.09-2.15-2.42 0-1.34.95-2.43 2.15-2.43 1.21 0 2.18 1.1 2.16 2.43 0 1.33-.95 2.42-2.16 2.42Zm7.95 0c-1.18 0-2.15-1.09-2.15-2.42 0-1.34.95-2.43 2.15-2.43 1.21 0 2.18 1.1 2.16 2.43 0 1.33-.95 2.42-2.16 2.42Z"/></svg>
+    </a>
+    <a class="sd-whatsapp" href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer" data-tip="Falar no WhatsApp" aria-label="WhatsApp oficial">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Zm-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Zm8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+    </a>
+  </div>
+
+  <script>
+  /* ============ ANIMAÇÕES: contadores + reveal on scroll ============ */
+  (function () {
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var initialized = false;
+
+    function animateCount(el) {
+      var target = parseFloat(el.getAttribute('data-count'));
+      var prefix = el.getAttribute('data-prefix') || '';
+      var suffix = el.getAttribute('data-suffix') || '';
+      if (isNaN(target)) return;
+      if (reduce) { el.textContent = prefix + target + suffix; return; }
+      var dur = 1900, start = null;
+      function step(ts) {
+        if (start === null) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        var val = Math.round(target * eased);
+        if (p < 0.92) { val = Math.max(0, val + Math.round((Math.random() - 0.5) * target * 0.06 * (1 - p))); }
+        el.textContent = prefix + val.toLocaleString('pt-BR') + suffix;
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = prefix + target.toLocaleString('pt-BR') + suffix;
+      }
+      requestAnimationFrame(step);
+    }
+
+    function init() {
+      if (initialized) return;
+      var languageOverlay = document.getElementById('langOverlay');
+      if (languageOverlay && !languageOverlay.classList.contains('hidden')) return;
+      initialized = true;
+      var counters = document.querySelectorAll('[data-count]');
+      var revealSel = '.stat-item, .surface-card, .section-head, .process-card, .opt-card';
+      var reveals = [];
+      if (!reduce) {
+        document.querySelectorAll(revealSel).forEach(function (el) {
+          if (el.closest('.chat-modal, .gt-modal, .gt-overlay, .chat-overlay')) return;
+          el.classList.add('reveal');
+          reveals.push(el);
+        });
+      }
+
+      if (!('IntersectionObserver' in window)) {
+        counters.forEach(animateCount);
+        reveals.forEach(function (el) { el.classList.add('in-view'); });
+        return;
+      }
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var el = e.target;
+          if (el.hasAttribute('data-count') && !el.dataset.counted) { el.dataset.counted = '1'; animateCount(el); }
+          el.classList.add('in-view');
+          io.unobserve(el);
+        });
+      }, { threshold: 0.35, rootMargin: '0px 0px -18% 0px' });
+
+      counters.forEach(function (el) { io.observe(el); });
+      reveals.forEach(function (el, i) { el.style.transitionDelay = (Math.min(i % 4, 3) * 70) + 'ms'; io.observe(el); });
+    }
+
+    window.addEventListener('gutweaks:site-ready', function () {
+      window.setTimeout(init, 180);
+    }, { once: true });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  })();
+  </script>
 </body>
 </html>
