@@ -393,6 +393,7 @@
     .chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
     .chat-step { text-align: center; font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 0.5rem; }
     .whatsapp-btn { display: flex; width: 100%; align-items: center; justify-content: center; gap: 0.5rem; background: #25d366; color: #000; padding: 0.875rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; }
+    .wa-option-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); text-align: center; margin: 0.4rem 0 0.1rem; }
     .whatsapp-btn.wa-attention { animation: waGlow 1.4s ease-in-out infinite; }
     @keyframes waGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.55); } 50% { box-shadow: 0 0 0 12px rgba(37,211,102,0); } }
     .wa-fallback-note { font-size: 0.78rem; color: var(--muted); text-align: center; line-height: 1.5; margin: 0; }
@@ -641,7 +642,7 @@
           <button type="button" id="langBtnPt" class="ripple-fx" onclick="setLanguage('pt')">PT</button>
           <button type="button" id="langBtnEn" class="ripple-fx" onclick="setLanguage('en')">EN</button>
         </div>
-        <button class="brand-btn ripple-fx" onclick="openChat()">
+        <button class="brand-btn ripple-fx" onclick="openTicket('orcamento')">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
           <span data-i18n="nav.cta">Fazer orçamento</span>
         </button>
@@ -678,8 +679,8 @@
       <button type="button" class="gt-modal-close ripple-fx" onclick="closeTicket()">✕</button>
 
       <div id="ticketFormWrap">
-        <p class="gt-title">Abrir chamado de suporte</p>
-        <p class="gt-sub">Me conta qual é o problema por aqui — o chamado vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.</p>
+        <p class="gt-title" id="ticketTitle">Peça seu orçamento</p>
+        <p class="gt-sub" id="ticketSub">Me conta o que você precisa por aqui — o pedido vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.</p>
         <div class="gt-field">
           <label>Seu nome</label>
           <input type="text" id="ticketNome" placeholder="Ex.: João Silva" />
@@ -691,6 +692,7 @@
         <div class="gt-field">
           <label>Categoria</label>
           <select id="ticketCategoria">
+            <option value="Orçamento / Novo serviço">Orçamento / Novo serviço</option>
             <option value="Suporte técnico">Suporte técnico</option>
             <option value="Dúvida sobre serviço">Dúvida sobre serviço</option>
             <option value="Cobrança / Pagamento">Cobrança / Pagamento</option>
@@ -698,11 +700,18 @@
           </select>
         </div>
         <div class="gt-field">
-          <label>Descreva o problema</label>
-          <textarea id="ticketMensagem" rows="4" placeholder="Explica com detalhes o que tá acontecendo..."></textarea>
+          <label>Descreva o que você precisa</label>
+          <textarea id="ticketMensagem" rows="4" placeholder="Ex.: config do PC, o que quer melhorar, ou o problema que tá acontecendo..."></textarea>
+        </div>
+        <div class="gt-field">
+          <label>Cupom de desconto (opcional)</label>
+          <input type="text" id="ticketCupom" placeholder="Ex.: FTNLUCCA" />
         </div>
         <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" id="ticketSubmitBtn" onclick="submitTicket()">Abrir chamado</button>
         <p id="ticketError" class="gt-error"></p>
+        <a id="ticketWaInline" class="ripple-fx" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;gap:0.4rem;margin-top:0.75rem;font-size:0.72rem;color:var(--muted);text-decoration:underline;text-underline-offset:2px">
+          <span data-i18n="chat.waOptionLabel">Opção 2 (opcional):</span> <span>falar agora no WhatsApp</span>
+        </a>
       </div>
 
       <div id="ticketSuccessWrap" class="hidden">
@@ -746,7 +755,7 @@
         <h1><span class="gradient-text" data-i18n="hero.title1">Otimização profissional</span><br><span data-i18n="hero.title2">de PC ao extremo.</span></h1>
         <p data-i18n="hero.desc">Otimização completa por R$ 95. Ajustes de BIOS, redução de input lag e estabilidade total, sob medida pra sua máquina e o seu jogo.</p>
         <div class="hero-actions">
-          <button class="brand-btn ripple-fx" onclick="openChat()">
+          <button class="brand-btn ripple-fx" onclick="openTicket('orcamento')">
             <span data-i18n="hero.cta1">Fazer orçamento personalizado</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
@@ -872,7 +881,7 @@
               <p style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)" data-i18n="services.paymentLabel">Pagamento</p>
               <p style="font-size:0.875rem;margin-top:0.25rem" data-i18n="services.paymentValue">PIX · Cartão · Internacional</p>
             </div>
-            <button class="brand-btn ripple-fx" onclick="openChat()"><span data-i18n="nav.cta">Fazer orçamento</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+            <button class="brand-btn ripple-fx" onclick="openTicket('orcamento')"><span data-i18n="nav.cta">Fazer orçamento</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
           </div>
         </div>
         <div class="mini-cards">
@@ -901,7 +910,7 @@
       <p class="section-label" data-i18n="process.label">Processo</p>
       <h2 class="section-title"><span data-i18n="process.title1">Simples, transparente,</span><br><span style="color:var(--muted)" data-i18n="process.title2">e sob medida.</span></h2>
       <div class="process-grid">
-        <div class="surface-card process-card"><div class="process-num">01</div><div class="process-title" data-i18n="process1.title">Você abre o orçamento</div><div class="process-desc" data-i18n="process1.desc">Clica no botão, me passa a config do seu PC pelo chat e o que quer resolver.</div></div>
+        <div class="surface-card process-card"><div class="process-num">01</div><div class="process-title" data-i18n="process1.title">Você abre o orçamento</div><div class="process-desc" data-i18n="process1.desc">Clica no botão, abre o orçamento e me conta a config do seu PC e o que quer resolver.</div></div>
         <div class="surface-card process-card"><div class="process-num">02</div><div class="process-title" data-i18n="process2.title">Analiso sua máquina</div><div class="process-desc" data-i18n="process2.desc">Estudo cada peça, sistema e uso, e monto uma proposta feita sob medida pra você.</div></div>
         <div class="surface-card process-card"><div class="process-num">03</div><div class="process-title" data-i18n="process3.title">Agendamos e otimizo</div><div class="process-desc" data-i18n="process3.desc">Marcamos horário, faço a otimização remota com você acompanhando e testando ao vivo.</div></div>
         <div class="surface-card process-card"><div class="process-num">04</div><div class="process-title" data-i18n="process4.title">Suporte contínuo</div><div class="process-desc" data-i18n="process4.desc">Depois da entrega, seguimos em contato pra ajuste fino e qualquer dúvida futura.</div></div>
@@ -1058,7 +1067,7 @@
       <div>
         <p class="section-label" data-i18n="faq.label">FAQ</p>
         <h2 class="section-title"><span data-i18n="faq.title1">Perguntas</span><br><span data-i18n="faq.title2">frequentes</span></h2>
-        <p class="section-desc" data-i18n="faq.desc">Ficou alguma dúvida? Abre o orçamento e me pergunta direto no chat.</p>
+        <p class="section-desc" data-i18n="faq.desc">Ficou alguma dúvida? Abre o orçamento e me pergunta direto por lá.</p>
       </div>
       <div class="faq-list">
         <details class="faq-item"><summary><span data-i18n="faq1.q">Como é feita a otimização?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq1.a">Feita remotamente, com acesso autorizado por você. Faço backup, ajustes de BIOS, otimização do Windows, overclock quando cabível e testes de estabilidade antes de entregar.</div></details>
@@ -1084,8 +1093,8 @@
           <p class="invest-desc" data-i18n="invest.desc">A otimização definitiva projetada tanto para quem busca o máximo de FPS e fluidez em jogos competitivos quanto para aceleração extrema em fluxos de trabalho e produtividade profissional. Sem recorrência, sem mensalidades.</p>
           <div class="invest-divider"></div>
           <h2 class="section-title" style="max-width:32rem;margin-inline:auto"><span data-i18n="cta.title1">Pronto pra extrair o</span> <span class="gradient-text" data-i18n="cta.titleGradient">máximo</span> <span data-i18n="cta.title2">do seu PC?</span></h2>
-          <p class="section-desc" style="max-width:28rem;margin-inline:auto;text-align:center" data-i18n="cta.desc">Abre o chat de orçamento, me passa sua config e agendamos hoje mesmo.</p>
-          <button class="brand-btn ripple-fx" style="margin-top:2rem" onclick="openChat()">
+          <p class="section-desc" style="max-width:28rem;margin-inline:auto;text-align:center" data-i18n="cta.desc">Abre o orçamento, me passa sua config e agendamos hoje mesmo.</p>
+          <button class="brand-btn ripple-fx" style="margin-top:2rem" onclick="openTicket('orcamento')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
             <span data-i18n="cta.button">Fazer orçamento personalizado</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -1122,7 +1131,7 @@
     </div>
   </footer>
 
-  <button class="floating-cta ripple-fx" onclick="openChat()">
+  <button class="floating-cta ripple-fx" onclick="openTicket('orcamento')">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
     <span data-i18n="floating.cta">Orçamento</span>
   </button>
@@ -1140,9 +1149,10 @@
       <div id="chatMessages" class="chat-messages"></div>
       <div class="chat-footer">
         <div id="postFinishActions" class="post-finish-actions hidden">
+          <p class="wa-option-label" data-i18n="chat.waOptionLabel">Opção 2 (opcional):</p>
           <a id="whatsappBtn" class="whatsapp-btn ripple-fx" target="_blank" rel="noopener noreferrer">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26 9.99 9.99 0 0 1 16.638-7.45c.026.025.05.05.074.076l.17.17a9.99 9.99 0 0 1 2.91 7.037 9.86 9.86 0 0 1-9.901 9.905M20.11 7.916a8.23 8.23 0 0 0-5.889-2.435 8.24 8.24 0 0 0-8.236 8.228 8.23 8.23 0 0 0 1.258 4.383l.18.288-.84 3.06 3.112-.816.19.113a8.22 8.22 0 0 0 4.225 1.159 8.24 8.24 0 0 0 8.236-8.228 8.21 8.21 0 0 0-2.436-5.752Z"/></svg>
-            <span id="waBtnLabel" data-i18n="chat.waButton">Enviar no WhatsApp e agendar</span>
+            <span id="waBtnLabel" data-i18n="chat.waButton">Falar agora no WhatsApp</span>
           </a>
           <p id="waFallbackNote" class="wa-fallback-note hidden"></p>
           <div id="waCopyRow" class="wa-copy-row hidden">
@@ -1193,7 +1203,7 @@
         'mini2.title': '100% seguro', 'mini2.desc': 'Sem risco pra sua máquina. Backup, testes de estabilidade e reversão sempre possível.',
         'mini3.title': 'Atendimento direto', 'mini3.desc': 'Você fala diretamente comigo do começo ao fim, sem passar por atendente ou bot.',
         'process.label': 'Processo', 'process.title1': 'Simples, transparente,', 'process.title2': 'e sob medida.',
-        'process1.title': 'Você abre o orçamento', 'process1.desc': 'Clica no botão, me passa a config do seu PC pelo chat e o que quer resolver.',
+        'process1.title': 'Você abre o orçamento', 'process1.desc': 'Clica no botão, abre o orçamento e me conta a config do seu PC e o que quer resolver.',
         'process2.title': 'Analiso sua máquina', 'process2.desc': 'Estudo cada peça, sistema e uso, e monto uma proposta feita sob medida pra você.',
         'process3.title': 'Agendamos e otimizo', 'process3.desc': 'Marcamos horário, faço a otimização remota com você acompanhando e testando ao vivo.',
         'process4.title': 'Suporte contínuo', 'process4.desc': 'Depois da entrega, seguimos em contato pra ajuste fino e qualquer dúvida futura.',
@@ -1219,7 +1229,7 @@
         'partners.lucca.desc': 'Jovem talento do competitivo de Fortnite, reconhecido pela mecânica refinada e pelo conteúdo que compartilha com a comunidade nas lives e nas redes sociais. Um dos criadores que já usa a otimização da GuTweaks pra manter o desempenho no mais alto nível.',
         'partners.trevo.cat': 'Organização de Esports', 'partners.trevo.role': 'Organização Profissional de Esports',
         'partners.trevo.desc': 'Organização profissional de esports com elenco competitivo e presença ativa na cena, reunindo jogadores e criadores em busca de alta performance. Parceira da GuTweaks na otimização dos PCs do time.',
-        'faq.label': 'FAQ', 'faq.title1': 'Perguntas', 'faq.title2': 'frequentes', 'faq.desc': 'Ficou alguma dúvida? Abre o orçamento e me pergunta direto no chat.',
+        'faq.label': 'FAQ', 'faq.title1': 'Perguntas', 'faq.title2': 'frequentes', 'faq.desc': 'Ficou alguma dúvida? Abre o orçamento e me pergunta direto por lá.',
         'faq1.q': 'Como é feita a otimização?', 'faq1.a': 'Feita remotamente, com acesso autorizado por você. Faço backup, ajustes de BIOS, otimização do Windows, overclock quando cabível e testes de estabilidade antes de entregar.',
         'faq2.q': 'Tem risco pra minha máquina?', 'faq2.a': 'Não. Todo processo é reversível, sempre com backup e ajustes dentro dos limites seguros do seu hardware. Nada de tensões absurdas ou tweaks que comprometam a vida útil.',
         'faq3.q': 'Vocês acessam meus arquivos pessoais?', 'faq3.a': 'Não. O acesso é focado só no que é necessário pra otimização. Seus arquivos pessoais não são abertos, movidos nem coletados.',
@@ -1227,9 +1237,9 @@
         'faq5.q': 'Vocês entram em call durante a otimização?', 'faq5.a': 'Sim. Todo o processo é feito com você presente na call, podendo testar antes e depois de cada ajuste.',
         'faq6.q': 'Tem garantia ou reembolso?', 'faq6.a': 'Sim. Se algo não funcionar como acordado, ajustamos até ficar redondo. Caso não seja possível, o reembolso é analisado caso a caso.',
         'cta.title1': 'Pronto pra extrair o', 'cta.titleGradient': 'máximo', 'cta.title2': 'do seu PC?',
-        'cta.desc': 'Abre o chat de orçamento, me passa sua config e agendamos hoje mesmo.', 'cta.button': 'Fazer orçamento personalizado',
+        'cta.desc': 'Abre o orçamento, me passa sua config e agendamos hoje mesmo.', 'cta.button': 'Fazer orçamento personalizado',
         'footer.tagline': 'Feito por gamer, pra gamer.', 'footer.support': 'Já é cliente? Abrir chamado de suporte', 'floating.cta': 'Orçamento',
-        'chat.name': 'Atendimento GuTweaks', 'chat.sub': 'Online — resposta em minutos', 'chat.waButton': 'Enviar no WhatsApp e agendar'
+        'chat.name': 'Atendimento GuTweaks', 'chat.sub': 'Online — resposta em minutos', 'chat.waButton': 'Falar agora no WhatsApp', 'chat.waOptionLabel': 'Opção 2 (opcional):'
       },
       en: {
         'meta.title': 'GuTweaks — Professional gaming PC optimization',
@@ -1255,7 +1265,7 @@
         'mini2.title': '100% safe', 'mini2.desc': 'No risk to your machine. Backup, stability testing and rollback always available.',
         'mini3.title': 'Direct support', 'mini3.desc': 'You talk directly with me from start to finish, no agents, no bots.',
         'process.label': 'Process', 'process.title1': 'Simple, transparent,', 'process.title2': 'and tailored to you.',
-        'process1.title': 'You request a quote', 'process1.desc': 'Click the button, send me your PC specs over chat and tell me what you want fixed.',
+        'process1.title': 'You request a quote', 'process1.desc': 'Click the button, open the quote request and send me your PC specs and what you want fixed.',
         'process2.title': 'I analyze your machine', 'process2.desc': 'I study each component, your OS and your usage, and put together a tailored proposal.',
         'process3.title': 'We schedule and optimize', 'process3.desc': 'We book a time, and I run the remote optimization while you watch and test live.',
         'process4.title': 'Ongoing support', 'process4.desc': 'After delivery, we stay in touch for fine-tuning and any future questions.',
@@ -1281,7 +1291,7 @@
         'partners.lucca.desc': 'A young Fortnite competitive talent, known for refined mechanics and the content he shares with his community across streams and social media. One of the creators already using GuTweaks optimization to stay at peak performance.',
         'partners.trevo.cat': 'Esports Organization', 'partners.trevo.role': 'Professional Esports Organization',
         'partners.trevo.desc': 'A professional esports organization with a competitive roster and an active presence in the scene, bringing together players and creators chasing peak performance. A GuTweaks partner for optimizing the team PCs.',
-        'faq.label': 'FAQ', 'faq.title1': 'Frequently', 'faq.title2': 'asked questions', 'faq.desc': 'Still have questions? Open the quote chat and ask me directly.',
+        'faq.label': 'FAQ', 'faq.title1': 'Frequently', 'faq.title2': 'asked questions', 'faq.desc': 'Still have questions? Open the quote request and ask me directly.',
         'faq1.q': 'How is the optimization done?', 'faq1.a': 'It\'s done remotely, with access you authorize. I back up your system, tune the BIOS, optimize Windows, overclock where it makes sense, and run stability tests before handing it back.',
         'faq2.q': 'Is there any risk to my machine?', 'faq2.a': 'No. The whole process is reversible, always with a backup and adjustments kept within your hardware\'s safe limits. No extreme voltages or tweaks that would hurt its lifespan.',
         'faq3.q': 'Do you access my personal files?', 'faq3.a': 'No. Access is limited strictly to what\'s needed for the optimization. Your personal files are never opened, moved or collected.',
@@ -1289,9 +1299,9 @@
         'faq5.q': 'Do you stay on a call during the optimization?', 'faq5.a': 'Yes. The whole process happens with you present on the call, so you can test before and after every change.',
         'faq6.q': 'Is there a warranty or refund?', 'faq6.a': 'Yes. If something doesn\'t work as agreed, we fix it until it\'s right. If that\'s not possible, refunds are evaluated case by case.',
         'cta.title1': 'Ready to get the', 'cta.titleGradient': 'most', 'cta.title2': 'out of your PC?',
-        'cta.desc': 'Open the quote chat, send me your specs and let\'s schedule it for today.', 'cta.button': 'Get a personalized quote',
+        'cta.desc': 'Open the quote request, send me your specs and let\'s schedule it for today.', 'cta.button': 'Get a personalized quote',
         'footer.tagline': 'Built by a gamer, for gamers.', 'footer.support': 'Already a client? Open a support ticket', 'floating.cta': 'Get a quote',
-        'chat.name': 'GuTweaks Support', 'chat.sub': 'Online — reply within minutes', 'chat.waButton': 'Send on WhatsApp and schedule'
+        'chat.name': 'GuTweaks Support', 'chat.sub': 'Online — reply within minutes', 'chat.waButton': 'Talk on WhatsApp now', 'chat.waOptionLabel': 'Option 2 (optional):'
       }
     };
 
@@ -1468,53 +1478,12 @@
       const semCupomLabels = ['não tenho cupom','no coupon',''];
       const cupomDigitado = semCupomLabels.includes(rawCupom.toLowerCase()) ? '' : rawCupom;
 
-      // monta a mensagem imediatamente (sem esperar validação de cupom / salvar lead)
-      // e já deixa o link pronto no botão e tenta abrir o WhatsApp na hora, o mais perto
-      // possível do clique do usuário — assim navegadores não bloqueiam o redirecionamento
-      const draftLine = cupomDigitado
-        ? (isEn ? `🏷️ *Coupon typed:* ${cupomDigitado}` : `🏷️ *Cupom digitado:* ${cupomDigitado}`)
-        : '';
-      const draftText = buildWaLines(isEn, answers, draftLine).join('\n');
-      const draftLink = waLink(draftText);
-      waBtn.href = draftLink;
-
-      const inApp = isInAppBrowser();
-      let autoOpened = false;
-      if (!inApp) {
-        try {
-          const popup = window.open(draftLink, '_blank');
-          autoOpened = !!(popup && !popup.closed);
-        } catch(e) { autoOpened = false; }
-      }
-
       formEl.classList.add('hidden');
       document.getElementById('postFinishActions').classList.remove('hidden');
       stepEl.textContent = stepLabel();
-
       waFallbackNote.classList.add('hidden');
       waCopyRow.classList.add('hidden');
       waBtn.classList.remove('wa-attention');
-
-      if (inApp) {
-        addMsg('bot', isEn
-          ? "Perfect! ✅ Since you're inside an app browser (Instagram/TikTok/etc.), WhatsApp usually won't open directly here. Tap the button below, or open this page in your regular browser (Chrome/Safari) and try again."
-          : 'Perfeito! ✅ Como você tá dentro de um navegador de app (Instagram/TikTok/etc.), o WhatsApp geralmente não abre direto por aqui. Toca no botão abaixo, ou abre essa página no seu navegador normal (Chrome/Safari) e tenta de novo.');
-        waFallbackNote.textContent = isEn
-          ? 'If nothing happens, copy the number below and send the message yourself:'
-          : 'Se nada acontecer, copia o número abaixo e manda a mensagem você mesmo:';
-        waFallbackNote.classList.remove('hidden');
-        waCopyRow.classList.remove('hidden');
-        waBtn.classList.add('wa-attention');
-      } else if (autoOpened) {
-        addMsg('bot', isEn
-          ? 'Perfect! ✅ I just opened WhatsApp in a new tab with everything filled in — just hit send there to talk to me directly. Didn\'t open? Tap the green button below.'
-          : 'Perfeito! ✅ Acabei de abrir o WhatsApp numa nova aba com tudo preenchido — é só apertar enviar por lá pra falar comigo direto. Não abriu? Toca no botão verde abaixo.');
-      } else {
-        addMsg('bot', isEn
-          ? 'Perfect! Summary ready ✅ Your browser blocked the automatic redirect, so tap the green button below to open WhatsApp and send it to me.'
-          : 'Perfeito! Resumo montado ✅ Seu navegador bloqueou o redirecionamento automático, então toca no botão verde abaixo pra abrir o WhatsApp e me mandar.');
-        waBtn.classList.add('wa-attention');
-      }
 
       // valida o cupom no Firestore (se houver)
       let coupon = { valid: false, code: '', discountPercent: 0 };
@@ -1522,8 +1491,21 @@
         try { coupon = await window.GT.validateCoupon(cupomDigitado); } catch(e) { coupon = { valid:false, code: cupomDigitado, discountPercent:0 }; }
       }
 
+      // salva o pedido como um "chamado" no Firestore (só você vê isso no painel) —
+      // essa é a ação principal; o WhatsApp abaixo é só uma opção extra, opcional
+      currentLeadId = null;
+      if (window.GT && typeof window.GT.saveLead === 'function') {
+        try { currentLeadId = await window.GT.saveLead({ answers, coupon, lang: currentLang }); }
+        catch(e) { currentLeadId = null; }
+      }
+      const shortCode = currentLeadId ? ('#' + currentLeadId.slice(-6).toUpperCase()) : '';
+
+      addMsg('bot', isEn
+        ? `Perfect! ✅ Your quote request ${shortCode} was received — I'll get back to you here. If it's urgent, you can also reach me on WhatsApp using the button below (optional, second option).`
+        : `Perfeito! ✅ Seu pedido de orçamento ${shortCode} foi recebido — vou te responder por aqui. Se for urgente, você também pode falar comigo pelo WhatsApp no botão abaixo (opcional, segunda opção).`);
+
       const sum = document.createElement('div'); sum.className='summary-box';
-      sum.innerHTML = `<h4>${isEn ? 'Summary sent to the specialist' : 'Resumo enviado ao especialista'}</h4><ul>`+
+      sum.innerHTML = `<h4>${isEn ? `Request ${shortCode} sent to the specialist` : `Pedido ${shortCode} enviado ao especialista`}</h4><ul>`+
         `<li>👤 ${answers.nome||'-'}</li>`+
         `<li>🛠️ ${answers.servico||'-'}</li>`+
         `<li>🖥️ ${answers.configuracao||'-'}</li>`+
@@ -1533,13 +1515,13 @@
       messagesEl.appendChild(sum);
       messagesEl.scrollTop = messagesEl.scrollHeight;
 
-      // atualiza o link do botão (e o botão de copiar) com o texto final, já com o cupom validado —
-      // vale pra quem ainda não clicou no botão / não conseguiu abrir automaticamente
+      // monta o link do WhatsApp — só pra quem CLICAR nele por vontade própria, não abre sozinho
       const couponLine = coupon.valid
         ? (isEn ? `🏷️ *Coupon:* ${coupon.code} (5% discount)` : `🏷️ *Cupom:* ${coupon.code} (5% de desconto)`)
         : (cupomDigitado ? (isEn ? `🏷️ *Coupon typed (not valid):* ${cupomDigitado}` : `🏷️ *Cupom digitado (não válido):* ${cupomDigitado}`) : '');
+      const codeLine = shortCode ? (isEn ? `🎫 *Request:* ${shortCode}` : `🎫 *Pedido:* ${shortCode}`) : '';
 
-      const finalText = buildWaLines(isEn, answers, couponLine).join('\n');
+      const finalText = buildWaLines(isEn, answers, [couponLine, codeLine].filter(Boolean).join('\n')).join('\n');
       waBtn.href = waLink(finalText);
 
       const displayNumber = '+' + WHATSAPP_NUMBER.replace(/^55/, '55 ').replace(/(\d{2})(\d{5})(\d{4})$/, '$1 $2-$3');
@@ -1553,11 +1535,14 @@
         }
       };
 
-      // salva o lead no Firestore (para o dashboard do criador/admin)
-      currentLeadId = null;
-      if (window.GT && typeof window.GT.saveLead === 'function') {
-        try { currentLeadId = await window.GT.saveLead({ answers, coupon, lang: currentLang }); }
-        catch(e) { currentLeadId = null; }
+      // se o navegador for embutido (Instagram/TikTok/etc.), o link do WhatsApp
+      // costuma falhar — deixa o fallback de copiar já visível pra esse caso
+      if (isInAppBrowser()) {
+        waFallbackNote.textContent = isEn
+          ? "You're inside an app browser (Instagram/TikTok/etc.), so the WhatsApp button below might not open the app directly. You can copy the number instead:"
+          : 'Você tá dentro de um navegador de app (Instagram/TikTok/etc.), então o botão de WhatsApp abaixo pode não abrir o app direto. Se preferir, copia o número:';
+        waFallbackNote.classList.remove('hidden');
+        waCopyRow.classList.remove('hidden');
       }
     }
 
@@ -1597,15 +1582,38 @@
     const ticketError = document.getElementById('ticketError');
     const ticketSubmitBtn = document.getElementById('ticketSubmitBtn');
 
-    function openTicket(){
+    function openTicket(mode){
+      const isOrcamento = mode === 'orcamento';
       ticketOverlay.classList.remove('hidden');
       ticketFormWrap.classList.remove('hidden');
       ticketSuccessWrap.classList.add('hidden');
       ticketError.textContent = '';
       document.getElementById('ticketNome').value = '';
       document.getElementById('ticketContato').value = '';
-      document.getElementById('ticketCategoria').value = 'Suporte técnico';
+      document.getElementById('ticketCategoria').value = isOrcamento ? 'Orçamento / Novo serviço' : 'Suporte técnico';
       document.getElementById('ticketMensagem').value = '';
+      document.getElementById('ticketCupom').value = REF_CUPOM ? REF_CUPOM.toUpperCase() : '';
+      const titleEl = document.getElementById('ticketTitle');
+      const subEl = document.getElementById('ticketSub');
+      const isEn = currentLang === 'en';
+      if (isOrcamento) {
+        titleEl.textContent = isEn ? 'Request your quote' : 'Peça seu orçamento';
+        subEl.textContent = isEn
+          ? "Tell me what you need here — your request comes straight to me and I'll reply as soon as possible. No need to leave for WhatsApp."
+          : 'Me conta o que você precisa por aqui — o pedido vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.';
+      } else {
+        titleEl.textContent = isEn ? 'Open a support ticket' : 'Abrir chamado de suporte';
+        subEl.textContent = isEn
+          ? "Tell me what's going on here — your ticket comes straight to me and I'll reply as soon as possible. No need to leave for WhatsApp."
+          : 'Me conta qual é o problema por aqui — o chamado vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.';
+      }
+      const waInline = document.getElementById('ticketWaInline');
+      if (waInline) {
+        const waText = isOrcamento
+          ? (isEn ? '*New quote request — GuTweaks*' : '*Novo pedido de orçamento — GuTweaks*')
+          : (isEn ? '*Support request — GuTweaks*' : '*Chamado de suporte — GuTweaks*');
+        waInline.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
+      }
       ticketSubmitBtn.disabled = false;
       ticketSubmitBtn.textContent = 'Abrir chamado';
     }
@@ -1616,10 +1624,12 @@
       const contato = document.getElementById('ticketContato').value.trim();
       const categoria = document.getElementById('ticketCategoria').value;
       const mensagem = document.getElementById('ticketMensagem').value.trim();
+      const cupom = document.getElementById('ticketCupom').value.trim();
+      const isOrcamento = categoria === 'Orçamento / Novo serviço';
 
       ticketError.textContent = '';
       if (!nome || !contato || !mensagem) {
-        ticketError.textContent = 'Preenche seu nome, um contato e a descrição do problema.';
+        ticketError.textContent = 'Preenche seu nome, um contato e a descrição do que você precisa.';
         return;
       }
       if (!window.GT || typeof window.GT.saveTicket !== 'function') {
@@ -1630,10 +1640,10 @@
       ticketSubmitBtn.disabled = true;
       ticketSubmitBtn.textContent = 'Enviando…';
       try {
-        const ticketId = await window.GT.saveTicket({ nome, contato, categoria, mensagem, lang: currentLang });
+        const ticketId = await window.GT.saveTicket({ nome, contato, categoria, mensagem, cupom, isOrcamento, lang: currentLang });
         const shortId = '#' + ticketId.slice(-6).toUpperCase();
         document.getElementById('ticketSuccessId').textContent = shortId;
-        const waText = `*Chamado de suporte ${shortId} — GuTweaks*\n\n👤 *Nome:* ${nome}\n📞 *Contato:* ${contato}\n🗂️ *Categoria:* ${categoria}\n📝 *Problema:* ${mensagem}`;
+        const waText = `*Chamado de suporte ${shortId} — GuTweaks*\n\n👤 *Nome:* ${nome}\n📞 *Contato:* ${contato}\n🗂️ *Categoria:* ${categoria}\n📝 *Detalhes:* ${mensagem}` + (cupom ? `\n🏷️ *Cupom:* ${cupom}` : '');
         document.getElementById('ticketWaBtn').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
         ticketFormWrap.classList.add('hidden');
         ticketSuccessWrap.classList.remove('hidden');
@@ -1663,13 +1673,13 @@
         `<p class="cancel-done-msg">${currentLang==='en' ? 'No worries — thanks for letting us know. Feel free to come back anytime! 👋' : 'Sem problema — obrigado por avisar! Quando quiser, é só voltar aqui. 👋'}</p>`;
     }
 
-    // Abre o chat de orçamento automaticamente ao chegar com #orcamento na URL
+    // Abre o orçamento (ticket) automaticamente ao chegar com #orcamento na URL
     // (usado pelo botão "Agendar otimização agora" da página Sobre Mim)
     if (window.location.hash === '#orcamento') {
       window.addEventListener('DOMContentLoaded', function(){
         const langOverlay = document.getElementById('langOverlay');
         if (langOverlay) langOverlay.classList.add('hidden');
-        openChat();
+        openTicket('orcamento');
         history.replaceState(null, '', window.location.pathname);
       });
     }
@@ -2064,7 +2074,8 @@
   }
 
   /* ================= CHAMADO DE SUPORTE (visível só para o admin) ================= */
-  async function saveTicket({ nome, contato, categoria, mensagem, lang }){
+  async function saveTicket({ nome, contato, categoria, mensagem, cupom, isOrcamento, lang }){
+    const cupomDigitado = (cupom||'').trim();
     const data = {
       nome: (nome||'').trim().slice(0,120),
       contato: (contato||'').trim().slice(0,120),
@@ -2075,6 +2086,23 @@
       createdAt: serverTimestamp()
     };
     const ref = await addDoc(collection(db, 'tickets'), data);
+
+    // Se veio da tela de orçamento (ou com um cupom digitado), também vira um "lead"
+    // pra manter o rastreio de cupom/comissão de criadores funcionando.
+    if (isOrcamento || cupomDigitado) {
+      let coupon = { valid:false, code: cupomDigitado, discountPercent:0 };
+      if (cupomDigitado) {
+        try { coupon = await validateCoupon(cupomDigitado); } catch(e) {}
+      }
+      try {
+        await saveLead({
+          answers: { nome, servico: mensagem, configuracao: '', objetivo: categoria, cupom: cupomDigitado },
+          coupon,
+          lang
+        });
+      } catch(e) {}
+    }
+
     return ref.id;
   }
 
