@@ -271,14 +271,14 @@
     .kc-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(125,211,252,0.55); flex-shrink: 0; }
     .kc-name-row { display: flex; flex-direction: column; gap: 0.3rem; }
     .kc-name { font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; }
-    .kc-verified { color: #7dd3fc; display: inline-flex; }
+    .kc-verified { color: #e9e9e9; display: inline-flex; }
     .kc-followers { font-size: 0.72rem; letter-spacing: 0.06em; color: var(--muted); display: inline-flex; align-items: center; gap: 0.35rem; }
-    .kc-followers strong { color: #7dd3fc; font-weight: 700; }
-    .kc-badge { position: absolute; top: 1.25rem; right: 1.25rem; font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: #7dd3fc; border: 1px solid rgba(125,211,252,0.4); padding: 0.3rem 0.65rem; border-radius: 999px; background: rgba(125,211,252,0.08); }
+    .kc-followers strong { color: #e9e9e9; font-weight: 700; }
+    .kc-badge { position: absolute; top: 1.25rem; right: 1.25rem; font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: #e9e9e9; border: 1px solid rgba(255,255,255,0.28); padding: 0.3rem 0.65rem; border-radius: 999px; background: rgba(255,255,255,0.06); }
     .kc-text { font-size: 0.925rem; line-height: 1.7; color: var(--fg); }
     .kc-socials { display: flex; gap: 0.75rem; flex-wrap: wrap; }
     .kc-social-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 600; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid var(--border); color: var(--fg); text-decoration: none; transition: border-color .2s ease, transform .15s ease, background .2s ease; }
-    .kc-social-btn:hover { transform: translateY(-2px); border-color: #7dd3fc; background: rgba(125,211,252,0.08); }
+    .kc-social-btn:hover { transform: translateY(-2px); border-color: #e9e9e9; background: rgba(255,255,255,0.06); }
     .kc-social-btn svg { flex-shrink: 0; }
     @media (min-width: 760px) { .kc-top { align-items: center; } }
 
@@ -299,9 +299,9 @@
     .partner-card--trevo { background: linear-gradient(155deg, rgba(34,197,94,0.08), rgba(20,20,20,0.55) 55%); }
     .partner-card--trevo .partner-cat { color: #4ade80; border-color: rgba(74,222,128,0.35); background: rgba(74,222,128,0.08); }
     .partner-card--trevo .partner-social-btn:hover { border-color: rgba(74,222,128,0.55); background: rgba(74,222,128,0.08); }
-    .partner-card--lucca { background: linear-gradient(155deg, rgba(125,211,252,0.08), rgba(20,20,20,0.55) 55%); }
-    .partner-card--lucca .partner-cat { color: #7dd3fc; border-color: rgba(125,211,252,0.35); background: rgba(125,211,252,0.08); }
-    .partner-card--lucca .partner-social-btn:hover { border-color: rgba(125,211,252,0.55); background: rgba(125,211,252,0.08); }
+    .partner-card--lucca { background: linear-gradient(155deg, rgba(255,255,255,0.06), rgba(20,20,20,0.55) 55%); }
+    .partner-card--lucca .partner-cat { color: #e9e9e9; border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); }
+    .partner-card--lucca .partner-social-btn:hover { border-color: rgba(125,211,252,0.55); background: rgba(255,255,255,0.06); }
 
     /* TESTIMONIAL CAROUSEL */
     .testimonial-carousel { margin-top: 3.5rem; }
@@ -313,7 +313,7 @@
     @media (min-width: 1024px) { .tc-slide { flex: 0 0 33.333%; } }
     .tc-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.75rem; }
     .tc-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); border: none; padding: 0; cursor: pointer; transition: background .2s ease, transform .2s ease; }
-    .tc-dot.active { background: #7dd3fc; transform: scale(1.3); }
+    .tc-dot.active { background: #e9e9e9; transform: scale(1.3); }
 
     /* FAQ */
     .faq-grid { display: grid; gap: 3rem; margin-top: 3rem; }
@@ -450,6 +450,14 @@
     .lang-instruction { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); margin-bottom: 2rem; }
     .lang-cards { display: grid; gap: 1rem; grid-template-columns: 1fr; max-width: 34rem; margin-inline: auto; }
     @media (min-width: 560px) { .lang-cards { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 880px) { .lang-cards { grid-template-columns: repeat(3, 1fr); max-width: 48rem; } }
+    [data-count] { font-variant-numeric: tabular-nums; }
+    [data-count].is-counting { animation: gt-count-pulse 1.7s ease-out; }
+    @keyframes gt-count-pulse {
+      0% { transform: scale(0.94); filter: blur(1px); opacity: .55; }
+      55% { transform: scale(1.03); filter: blur(0); opacity: 1; }
+      100% { transform: scale(1); }
+    }
     .lang-card { padding: 1.75rem; text-align: left; cursor: pointer; transition: border-color .2s, transform .15s; background: rgba(20,20,20,0.5); }
     .lang-card:hover { border-color: rgba(255,255,255,0.4); transform: translateY(-2px); }
     .lang-card-tag { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); margin-bottom: 0.85rem; }
@@ -466,7 +474,14 @@
     .invest-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: -0.03em; line-height: 1; font-size: clamp(2.5rem, 6vw, 4.5rem); margin-top: 1rem; }
     .invest-title span { display: block; }
     .invest-line-1 { color: var(--fg); }
-    .invest-line-2 { color: #4aa8ff; background: linear-gradient(180deg, #7dd3fc 0%, #3b82f6 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .invest-line-2 {
+      display: inline-block !important; margin-top: 0.5rem;
+      padding: 0.15em 0.55em; border-radius: 0.6em;
+      background: linear-gradient(180deg, #ffffff 0%, #dcdcdc 100%);
+      color: #050505; -webkit-text-fill-color: initial;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+      box-shadow: 0 18px 45px -20px rgba(0,0,0,0.9), inset 0 -1px 0 rgba(0,0,0,0.15);
+    }
     .invest-desc { margin-top: 1.5rem; max-width: 44rem; margin-inline: auto; color: var(--muted); font-style: italic; font-size: 1rem; line-height: 1.7; }
     .invest-divider { width: 3rem; height: 1px; background: var(--border); margin: 2.5rem auto; }
 
@@ -502,7 +517,7 @@
     .opt-tag { display: inline-block; align-self: flex-start; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: 0.2rem 0.55rem; border-radius: 999px; }
     .opt-title { font-size: 1.15rem; font-weight: 600; font-style: italic; margin-top: 0.5rem; }
     .opt-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
-    .opt-hi { color: #7dd3fc; }
+    .opt-hi { color: #e9e9e9; }
 
 
     /* CUSTOM CURSOR — dot fino + anel com leve lag, clean e minimalista */
@@ -519,7 +534,7 @@
       transform: translate(-50%,-50%);
       transition: width .25s cubic-bezier(.2,.8,.2,1), height .25s cubic-bezier(.2,.8,.2,1), border-color .2s ease, opacity .2s ease;
     }
-    body.cursor-hover #cursor-ring { width: 46px; height: 46px; border-color: rgba(125,211,252,0.65); }
+    body.cursor-hover #cursor-ring { width: 46px; height: 46px; border-color: rgba(255,255,255,0.7); }
     body.cursor-hover #cursor-dot { width: 0; height: 0; }
     body.cursor-active #cursor-ring { width: 22px; height: 22px; }
     body.cursor-active #cursor-dot { width: 3px; height: 3px; }
@@ -576,7 +591,7 @@
     table.gt-table tr:last-child td { border-bottom: none; }
     .gt-pill { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
     .gt-pill.gt-pill--open { background: rgba(250, 204, 21, 0.15); color: #facc15; }
-    .gt-pill.gt-pill--progress { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
+    .gt-pill.gt-pill--progress { background: rgba(255,255,255,0.12); color: #d4d4d4; }
     .gt-pill.gt-pill--closed { background: rgba(52, 211, 153, 0.15); color: #34d399; }
     .gt-mini-input { width: 6.5rem; background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 0.4rem; padding: 0.35rem 0.5rem; color: var(--fg); font-size: 0.78rem; }
     .gt-small-btn { padding: 0.4rem 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: rgba(255,255,255,0.06); color: var(--fg); font-size: 0.72rem; font-weight: 600; }
@@ -733,6 +748,155 @@
       .nav-right .acc-btn { padding: 0.55rem 0.75rem; font-size: 0.78rem; }
       .logo img { height: 2.9rem; width: 2.9rem; }
     }
+    /* =========================================================
+       v2 · REFINO CLEAN + MOVIMENTO (preto & branco)
+    ========================================================= */
+    :root { --radius: 0.9rem; }
+    ::selection { background: #fff; color: #000; }
+
+    /* barra de progresso de rolagem */
+    #gt-progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 100%;
+      transform: scaleX(0); transform-origin: left; z-index: 100;
+      background: linear-gradient(90deg, rgba(255,255,255,.25), #fff);
+      pointer-events: none;
+    }
+
+    /* superfícies mais soft e compactas */
+    .surface-card {
+      border-radius: 1.1rem !important;
+      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)) !important;
+      border: 1px solid rgba(255,255,255,0.09) !important;
+      box-shadow: 0 24px 60px -40px rgba(0,0,0,0.95);
+      transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .35s ease, background .3s ease;
+    }
+    .surface-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.2) !important;
+      box-shadow: 0 32px 70px -34px rgba(0,0,0,0.95);
+    }
+    .lang-card:hover { transform: translateY(-6px); }
+
+    /* respiro mais compacto e consistente */
+    section { padding-block: clamp(3.25rem, 6vw, 5rem) !important; }
+    .section-title { letter-spacing: -0.035em; }
+    .section-desc { max-width: 46rem; }
+    .section-label { letter-spacing: 0.24em; opacity: .55; }
+
+    /* botões com brilho suave ao passar o mouse */
+    .brand-btn { position: relative; overflow: hidden; border-radius: 0.8rem; transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease; }
+    .brand-btn:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -20px rgba(255,255,255,0.55); }
+    .brand-btn::after {
+      content: ""; position: absolute; inset: 0; transform: translateX(-120%);
+      background: linear-gradient(100deg, transparent 20%, rgba(255,255,255,.55) 50%, transparent 80%);
+    }
+    .brand-btn:hover::after { animation: btnSheen .8s ease forwards; }
+    @keyframes btnSheen { to { transform: translateX(120%); } }
+    .acc-btn { border-radius: 0.75rem; transition: background .2s ease, transform .2s ease, border-color .2s ease; }
+    .acc-btn:hover { transform: translateY(-2px); }
+
+    /* cartões de processo / opções com movimento sutil */
+    .process-card, .opt-card, .faq-item, .partner-card, .kc-card {
+      transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, background .3s ease;
+    }
+    .process-card:hover, .opt-card:hover, .partner-card:hover, .kc-card:hover { transform: translateY(-5px); }
+    .faq-item:hover { border-color: rgba(255,255,255,0.22); }
+
+    /* números: brilho vivo e respiração */
+    .stat-val { text-shadow: 0 0 34px rgba(255,255,255,0.16); }
+    .stat-item.in-view .stat-val { animation: statPop .9s cubic-bezier(.2,.8,.2,1) both, statBreath 5.5s ease-in-out 1s infinite; }
+    @keyframes statBreath { 0%,100% { text-shadow: 0 0 26px rgba(255,255,255,0.12); } 50% { text-shadow: 0 0 46px rgba(255,255,255,0.30); } }
+    .stat-item { padding-block: .25rem; }
+    .stat-item::after {
+      content: ""; display: block; height: 1px; width: 0; margin-top: .85rem;
+      background: linear-gradient(90deg, rgba(255,255,255,.8), transparent);
+      transition: width .9s cubic-bezier(.2,.8,.2,1) .25s;
+    }
+    .stat-item.in-view::after { width: 100%; }
+
+    /* reveal um pouco mais curto e elegante */
+    .reveal { transform: translateY(16px); }
+
+    /* =========== TICKET / ORÇAMENTO — MAIS CLEAN =========== */
+    .gt-overlay { background: rgba(0,0,0,0.66); backdrop-filter: blur(10px); padding: 1rem; }
+    #ticketOverlay .gt-modal {
+      max-width: 30rem; padding: 1.75rem 1.6rem 1.5rem; border-radius: 1.25rem !important;
+      background: linear-gradient(180deg, #121212 0%, #0b0b0b 100%) !important;
+      border: 1px solid rgba(255,255,255,0.09) !important;
+      box-shadow: 0 50px 120px -45px rgba(0,0,0,1);
+    }
+    #ticketOverlay .gt-modal:hover { transform: none; }
+    #ticketOverlay .gt-title { font-size: 1.3rem; letter-spacing: -0.02em; }
+    #ticketOverlay .gt-sub { font-size: 0.78rem; line-height: 1.55; margin-bottom: 1.25rem; opacity: .85; }
+    #ticketOverlay .gt-field { margin-bottom: 0.8rem; }
+    #ticketOverlay .gt-field label { font-size: 0.62rem; letter-spacing: 0.16em; opacity: .7; margin-bottom: 0.3rem; }
+    #ticketOverlay .gt-field input,
+    #ticketOverlay .gt-field select,
+    #ticketOverlay .gt-field textarea {
+      background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0.7rem; padding: 0.72rem 0.9rem; font-size: 0.84rem;
+      transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    #ticketOverlay .gt-field input::placeholder,
+    #ticketOverlay .gt-field textarea::placeholder { color: rgba(255,255,255,0.32); }
+    #ticketOverlay .gt-field input:focus,
+    #ticketOverlay .gt-field select:focus,
+    #ticketOverlay .gt-field textarea:focus {
+      border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.07);
+    }
+    #ticketOverlay .brand-btn { border-radius: 0.8rem; padding: 0.9rem 1.25rem; }
+    #ticketOverlay .alt-contact-btn { border-radius: 0.8rem; background: transparent; border-color: rgba(255,255,255,0.14); }
+    #ticketOverlay .alt-contact-btn:hover { background: rgba(255,255,255,0.07); }
+    #ticketOverlay .alt-contact-hint { font-size: 0.62rem; opacity: .6; margin-top: 0.7rem; }
+    .gt-modal-close { border-radius: 0.6rem; transition: background .2s ease, color .2s ease; }
+    .gt-modal-close:hover { background: rgba(255,255,255,0.09); }
+    #networksOverlay .gt-modal { max-width: 27rem; padding: 1.6rem; }
+    .net-card { border-radius: 0.85rem; padding: 0.9rem 1rem; }
+
+    @media (max-width: 640px) {
+      section { padding-block: 2.75rem !important; }
+      #ticketOverlay .gt-modal { padding: 1.4rem 1.15rem 1.25rem; }
+    }
+
+    /* ================= LEGAL PAGES (Termos / Cookies) ================= */
+    .legal-page { position: fixed; inset: 0; z-index: 260; overflow-y: auto; background: var(--bg, #050505); padding: 2.5rem 1rem 4rem; }
+    .legal-page.hidden { display: none; }
+    .legal-wrap { max-width: 46rem; margin-inline: auto; }
+    .legal-back { display: inline-flex; align-items: center; gap: .5rem; background: none; border: 0; color: var(--muted); font-size: .8rem; cursor: pointer; padding: .25rem 0; margin-bottom: 1.75rem; }
+    .legal-back:hover { color: var(--fg); }
+    .legal-head { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 2rem; }
+    .legal-head .legal-ic { flex: none; display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: .9rem; border: 1px solid var(--border); background: rgba(255,255,255,.05); }
+    .legal-head h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.9rem; letter-spacing: -.02em; margin: 0; }
+    .legal-head p { margin: .35rem 0 0; font-size: .85rem; color: var(--muted); }
+    .legal-list { display: grid; gap: .9rem; }
+    .legal-card { display: flex; gap: 1rem; align-items: flex-start; border: 1px solid var(--border); background: rgba(255,255,255,.025); border-radius: 1rem; padding: 1.15rem 1.35rem; transition: transform .25s ease, background .25s ease, border-color .25s ease; }
+    .legal-card:hover { transform: translateY(-2px); background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.18); }
+    .legal-card .legal-ic { flex: none; display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: .6rem; border: 1px solid var(--border); background: rgba(255,255,255,.05); color: var(--fg); }
+    .legal-card h3 { margin: 0 0 .3rem; font-size: .95rem; font-family: 'Space Grotesk', sans-serif; }
+    .legal-card p { margin: 0; font-size: .82rem; line-height: 1.65; color: var(--muted); }
+    .legal-note { margin-top: 2rem; border: 1px solid var(--border); background: rgba(255,255,255,.025); border-radius: 1rem; padding: 1.5rem; text-align: center; }
+    .legal-note p { margin: 0 0 1rem; font-size: .82rem; color: var(--muted); }
+    .legal-foot { margin-top: 2.5rem; text-align: center; font-size: .72rem; color: var(--muted); }
+
+    /* footer legal links */
+    .footer-legal { display: flex; flex-wrap: wrap; gap: .25rem 1.1rem; align-items: center; justify-content: center; font-size: .75rem; }
+    .footer-legal a, .footer-legal button { background: none; border: 0; color: var(--muted); font-size: .75rem; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; padding: 0; font-family: inherit; }
+    .footer-legal a:hover, .footer-legal button:hover { color: var(--fg); }
+
+    /* ================= COOKIE BANNER ================= */
+    .cookie-bar { position: fixed; left: 1rem; right: 1rem; bottom: 1rem; z-index: 240; max-width: 42rem; margin-inline: auto; border: 1px solid var(--border); background: rgba(12,12,12,.92); backdrop-filter: blur(14px); border-radius: 1.1rem; padding: 1.1rem 1.25rem; display: flex; flex-wrap: wrap; gap: .9rem; align-items: center; justify-content: space-between; box-shadow: 0 20px 60px rgba(0,0,0,.6); animation: cookie-up .45s ease both; }
+    .cookie-bar.hidden { display: none; }
+    @keyframes cookie-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    .cookie-bar p { margin: 0; font-size: .8rem; color: var(--muted); line-height: 1.55; flex: 1 1 18rem; }
+    .cookie-bar p a { color: var(--fg); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+    .cookie-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .cookie-actions button { border-radius: .7rem; padding: .55rem 1rem; font-size: .78rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .ck-accept { border: 0; background: #fff; color: #0a0a0a; }
+    .ck-accept:hover { opacity: .88; }
+    .ck-reject { border: 1px solid var(--border); background: transparent; color: var(--fg); }
+    .ck-reject:hover { background: rgba(255,255,255,.07); }
+
 </style>
 </head>
 <body>
@@ -749,7 +913,7 @@
     <div class="lang-inner">
       <p class="lang-eyebrow">GuTweaks · Pro Optimization</p>
       <h1 class="lang-title" style="color:#fff"><span>Select Your Experience</span></h1>
-      <p class="lang-sub">Escolha seu idioma&nbsp; &middot; &nbsp;Choose your language</p>
+      <p class="lang-sub">Escolha seu idioma&nbsp; &middot; &nbsp;Choose your language&nbsp; &middot; &nbsp;Elige tu idioma</p>
       <div class="lang-divider"></div>
       <div class="lang-cards">
         <button type="button" class="surface-card lang-card ripple-fx" onclick="setLanguage('pt')">
@@ -762,8 +926,13 @@
           <div class="lang-card-name-row"><span class="lang-flag">US</span><span class="lang-card-name">English</span></div>
           <div class="lang-card-line"></div>
         </button>
+        <button type="button" class="surface-card lang-card ripple-fx" onclick="setLanguage('es')">
+          <p class="lang-card-tag">Latinoamérica / España</p>
+          <div class="lang-card-name-row"><span class="lang-flag">ES</span><span class="lang-card-name">Español</span></div>
+          <div class="lang-card-line"></div>
+        </button>
       </div>
-      <p class="lang-footer-note">Otimização de PC de alta performance &nbsp;&middot;&nbsp; High-performance PC optimization</p>
+      <p class="lang-footer-note">Otimização de PC de alta performance &nbsp;&middot;&nbsp; High-performance PC optimization &nbsp;&middot;&nbsp; Optimización de PC de alto rendimiento</p>
     </div>
   </div>
 
@@ -790,6 +959,7 @@
         <div class="lang-switch">
           <button type="button" id="langBtnPt" class="ripple-fx" onclick="setLanguage('pt')">PT</button>
           <button type="button" id="langBtnEn" class="ripple-fx" onclick="setLanguage('en')">EN</button>
+          <button type="button" id="langBtnEs" class="ripple-fx" onclick="setLanguage('es')">ES</button>
         </div>
         <button class="brand-btn ripple-fx" onclick="openTicket('orcamento')">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
@@ -797,7 +967,7 @@
         </button>
         <button id="acctBtn" class="acc-btn ripple-fx" onclick="GT.openAccountArea()">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <span id="acctBtnLabel">Entrar</span>
+          <span id="acctBtnLabel" data-i18n="acct.login">Entrar</span>
         </button>
       </div>
     </div>
@@ -807,17 +977,17 @@
   <div id="loginOverlay" class="gt-overlay hidden" onclick="if(event.target===this) GT.closeLogin()">
     <div class="surface-card gt-modal">
       <button type="button" class="gt-modal-close ripple-fx" onclick="GT.closeLogin()">✕</button>
-      <p class="gt-title">Entrar na conta</p>
-      <p class="gt-sub">Acesso para administrador do site e criadores de conteúdo parceiros.</p>
+      <p class="gt-title" data-i18n="acct.title">Entrar na conta</p>
+      <p class="gt-sub" data-i18n="acct.sub">Acesso para administrador do site e criadores de conteúdo parceiros.</p>
       <div class="gt-field">
-        <label>E-mail</label>
+        <label data-i18n="acct.email">E-mail</label>
         <input type="email" id="loginEmail" autocomplete="username" placeholder="seuemail@exemplo.com" />
       </div>
       <div class="gt-field">
-        <label>Senha</label>
+        <label data-i18n="acct.password">Senha</label>
         <input type="password" id="loginPassword" autocomplete="current-password" placeholder="••••••••" />
       </div>
-      <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" onclick="GT.doLogin()">Entrar</button>
+      <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" onclick="GT.doLogin()" data-i18n="acct.submit">Entrar</button>
       <p id="loginError" class="gt-error"></p>
     </div>
   </div>
@@ -828,43 +998,43 @@
       <button type="button" class="gt-modal-close ripple-fx" onclick="closeTicket()">✕</button>
 
       <div id="ticketFormWrap">
-        <p class="gt-title" id="ticketTitle">Peça seu orçamento</p>
-        <p class="gt-sub" id="ticketSub">Me conta o que você precisa por aqui — o pedido vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.</p>
+        <p class="gt-title" id="ticketTitle" data-i18n="ticket.title">Peça seu orçamento</p>
+        <p class="gt-sub" id="ticketSub" data-i18n="ticket.sub">Me conta o que você precisa por aqui — o pedido vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.</p>
         <div class="gt-field">
-          <label>Seu nome</label>
-          <input type="text" id="ticketNome" placeholder="Ex.: João Silva" />
+          <label data-i18n="ticket.name">Seu nome</label>
+          <input type="text" id="ticketNome" data-i18n-ph="ticket.namePh" placeholder="Ex.: João Silva" />
         </div>
         <div class="gt-field">
-          <label>Contato (e-mail ou WhatsApp)</label>
-          <input type="text" id="ticketContato" placeholder="Ex.: joao@email.com ou (11) 91234-5678" />
+          <label data-i18n="ticket.contact">Contato (e-mail ou WhatsApp)</label>
+          <input type="text" id="ticketContato" data-i18n-ph="ticket.contactPh" placeholder="Ex.: joao@email.com ou (11) 91234-5678" />
         </div>
         <div class="gt-field">
-          <label>Categoria</label>
+          <label data-i18n="ticket.category">Categoria</label>
           <select id="ticketCategoria">
-            <option value="Orçamento / Novo serviço">Orçamento / Novo serviço</option>
-            <option value="Suporte técnico">Suporte técnico</option>
-            <option value="Dúvida sobre serviço">Dúvida sobre serviço</option>
-            <option value="Cobrança / Pagamento">Cobrança / Pagamento</option>
-            <option value="Outro">Outro</option>
+            <option value="Orçamento / Novo serviço" data-i18n="ticket.cat1">Orçamento / Novo serviço</option>
+            <option value="Suporte técnico" data-i18n="ticket.cat2">Suporte técnico</option>
+            <option value="Dúvida sobre serviço" data-i18n="ticket.cat3">Dúvida sobre serviço</option>
+            <option value="Cobrança / Pagamento" data-i18n="ticket.cat4">Cobrança / Pagamento</option>
+            <option value="Outro" data-i18n="ticket.cat5">Outro</option>
           </select>
         </div>
         <div class="gt-field">
-          <label>Descreva o que você precisa</label>
-          <textarea id="ticketMensagem" rows="4" placeholder="Ex.: config do PC, o que quer melhorar, ou o problema que tá acontecendo..."></textarea>
+          <label data-i18n="ticket.message">Descreva o que você precisa</label>
+          <textarea id="ticketMensagem" rows="4" data-i18n-ph="ticket.messagePh" placeholder="Ex.: config do PC, o que quer melhorar, ou o problema que tá acontecendo..."></textarea>
         </div>
         <div class="gt-field">
-          <label>Cupom de desconto (opcional)</label>
-          <input type="text" id="ticketCupom" placeholder="Ex.: FTNLUCCA" />
+          <label data-i18n="ticket.coupon">Cupom de desconto (opcional)</label>
+          <input type="text" id="ticketCupom" data-i18n-ph="ticket.couponPh" placeholder="Ex.: FTNLUCCA" />
         </div>
-        <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" id="ticketSubmitBtn" onclick="submitTicket()">Abrir chamado</button>
+        <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" id="ticketSubmitBtn" onclick="submitTicket()" data-i18n="ticket.submit">Abrir chamado</button>
         <p id="ticketError" class="gt-error"></p>
         <button type="button" class="alt-contact-btn ripple-fx" onclick="openNetworks()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.17L4 17.17V4Z"/><path d="M8 9h8"/><path d="M8 12.5h5"/></svg>
-          <span>Entrar em contato em outras redes (opcional)</span>
+          <span data-i18n="ticket.altBtn">Entrar em contato em outras redes (opcional)</span>
         </button>
-        <p class="alt-contact-hint">Opção 2 · Discord e WhatsApp</p>
+        <p class="alt-contact-hint" data-i18n="ticket.altHint">Opção 2 · Discord e WhatsApp</p>
         <a id="ticketWaInline" class="ripple-fx wa-inline-legacy" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;gap:0.4rem;margin-top:0.75rem;font-size:0.72rem;color:var(--muted);text-decoration:underline;text-underline-offset:2px">
-          <span data-i18n="chat.waOptionLabel">Opção 2 (opcional):</span> <span>falar agora no WhatsApp</span>
+          <span data-i18n="chat.waOptionLabel">Opção 2 (opcional):</span> <span data-i18n="ticket.waInline">falar agora no WhatsApp</span>
         </a>
       </div>
 
@@ -875,22 +1045,22 @@
   <div id="networksOverlay" class="gt-overlay hidden" onclick="if(event.target===this) closeNetworks()">
     <div class="surface-card gt-modal">
       <button type="button" class="gt-modal-close ripple-fx" onclick="closeNetworks()">&#10005;</button>
-      <p class="gt-title">Falar em outras redes</p>
-      <p class="gt-sub">Prefere conversar direto? Escolha um canal oficial abaixo — atendimento pelo Discord ou WhatsApp Business.</p>
+      <p class="gt-title" data-i18n="net.title">Falar em outras redes</p>
+      <p class="gt-sub" data-i18n="net.sub">Prefere conversar direto? Escolha um canal oficial abaixo — atendimento pelo Discord ou WhatsApp Business.</p>
       <div class="net-list">
         <a class="net-card net-card--discord ripple-fx" href="https://discord.gg/8PUFNEDxNU" target="_blank" rel="noopener noreferrer">
           <span class="net-icon net-icon--discord"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.319 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127c-.598.35-1.22.645-1.873.891a.077.077 0 0 0-.041.107c.36.699.772 1.364 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg></span>
           <span>
-            <span class="net-name">Discord — Embaixadores FTNLUCCA</span>
-            <span class="net-desc">Comunidade oficial dos embaixadores</span>
+            <span class="net-name" data-i18n="net.d1name">Discord — Embaixadores FTNLUCCA</span>
+            <span class="net-desc" data-i18n="net.d1desc">Comunidade oficial dos embaixadores</span>
           </span>
           <svg class="net-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
         </a>
         <a class="net-card net-card--discord ripple-fx" href="https://discord.gg/UzRMyTgwa5" target="_blank" rel="noopener noreferrer">
           <span class="net-icon net-icon--discord"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.319 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127c-.598.35-1.22.645-1.873.891a.077.077 0 0 0-.041.107c.36.699.772 1.364 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg></span>
           <span>
-            <span class="net-name">Discord — GustavoTweaks (oficial)</span>
-            <span class="net-desc">Servidor oficial do GuTweaks</span>
+            <span class="net-name" data-i18n="net.d2name">Discord — GustavoTweaks (oficial)</span>
+            <span class="net-desc" data-i18n="net.d2desc">Servidor oficial do GuTweaks</span>
           </span>
           <svg class="net-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
         </a>
@@ -898,12 +1068,12 @@
           <span class="net-icon net-icon--wa"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Zm-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Z"/></svg></span>
           <span>
             <span class="net-name">WhatsApp Business</span>
-            <span class="net-desc">Atendimento direto comigo</span>
+            <span class="net-desc" data-i18n="net.wadesc">Atendimento direto comigo</span>
           </span>
           <svg class="net-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
         </a>
       </div>
-      <p class="alt-contact-hint">Resposta normalmente em poucos minutos</p>
+      <p class="alt-contact-hint" data-i18n="net.hint">Resposta normalmente em poucos minutos</p>
     </div>
   </div>
 
@@ -1057,25 +1227,25 @@
       <div class="opt-grid">
         <div class="surface-card opt-card">
           <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></div>
-          <p class="opt-tag">Deep Tuning</p>
+          <p class="opt-tag" data-i18n="opt.tag1">Deep Tuning</p>
           <h3 class="opt-title" data-i18n="opt.c1.title">Overclock saudável</h3>
           <p class="opt-desc" data-i18n="opt.c1.desc">Via chamada de vídeo, vamos até a <span class="opt-hi">BIOS</span> da sua placa-mãe. Aumento a performance subindo as <span class="opt-hi">frequências</span> e reduzindo as temperaturas ao baixar as <span class="opt-hi">tensões</span>.</p>
         </div>
         <div class="surface-card opt-card">
           <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
-          <p class="opt-tag">Resposta rápida</p>
+          <p class="opt-tag" data-i18n="opt.tag2">Resposta rápida</p>
           <h3 class="opt-title" data-i18n="opt.c2.title">Inputlag zero</h3>
           <p class="opt-desc" data-i18n="opt.c2.desc">Instalação de um Windows 100% otimizado a partir do original da Microsoft. Sem programas e serviços inúteis travando seu PC. Acesso <span class="opt-hi">vitalício</span> a futuras versões.</p>
         </div>
         <div class="surface-card opt-card">
           <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-          <p class="opt-tag">Para o seu conforto</p>
+          <p class="opt-tag" data-i18n="opt.tag3">Para o seu conforto</p>
           <h3 class="opt-title" data-i18n="opt.c3.title">Atendimento remoto</h3>
           <p class="opt-desc" data-i18n="opt.c3.desc">O procedimento dura em média de 1h a 2h, de forma totalmente remota. Eu daqui, e você daí, podendo ver e interferir em tudo o que é feito.</p>
         </div>
         <div class="surface-card opt-card">
           <div class="opt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
-          <p class="opt-tag">Autonomia</p>
+          <p class="opt-tag" data-i18n="opt.tag4">Autonomia</p>
           <h3 class="opt-title" data-i18n="opt.c4.title">Depois, faça você mesmo!</h3>
           <p class="opt-desc" data-i18n="opt.c4.desc">Você recebe um manual de cuidados práticos essenciais para manter a máquina voando sozinho, incluindo links de drivers e futuras atualizações. Total autonomia, sem mensalidades.</p>
         </div>
@@ -1166,19 +1336,19 @@
       <div class="fps-grid">
         <div class="fps-metrics">
           <div class="fps-metric">
-            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m1.label">FPS</span><span class="fps-metric-value">+42%</span></div>
+            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m1.label">FPS</span><span class="fps-metric-value" data-count="42" data-prefix="+" data-suffix="%">+42%</span></div>
             <p class="fps-metric-desc" data-i18n="fps.m1.desc">Aumento médio em títulos competitivos.</p>
           </div>
           <div class="fps-metric">
-            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m2.label">Temperatura</span><span class="fps-metric-value">-20%</span></div>
+            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m2.label">Temperatura</span><span class="fps-metric-value" data-count="20" data-prefix="-" data-suffix="%">-20%</span></div>
             <p class="fps-metric-desc" data-i18n="fps.m2.desc">Consumo energético reduzido.</p>
           </div>
           <div class="fps-metric">
-            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m3.label">Latência</span><span class="fps-metric-value">-12ms</span></div>
+            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m3.label">Latência</span><span class="fps-metric-value" data-count="12" data-prefix="-" data-suffix="ms">-12ms</span></div>
             <p class="fps-metric-desc" data-i18n="fps.m3.desc">Redução de input lag sistêmico.</p>
           </div>
           <div class="fps-metric">
-            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m4.label">Estabilidade</span><span class="fps-metric-value">100%</span></div>
+            <div class="fps-metric-row"><span class="fps-metric-label" data-i18n="fps.m4.label">Estabilidade</span><span class="fps-metric-value" data-count="100" data-suffix="%">100%</span></div>
             <p class="fps-metric-desc" data-i18n="fps.m4.desc">Zero quedas bruscas (frame drops).</p>
           </div>
           <p class="fps-note" data-i18n="fps.note">*Nota: As métricas apresentadas representam médias obtidas em testes internos. Os ganhos reais são variáveis e dependem diretamente das especificações de hardware, refrigeração e condições físicas de cada computador.</p>
@@ -1188,11 +1358,11 @@
           <div class="fps-chart-top">
             <div class="fps-chart-base">
               <p class="fps-chart-eyebrow" data-i18n="fps.base">Base</p>
-              <p class="fps-num">680 <span style="font-size:0.75rem;color:var(--muted)">FPS</span></p>
+              <p class="fps-num"><span data-count="680">680</span> <span style="font-size:0.75rem;color:var(--muted)">FPS</span></p>
             </div>
             <div class="fps-chart-opt">
               <div class="fps-chart-opt-tag"><span class="fps-dot"></span><span data-i18n="fps.optimized">Otimizado</span></div>
-              <p class="fps-num">966 <span style="font-size:0.75rem;color:var(--muted)">FPS</span></p>
+              <p class="fps-num"><span data-count="966">966</span> <span style="font-size:0.75rem;color:var(--muted)">FPS</span></p>
             </div>
           </div>
           <div class="fps-chart-svg-wrap">
@@ -1210,7 +1380,7 @@
             </div>
             <div>
               <span data-i18n="fps.lagReduction">Redução lag</span>
-              <strong>-14.2ms</strong>
+              <strong data-count="14.2" data-decimals="1" data-prefix="-" data-suffix="ms">-14.2ms</strong>
             </div>
           </div>
         </div>
@@ -1232,7 +1402,7 @@
               <img class="kc-avatar" src="data:image/jpeg;base64,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" alt="FTNLUCCA" loading="lazy">
               <div class="kc-name-row">
                 <p class="kc-name">FTNLUCCA <span class="kc-verified" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 14.4 4.9 18.1 4.4 18.6 8.1 21.5 10.5 20 14 21.5 17.5 18.6 19.9 18.1 23.6 14.4 23.1 12 26 9.6 23.1 5.9 23.6 5.4 19.9 2.5 17.5 4 14 2.5 10.5 5.4 8.1 5.9 4.4 9.6 4.9Z" transform="translate(0,-2)"/><path d="m9 12.5 2.2 2.2L15.5 10" fill="none" stroke="#0b0b0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></p>
-                <p class="kc-followers"><strong>+110K</strong> <span data-i18n="knownClients.followers">Seguidores</span></p>
+                <p class="kc-followers"><strong data-count="110" data-prefix="+" data-suffix="K">+110K</strong> <span data-i18n="knownClients.followers">Seguidores</span></p>
               </div>
             </div>
             <p class="kc-text" data-i18n="knownClients.ftnlucca.text">"Eu e meu pai fazemos lives de Fortnite, então precisamos de um PC com o máximo de desempenho e estabilidade. Depois da otimização da Gustavo Tweaks, ganhei mais FPS e a experiência melhorou muito. Isso tem me ajudado bastante nas lives e nas partidas. Recomendo demais!"</p>
@@ -1314,7 +1484,7 @@
         <details class="faq-item"><summary><span data-i18n="faq3.q">Vocês acessam meus arquivos pessoais?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq3.a">Não. O acesso é focado só no que é necessário pra otimização. Seus arquivos pessoais não são abertos, movidos nem coletados.</div></details>
         <details class="faq-item"><summary><span data-i18n="faq4.q">Quanto tempo demora?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq4.a">Depende da configuração e do que vamos ajustar. Em média entre 2h e 4h, com você acompanhando via call.</div></details>
         <details class="faq-item"><summary><span data-i18n="faq5.q">Vocês entram em call durante a otimização?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq5.a">Sim. Todo o processo é feito com você presente na call, podendo testar antes e depois de cada ajuste.</div></details>
-        <details class="faq-item"><summary><span data-i18n="faq6.q">Tem garantia ou reembolso?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq6.a">Sim. Se algo não funcionar como acordado, ajustamos até ficar redondo. Caso não seja possível, o reembolso é analisado caso a caso.</div></details>
+        <details class="faq-item"><summary><span data-i18n="faq6.q">Tem garantia ou reembolso?</span><svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="faq-answer" data-i18n="faq6.a">Garantia sim, reembolso não. Eu valorizo muito o meu serviço e cada otimização é feita de forma personalizada, com tempo dedicado só pra sua máquina — por isso não trabalho com reembolso. O que eu garanto é o acompanhamento: se algo não ficar como combinado, eu ajusto quantas vezes for preciso até o resultado ficar redondo.</div></details>
       </div>
     </div>
   </section>
@@ -1366,7 +1536,12 @@
         <span>© 2026 GuTweaks · Pro Optimization</span>
       </div>
       <span style="font-size:0.75rem" data-i18n="footer.tagline">Feito por gamer, pra gamer.</span>
-      <a href="#" onclick="openTicket();return false;" style="font-size:0.75rem;color:var(--muted);text-decoration:underline;text-underline-offset:2px" data-i18n="footer.support">Já é cliente? Abrir chamado de suporte</a>
+      <div class="footer-legal">
+        <a href="#" onclick="openTicket();return false;" data-i18n="footer.support">Já é cliente? Abrir chamado de suporte</a>
+        <button type="button" onclick="GTLegal.openTos()" data-i18n="footer.tos">Termos de Uso</button>
+        <button type="button" onclick="GTLegal.openCookies()" data-i18n="footer.cookies">Política de Cookies</button>
+        <a href="mailto:gustavotweex@gmail.com">gustavotweex@gmail.com</a>
+      </div>
     </div>
   </footer>
 
@@ -1474,11 +1649,65 @@
         'faq3.q': 'Vocês acessam meus arquivos pessoais?', 'faq3.a': 'Não. O acesso é focado só no que é necessário pra otimização. Seus arquivos pessoais não são abertos, movidos nem coletados.',
         'faq4.q': 'Quanto tempo demora?', 'faq4.a': 'Depende da configuração e do que vamos ajustar. Em média entre 2h e 4h, com você acompanhando via call.',
         'faq5.q': 'Vocês entram em call durante a otimização?', 'faq5.a': 'Sim. Todo o processo é feito com você presente na call, podendo testar antes e depois de cada ajuste.',
-        'faq6.q': 'Tem garantia ou reembolso?', 'faq6.a': 'Sim. Se algo não funcionar como acordado, ajustamos até ficar redondo. Caso não seja possível, o reembolso é analisado caso a caso.',
+        'faq6.q': 'Tem garantia ou reembolso?', 'faq6.a': 'Garantia sim, reembolso não. Eu valorizo muito o meu serviço e cada otimização é feita de forma personalizada, com tempo dedicado só pra sua máquina — por isso não trabalho com reembolso. O que eu garanto é o acompanhamento: se algo não ficar como combinado, eu ajusto quantas vezes for preciso até o resultado ficar redondo.',
         'cta.title1': 'Pronto pra extrair o', 'cta.titleGradient': 'máximo', 'cta.title2': 'do seu PC?',
         'cta.desc': 'Abre o orçamento, me passa sua config e agendamos hoje mesmo.', 'cta.button': 'Fazer orçamento personalizado',
+        'legal.back': 'Voltar ao início',
+        'footer.tos': 'Termos de Uso',
+        'footer.cookies': 'Política de Cookies',
+        'tos.title': 'Termos de Serviço',
+        'tos.sub': 'Ao contratar nossos serviços, você concorda com os termos abaixo.',
+        'tos.c1.t': 'Otimização via AnyDesk',
+        'tos.c1.d': 'A otimização é feita remotamente pelo AnyDesk, com configurações personalizadas para extrair o máximo do seu hardware.',
+        'tos.c2.t': 'Qualidade e Prazo',
+        'tos.c2.d': 'Priorizamos qualidade e personalização. O processo pode levar um tempo extra para garantir o melhor resultado.',
+        'tos.c3.t': 'Alta Demanda',
+        'tos.c3.d': 'Em períodos de alta demanda, a fila pode crescer. Todos os clientes são atendidos com excelência. Agradecemos a paciência.',
+        'tos.c4.t': 'Política de Reembolso',
+        'tos.c4.d': 'Não realizamos reembolsos. Garantimos otimização projetada para liberar o máximo desempenho. Resultados variam conforme o PC. Para melhorias adicionais, considere um upgrade de hardware.',
+        'tos.c5.t': 'Limitações',
+        'tos.c5.d': 'Não trocamos peças de hardware. Ajustamos e configuramos seu sistema dentro das capacidades do equipamento. Ganhos de FPS variam (90–170+ FPS dependendo da máquina).',
+        'tos.c6.t': 'Resultados',
+        'tos.c6.d': 'Aumento significativo de FPS, eliminação de input lag e travamentos. Foco em fluidez e resposta do sistema.',
+        'tos.foot': 'Agradecemos pela confiança. — GuTweaks',
+        'ck.title': 'Política de Cookies',
+        'ck.sub': 'Saiba como utilizamos cookies para melhorar sua experiência.',
+        'ck.c1.t': 'O que são Cookies?',
+        'ck.c1.d': 'Cookies são pequenos arquivos de texto armazenados no seu navegador quando você visita nosso site. Eles nos ajudam a lembrar suas preferências, entender como você usa o site e melhorar sua experiência geral de navegação.',
+        'ck.c2.t': 'Cookies Essenciais',
+        'ck.c2.d': 'São necessários para o funcionamento básico do site, como manter sua sessão ativa, autenticação de login e preferências de idioma/tema. Sem eles, o site não funciona corretamente. Esses cookies não podem ser desativados.',
+        'ck.c3.t': 'Cookies de Desempenho',
+        'ck.c3.d': 'Coletam informações sobre como você utiliza o site — quais páginas visita com mais frequência, tempos de carregamento e eventuais erros. Esses dados são agregados e anônimos, usados exclusivamente para melhorar o desempenho e a experiência do usuário.',
+        'ck.c4.t': 'Cookies de Funcionalidade',
+        'ck.c4.d': 'Permitem que o site lembre as escolhas que você faz, como tema escuro/claro, idioma preferido e configurações de notificação. Proporcionam uma experiência mais personalizada e consistente entre sessões.',
+        'ck.c5.t': 'Cookies de Análise',
+        'ck.c5.d': 'Utilizamos ferramentas de análise para entender o comportamento dos visitantes de forma agregada. Isso inclui dados como páginas mais acessadas, origem do tráfego e tempo médio de permanência. Nenhuma informação pessoal identificável é compartilhada com terceiros.',
+        'ck.c6.t': 'Cookies de Terceiros',
+        'ck.c6.d': 'Alguns serviços integrados ao nosso site (como processadores de pagamento e plataformas de mídia social) podem definir seus próprios cookies. Não temos controle direto sobre esses cookies — recomendamos consultar as políticas de privacidade de cada serviço.',
+        'ck.c7.t': 'Gerenciamento de Cookies',
+        'ck.c7.d': 'Você pode gerenciar ou excluir cookies a qualquer momento através das configurações do seu navegador. Lembre-se de que desativar certos cookies pode afetar a funcionalidade do site e limitar sua experiência de uso.',
+        'ck.c8.t': 'Atualizações nesta Política',
+        'ck.c8.d': 'Podemos atualizar esta Política de Cookies periodicamente para refletir mudanças em nossas práticas ou por exigências legais. Recomendamos que você revise esta página regularmente. A data da última atualização estará sempre indicada abaixo.',
+        'ck.noteText': 'Ao continuar navegando em nosso site, você concorda com o uso de cookies conforme descrito nesta política.',
+        'ck.noteBtn': 'Aceito a Política de Cookies',
+        'ck.foot': 'Última atualização: Agosto de 2026 — GuTweaks',
+        'ckbar.text': 'Usamos cookies para analisar o uso do site e melhorar sua experiência.',
+        'ckbar.link': 'Ver Política de Cookies',
+        'ckbar.accept': 'Aceitar',
+        'ckbar.reject': 'Só essenciais',
         'footer.tagline': 'Feito por gamer, pra gamer.', 'footer.support': 'Já é cliente? Abrir chamado de suporte', 'floating.cta': 'Orçamento',
-        'chat.name': 'Atendimento GuTweaks', 'chat.sub': 'Online — resposta em minutos', 'chat.waButton': 'Falar agora no WhatsApp', 'chat.waOptionLabel': 'Opção 2 (opcional):'
+        'chat.name': 'Atendimento GuTweaks', 'chat.sub': 'Online — resposta em minutos', 'chat.waButton': 'Falar agora no WhatsApp', 'chat.waOptionLabel': 'Opção 2 (opcional):',
+        'opt.tag1': 'Deep Tuning', 'opt.tag2': 'Resposta rápida', 'opt.tag3': 'Para o seu conforto', 'opt.tag4': 'Autonomia',
+        'acct.login': 'Entrar', 'acct.myAccount': 'Minha conta', 'acct.title': 'Entrar na conta', 'acct.sub': 'Acesso para administrador do site e criadores de conteúdo parceiros.', 'acct.email': 'E-mail', 'acct.password': 'Senha', 'acct.submit': 'Entrar',
+        'ticket.title': 'Peça seu orçamento', 'ticket.sub': 'Me conta o que você precisa por aqui — o pedido vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.',
+        'ticket.titleSupport': 'Abrir chamado de suporte', 'ticket.subSupport': 'Me conta qual é o problema por aqui — o chamado vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.',
+        'ticket.name': 'Seu nome', 'ticket.namePh': 'Ex.: João Silva', 'ticket.contact': 'Contato (e-mail ou WhatsApp)', 'ticket.contactPh': 'Ex.: joao@email.com ou (11) 91234-5678',
+        'ticket.category': 'Categoria', 'ticket.cat1': 'Orçamento / Novo serviço', 'ticket.cat2': 'Suporte técnico', 'ticket.cat3': 'Dúvida sobre serviço', 'ticket.cat4': 'Cobrança / Pagamento', 'ticket.cat5': 'Outro',
+        'ticket.message': 'Descreva o que você precisa', 'ticket.messagePh': 'Ex.: config do PC, o que quer melhorar, ou o problema que tá acontecendo...',
+        'ticket.coupon': 'Cupom de desconto (opcional)', 'ticket.couponPh': 'Ex.: FTNLUCCA', 'ticket.submit': 'Abrir chamado', 'ticket.sending': 'Enviando…',
+        'ticket.altBtn': 'Entrar em contato em outras redes (opcional)', 'ticket.altHint': 'Opção 2 · Discord e WhatsApp', 'ticket.waInline': 'falar agora no WhatsApp',
+        'net.title': 'Falar em outras redes', 'net.sub': 'Prefere conversar direto? Escolha um canal oficial abaixo — atendimento pelo Discord ou WhatsApp Business.',
+        'net.d1name': 'Discord — Embaixadores FTNLUCCA', 'net.d1desc': 'Comunidade oficial dos embaixadores', 'net.d2name': 'Discord — GustavoTweaks (oficial)', 'net.d2desc': 'Servidor oficial do GuTweaks', 'net.wadesc': 'Atendimento direto comigo', 'net.hint': 'Resposta normalmente em poucos minutos'
       },
       en: {
         'meta.title': 'GuTweaks — Professional gaming PC optimization',
@@ -1536,28 +1765,223 @@
         'faq3.q': 'Do you access my personal files?', 'faq3.a': 'No. Access is limited strictly to what\'s needed for the optimization. Your personal files are never opened, moved or collected.',
         'faq4.q': 'How long does it take?', 'faq4.a': 'It depends on your setup and what needs adjusting. On average between 2 and 4 hours, with you following along on a call.',
         'faq5.q': 'Do you stay on a call during the optimization?', 'faq5.a': 'Yes. The whole process happens with you present on the call, so you can test before and after every change.',
-        'faq6.q': 'Is there a warranty or refund?', 'faq6.a': 'Yes. If something doesn\'t work as agreed, we fix it until it\'s right. If that\'s not possible, refunds are evaluated case by case.',
+        'faq6.q': 'Is there a warranty or refund?', 'faq6.a': 'Warranty yes, refunds no. I truly value my work and every optimization is fully personalized, with time dedicated only to your machine — that is why I do not offer refunds. What I do guarantee is follow-up: if anything is not as agreed, I will adjust it as many times as needed until the result is right.',
         'cta.title1': 'Ready to get the', 'cta.titleGradient': 'most', 'cta.title2': 'out of your PC?',
         'cta.desc': 'Open the quote request, send me your specs and let\'s schedule it for today.', 'cta.button': 'Get a personalized quote',
+        'legal.back': 'Back to home',
+        'footer.tos': 'Terms of Use',
+        'footer.cookies': 'Cookie Policy',
+        'tos.title': 'Terms of Service',
+        'tos.sub': 'By hiring our services, you agree to the terms below.',
+        'tos.c1.t': 'Optimization via AnyDesk',
+        'tos.c1.d': 'The optimization is done remotely through AnyDesk, with custom settings to extract the maximum from your hardware.',
+        'tos.c2.t': 'Quality and Deadline',
+        'tos.c2.d': 'We prioritize quality and personalization. The process may take extra time to guarantee the best result.',
+        'tos.c3.t': 'High Demand',
+        'tos.c3.d': 'During high demand periods the queue may grow. Every client is served with excellence. Thanks for your patience.',
+        'tos.c4.t': 'Refund Policy',
+        'tos.c4.d': 'We do not issue refunds. We deliver an optimization designed to unlock maximum performance. Results vary according to each PC. For further gains, consider a hardware upgrade.',
+        'tos.c5.t': 'Limitations',
+        'tos.c5.d': 'We do not replace hardware parts. We tune and configure your system within the capabilities of your machine. FPS gains vary (90–170+ FPS depending on the rig).',
+        'tos.c6.t': 'Results',
+        'tos.c6.d': 'Significant FPS increase, elimination of input lag and stutters. Focus on smoothness and system responsiveness.',
+        'tos.foot': 'Thank you for your trust. — GuTweaks',
+        'ck.title': 'Cookie Policy',
+        'ck.sub': 'Learn how we use cookies to improve your experience.',
+        'ck.c1.t': 'What are Cookies?',
+        'ck.c1.d': 'Cookies are small text files stored in your browser when you visit our site. They help us remember your preferences, understand how you use the site and improve your overall browsing experience.',
+        'ck.c2.t': 'Essential Cookies',
+        'ck.c2.d': 'Required for the basic operation of the site, such as keeping your session active, login authentication and language/theme preferences. Without them the site does not work properly. These cookies cannot be disabled.',
+        'ck.c3.t': 'Performance Cookies',
+        'ck.c3.d': 'They collect information about how you use the site — which pages you visit most, loading times and eventual errors. This data is aggregated and anonymous, used exclusively to improve performance and user experience.',
+        'ck.c4.t': 'Functionality Cookies',
+        'ck.c4.d': 'They let the site remember the choices you make, such as dark/light theme, preferred language and notification settings. They provide a more personalized and consistent experience between sessions.',
+        'ck.c5.t': 'Analytics Cookies',
+        'ck.c5.d': 'We use analytics tools to understand visitor behaviour in an aggregated way. This includes data such as most visited pages, traffic source and average time on site. No personally identifiable information is shared with third parties.',
+        'ck.c6.t': 'Third-party Cookies',
+        'ck.c6.d': 'Some services integrated into our site (such as payment processors and social media platforms) may set their own cookies. We have no direct control over them — we recommend checking the privacy policy of each service.',
+        'ck.c7.t': 'Managing Cookies',
+        'ck.c7.d': 'You can manage or delete cookies at any time through your browser settings. Keep in mind that disabling certain cookies may affect site functionality and limit your experience.',
+        'ck.c8.t': 'Updates to this Policy',
+        'ck.c8.d': 'We may update this Cookie Policy periodically to reflect changes in our practices or legal requirements. We recommend reviewing this page regularly. The date of the last update is always shown below.',
+        'ck.noteText': 'By continuing to browse our site, you agree to the use of cookies as described in this policy.',
+        'ck.noteBtn': 'I accept the Cookie Policy',
+        'ck.foot': 'Last update: August 2026 — GuTweaks',
+        'ckbar.text': 'We use cookies to analyze site usage and improve your experience.',
+        'ckbar.link': 'View Cookie Policy',
+        'ckbar.accept': 'Accept',
+        'ckbar.reject': 'Essential only',
         'footer.tagline': 'Built by a gamer, for gamers.', 'footer.support': 'Already a client? Open a support ticket', 'floating.cta': 'Get a quote',
-        'chat.name': 'GuTweaks Support', 'chat.sub': 'Online — reply within minutes', 'chat.waButton': 'Talk on WhatsApp now', 'chat.waOptionLabel': 'Option 2 (optional):'
+        'chat.name': 'GuTweaks Support', 'chat.sub': 'Online — reply within minutes', 'chat.waButton': 'Talk on WhatsApp now', 'chat.waOptionLabel': 'Option 2 (optional):',
+        'opt.tag1': 'Deep Tuning', 'opt.tag2': 'Fast response', 'opt.tag3': 'For your comfort', 'opt.tag4': 'Autonomy',
+        'acct.login': 'Sign in', 'acct.myAccount': 'My account', 'acct.title': 'Sign in to your account', 'acct.sub': 'Access for the site administrator and partner content creators.', 'acct.email': 'E-mail', 'acct.password': 'Password', 'acct.submit': 'Sign in',
+        'ticket.title': 'Request your quote', 'ticket.sub': "Tell me what you need here — your request comes straight to me and I'll reply as soon as possible. No need to leave for WhatsApp.",
+        'ticket.titleSupport': 'Open a support ticket', 'ticket.subSupport': "Tell me what's going on here — your ticket comes straight to me and I'll reply as soon as possible. No need to leave for WhatsApp.",
+        'ticket.name': 'Your name', 'ticket.namePh': 'e.g. John Smith', 'ticket.contact': 'Contact (e-mail or WhatsApp)', 'ticket.contactPh': 'e.g. john@email.com or +1 555 123 4567',
+        'ticket.category': 'Category', 'ticket.cat1': 'Quote / New service', 'ticket.cat2': 'Technical support', 'ticket.cat3': 'Question about the service', 'ticket.cat4': 'Billing / Payment', 'ticket.cat5': 'Other',
+        'ticket.message': 'Describe what you need', 'ticket.messagePh': 'e.g. your PC specs, what you want to improve, or the issue you are facing...',
+        'ticket.coupon': 'Discount coupon (optional)', 'ticket.couponPh': 'e.g. FTNLUCCA', 'ticket.submit': 'Open ticket', 'ticket.sending': 'Sending…',
+        'ticket.altBtn': 'Contact me on other networks (optional)', 'ticket.altHint': 'Option 2 · Discord and WhatsApp', 'ticket.waInline': 'talk on WhatsApp now',
+        'net.title': 'Talk on other networks', 'net.sub': 'Prefer to talk directly? Pick an official channel below — support via Discord or WhatsApp Business.',
+        'net.d1name': 'Discord — FTNLUCCA Ambassadors', 'net.d1desc': 'Official ambassadors community', 'net.d2name': 'Discord — GustavoTweaks (official)', 'net.d2desc': 'Official GuTweaks server', 'net.wadesc': 'Direct support with me', 'net.hint': 'Usually answered within a few minutes'
+      },
+      es: {
+        'meta.title': 'GuTweaks — Optimización profesional de PC gamer',
+        'meta.desc': 'Menos delay, más FPS. Optimización a medida, ajustes de BIOS, overclock seguro y reducción de input lag. Configuración personalizada, sin atajos.',
+        'nav.services': 'Servicios', 'nav.process': 'Cómo funciona', 'nav.data': 'Datos', 'nav.results': 'Resultados', 'nav.faq': 'FAQ', 'nav.support': 'Soporte', 'nav.about': 'Sobre mí', 'nav.cta': 'Pedir presupuesto',
+        'hero.badge': 'Atendiendo ahora',
+        'hero.title1': 'Optimización profesional', 'hero.title2': 'de PC al extremo.',
+        'hero.desc': 'Ajustes de BIOS, overclock seguro, reducción de input lag y estabilidad total. Servicio 100% personalizado, a la medida de tu máquina y tu juego.',
+        'hero.cta1': 'Pedir presupuesto personalizado', 'hero.cta2': 'Ver servicios',
+        'hero.tag1': 'Overclock seguro', 'hero.tag2': 'Cero delay', 'hero.tag3': 'Estabilidad total',
+        'feature1.label': 'Cero Delay', 'feature1.title': 'FPS altos y respuesta inmediata', 'feature1.desc': 'Latencia prácticamente imperceptible — cada movimiento se traduce en rendimiento real.',
+        'feature2.label': 'Estabilidad', 'feature2.title': 'Temperaturas bajo control', 'feature2.desc': 'Sistema afinado sin tirones, sin stutter y sin calentarse en partidas largas.',
+        'feature3.label': 'Overclock', 'feature3.title': 'Máxima eficiencia', 'feature3.desc': 'Más rendimiento extraído de la CPU, la GPU y la RAM con total seguridad.',
+        'stats.label1': 'FPS de ganancia media', 'stats.label2': 'PCs optimizados', 'stats.label3': 'de input lag', 'stats.label4': 'clientes satisfechos',
+        'services.label': 'Servicios', 'services.title1': 'Cada máquina es única.', 'services.title2': 'Cada optimización también.',
+        'services.desc': 'Cuéntame tu configuración y lo que quieres lograr. Analizo tu hardware y te devuelvo una propuesta técnica a medida — sin paquetes genéricos, sin vueltas.',
+        'services.cardTitle': 'Optimizaciones desde R$ 95',
+        'services.li1': 'Ajustes avanzados de BIOS/UEFI', 'services.li2': 'Overclock personalizado — presupuesto según las piezas del PC', 'services.li3': 'Ajuste fino de voltajes y PBO',
+        'services.li4': 'Reducción de temperaturas', 'services.li5': 'Optimización completa de Windows', 'services.li6': 'Afinidad de núcleos y prioridades',
+        'services.li7': 'Pruebas de estrés y estabilidad', 'services.li8': 'Diagnóstico profundo del hardware', 'services.li9': 'Tweaks de red e input lag', 'services.li10': 'Soporte posterior a la optimización',
+        'services.paymentLabel': 'Pago', 'services.paymentValue': 'PIX · Tarjeta · Internacional',
+        'mini1.title': 'Enfoque competitivo', 'mini1.desc': 'Configuración pensada para quien juega Fortnite, Valorant, CS2 y otros títulos donde cada frame cuenta.',
+        'mini2.title': '100% seguro', 'mini2.desc': 'Sin riesgo para tu máquina. Copia de seguridad, pruebas de estabilidad y reversión siempre posible.',
+        'mini3.title': 'Atención directa', 'mini3.desc': 'Hablas directamente conmigo de principio a fin, sin agentes ni bots.',
+        'process.label': 'Proceso', 'process.title1': 'Simple, transparente,', 'process.title2': 'y a tu medida.',
+        'process1.title': 'Pides el presupuesto', 'process1.desc': 'Haces clic en el botón, abres el formulario y me cuentas la configuración de tu PC y qué quieres resolver.',
+        'process2.title': 'Analizo tu máquina', 'process2.desc': 'Estudio cada pieza, tu sistema y tu uso, y armo una propuesta hecha a tu medida.',
+        'process3.title': 'Agendamos y optimizo', 'process3.desc': 'Reservamos un horario y hago la optimización remota contigo mirando y probando en vivo.',
+        'process4.title': 'Soporte continuo', 'process4.desc': 'Después de la entrega seguimos en contacto para el ajuste fino y cualquier duda futura.',
+        'fps.label': 'Datos reales', 'fps.title1': 'Comparativa de', 'fps.title2': 'rendimiento.',
+        'fps.desc': 'Antes y después de la optimización, medido en condiciones reales de juego. Es la diferencia que sientes en el primer clic.',
+        'fps.m1.label': 'FPS', 'fps.m1.desc': 'Aumento medio en títulos competitivos.',
+        'fps.m2.label': 'Temperatura', 'fps.m2.desc': 'Consumo energético reducido.',
+        'fps.m3.label': 'Latencia', 'fps.m3.desc': 'Reducción del input lag del sistema.',
+        'fps.m4.label': 'Estabilidad', 'fps.m4.desc': 'Cero caídas bruscas de frames.',
+        'fps.note': '*Nota: Las métricas mostradas representan medias obtenidas en pruebas internas. Las ganancias reales varían y dependen directamente de las especificaciones de hardware, la refrigeración y el estado físico de cada ordenador.',
+        'fps.base': 'Base', 'fps.optimized': 'Optimizado', 'fps.status': 'Estado', 'fps.verified': 'Verificado', 'fps.lagReduction': 'Reducción de lag',
+        'testimonials.label': 'Resultados reales', 'testimonials.title': 'Lo que dicen del servicio', 'testimonials.label2': 'Más testimonios',
+        'knownClients.label': 'Clientes conocidos', 'knownClients.badge': 'Cliente conocido', 'knownClients.followers': 'Seguidores',
+        'knownClients.ftnlucca.text': '"Mi padre y yo hacemos directos de Fortnite, así que necesitamos un PC con el máximo rendimiento y estabilidad. Después de la optimización de Gustavo Tweaks gané más FPS y la experiencia mejoró muchísimo. Me ha ayudado mucho en los directos y en las partidas. ¡Lo recomiendo totalmente!"',
+        'testimonial1.text': '"El Fortnite competitivo se trababa. Pasó a 240+ FPS estables y el input quedó instantáneo."',
+        'testimonial2.text': '"Salto brutal de FPS y el PC dejó de calentarse. Trabajo impecable, valió cada peso."',
+        'testimonial3.text': '"Pensé que mi PC ya no daba más. Después de la optimización parecía otra máquina en Valorant."',
+        'testimonial4.text': '"Soporte impecable, todo explicado durante el proceso. Ya se lo recomendé a todo mi equipo."',
+        'nav.partners': 'Colaboradores',
+        'partners.label': 'Colaboraciones', 'partners.title1': 'Nuestros', 'partners.title2': 'colaboradores',
+        'partners.desc': 'Creadores y organizaciones que confían en el trabajo de GuTweaks y recomiendan la optimización a quien juega en serio.',
+        'partners.lucca.cat': 'Creador de contenido', 'partners.lucca.role': 'Prodigio de Fortnite y creador de contenido digital',
+        'partners.lucca.desc': 'Joven talento del competitivo de Fortnite, reconocido por su mecánica refinada y por el contenido que comparte con su comunidad en directos y redes sociales. Uno de los creadores que ya usa la optimización de GuTweaks para mantener el rendimiento al máximo nivel.',
+        'partners.trevo.cat': 'Organización de esports', 'partners.trevo.role': 'Organización profesional de esports',
+        'partners.trevo.desc': 'Organización profesional de esports con plantilla competitiva y presencia activa en la escena, reuniendo jugadores y creadores en busca del máximo rendimiento. Socia de GuTweaks en la optimización de los PCs del equipo.',
+        'faq.label': 'FAQ', 'faq.title1': 'Preguntas', 'faq.title2': 'frecuentes', 'faq.desc': '¿Te quedó alguna duda? Abre el presupuesto y pregúntame directamente por ahí.',
+        'faq1.q': '¿Cómo se hace la optimización?', 'faq1.a': 'Se hace de forma remota, con acceso autorizado por ti. Hago copia de seguridad, ajustes de BIOS, optimización de Windows, overclock cuando corresponde y pruebas de estabilidad antes de entregar.',
+        'faq2.q': '¿Hay riesgo para mi máquina?', 'faq2.a': 'No. Todo el proceso es reversible, siempre con copia de seguridad y ajustes dentro de los límites seguros de tu hardware. Nada de voltajes absurdos ni tweaks que comprometan la vida útil.',
+        'faq3.q': '¿Acceden a mis archivos personales?', 'faq3.a': 'No. El acceso se limita solo a lo necesario para la optimización. Tus archivos personales no se abren, ni se mueven, ni se recopilan.',
+        'faq4.q': '¿Cuánto tarda?', 'faq4.a': 'Depende de la configuración y de lo que vayamos a ajustar. De media entre 2h y 4h, contigo acompañando por videollamada.',
+        'faq5.q': '¿Entran en llamada durante la optimización?', 'faq5.a': 'Sí. Todo el proceso se hace contigo presente en la llamada, pudiendo probar antes y después de cada ajuste.',
+        'faq6.q': '¿Hay garantía o reembolso?', 'faq6.a': 'Garantía sí, reembolso no. Valoro mucho mi servicio y cada optimización es personalizada, con tiempo dedicado solo a tu máquina — por eso no trabajo con reembolsos. Lo que sí garantizo es el acompañamiento: si algo no queda como lo acordado, lo ajusto las veces que haga falta hasta que el resultado sea perfecto.',
+        'cta.title1': '¿Listo para sacar el', 'cta.titleGradient': 'máximo', 'cta.title2': 'de tu PC?',
+        'cta.desc': 'Abre el presupuesto, mándame tu configuración y lo agendamos hoy mismo.', 'cta.button': 'Pedir presupuesto personalizado',
+        'legal.back': 'Volver al inicio',
+        'footer.tos': 'Términos de Uso',
+        'footer.cookies': 'Política de Cookies',
+        'tos.title': 'Términos de Servicio',
+        'tos.sub': 'Al contratar nuestros servicios, aceptas los términos a continuación.',
+        'tos.c1.t': 'Optimización vía AnyDesk',
+        'tos.c1.d': 'La optimización se realiza de forma remota mediante AnyDesk, con configuraciones personalizadas para extraer el máximo de tu hardware.',
+        'tos.c2.t': 'Calidad y Plazo',
+        'tos.c2.d': 'Priorizamos la calidad y la personalización. El proceso puede tomar un tiempo extra para garantizar el mejor resultado.',
+        'tos.c3.t': 'Alta Demanda',
+        'tos.c3.d': 'En periodos de alta demanda la fila puede crecer. Todos los clientes son atendidos con excelencia. Agradecemos tu paciencia.',
+        'tos.c4.t': 'Política de Reembolso',
+        'tos.c4.d': 'No realizamos reembolsos. Garantizamos una optimización diseñada para liberar el máximo rendimiento. Los resultados varían según el PC. Para mejoras adicionales, considera una actualización de hardware.',
+        'tos.c5.t': 'Limitaciones',
+        'tos.c5.d': 'No cambiamos piezas de hardware. Ajustamos y configuramos tu sistema dentro de las capacidades del equipo. Las ganancias de FPS varían (90–170+ FPS según la máquina).',
+        'tos.c6.t': 'Resultados',
+        'tos.c6.d': 'Aumento significativo de FPS, eliminación de input lag y tirones. Enfoque en fluidez y respuesta del sistema.',
+        'tos.foot': 'Gracias por la confianza. — GuTweaks',
+        'ck.title': 'Política de Cookies',
+        'ck.sub': 'Descubre cómo usamos las cookies para mejorar tu experiencia.',
+        'ck.c1.t': '¿Qué son las Cookies?',
+        'ck.c1.d': 'Las cookies son pequeños archivos de texto almacenados en tu navegador cuando visitas nuestro sitio. Nos ayudan a recordar tus preferencias, entender cómo usas el sitio y mejorar tu experiencia de navegación.',
+        'ck.c2.t': 'Cookies Esenciales',
+        'ck.c2.d': 'Son necesarias para el funcionamiento básico del sitio, como mantener tu sesión activa, la autenticación y las preferencias de idioma/tema. Sin ellas el sitio no funciona correctamente. Estas cookies no se pueden desactivar.',
+        'ck.c3.t': 'Cookies de Rendimiento',
+        'ck.c3.d': 'Recopilan información sobre cómo usas el sitio — qué páginas visitas más, tiempos de carga y posibles errores. Estos datos son agregados y anónimos, usados exclusivamente para mejorar el rendimiento y la experiencia.',
+        'ck.c4.t': 'Cookies de Funcionalidad',
+        'ck.c4.d': 'Permiten que el sitio recuerde tus elecciones, como tema oscuro/claro, idioma preferido y ajustes de notificación. Ofrecen una experiencia más personalizada y consistente entre sesiones.',
+        'ck.c5.t': 'Cookies de Análisis',
+        'ck.c5.d': 'Usamos herramientas de análisis para entender el comportamiento de los visitantes de forma agregada. Incluye datos como páginas más visitadas, origen del tráfico y tiempo medio de permanencia. No se comparte información personal identificable con terceros.',
+        'ck.c6.t': 'Cookies de Terceros',
+        'ck.c6.d': 'Algunos servicios integrados en nuestro sitio (como procesadores de pago y redes sociales) pueden establecer sus propias cookies. No tenemos control directo sobre ellas — recomendamos consultar la política de privacidad de cada servicio.',
+        'ck.c7.t': 'Gestión de Cookies',
+        'ck.c7.d': 'Puedes gestionar o eliminar las cookies en cualquier momento desde la configuración de tu navegador. Ten en cuenta que desactivar ciertas cookies puede afectar la funcionalidad del sitio.',
+        'ck.c8.t': 'Actualizaciones de esta Política',
+        'ck.c8.d': 'Podemos actualizar esta Política de Cookies periódicamente para reflejar cambios en nuestras prácticas o por exigencias legales. Recomendamos revisar esta página con regularidad. La fecha de la última actualización estará siempre indicada abajo.',
+        'ck.noteText': 'Al continuar navegando en nuestro sitio, aceptas el uso de cookies según lo descrito en esta política.',
+        'ck.noteBtn': 'Acepto la Política de Cookies',
+        'ck.foot': 'Última actualización: Agosto de 2026 — GuTweaks',
+        'ckbar.text': 'Usamos cookies para analizar el uso del sitio y mejorar tu experiencia.',
+        'ckbar.link': 'Ver Política de Cookies',
+        'ckbar.accept': 'Aceptar',
+        'ckbar.reject': 'Solo esenciales',
+        'footer.tagline': 'Hecho por un gamer, para gamers.', 'footer.support': '¿Ya eres cliente? Abrir ticket de soporte', 'floating.cta': 'Presupuesto',
+        'chat.name': 'Atención GuTweaks', 'chat.sub': 'En línea — respuesta en minutos', 'chat.waButton': 'Hablar ahora por WhatsApp', 'chat.waOptionLabel': 'Opción 2 (opcional):',
+        'opt.eyebrow': 'Ingeniería de rendimiento', 'opt.title1': '¿Qué es la', 'opt.title2': 'optimización?',
+        'opt.desc': 'Cada ajuste tiene un propósito: más frames, menos delay, menos calor y más años de vida útil para tu PC.',
+        'opt.c1.title': 'Overclock saludable', 'opt.c1.desc': 'Por videollamada entramos en la BIOS de tu placa base. Aumento el rendimiento subiendo las frecuencias y reduzco las temperaturas bajando los voltajes.',
+        'opt.c2.title': 'Input lag cero', 'opt.c2.desc': 'Instalación de un Windows 100% optimizado a partir del original de Microsoft. Sin programas ni servicios inútiles frenando tu PC. Acceso de por vida a futuras versiones.',
+        'opt.c3.title': 'Atención remota', 'opt.c3.desc': 'El procedimiento dura de media entre 1h y 2h, de forma totalmente remota. Yo desde aquí y tú desde ahí, pudiendo ver e intervenir en todo lo que se hace.',
+        'opt.c4.title': 'Después, ¡hazlo tú mismo!', 'opt.c4.desc': 'Recibes un manual de cuidados prácticos esenciales para mantener la máquina volando por tu cuenta, con enlaces de drivers y futuras actualizaciones. Total autonomía, sin mensualidades.',
+        'opt.tag1': 'Deep Tuning', 'opt.tag2': 'Respuesta rápida', 'opt.tag3': 'Para tu comodidad', 'opt.tag4': 'Autonomía',
+        'acct.login': 'Entrar', 'acct.myAccount': 'Mi cuenta', 'acct.title': 'Entrar en la cuenta', 'acct.sub': 'Acceso para el administrador del sitio y creadores de contenido asociados.', 'acct.email': 'Correo', 'acct.password': 'Contraseña', 'acct.submit': 'Entrar',
+        'ticket.title': 'Pide tu presupuesto', 'ticket.sub': 'Cuéntame por aquí lo que necesitas — el pedido llega directo a mí y te respondo lo antes posible. Sin salir a WhatsApp.',
+        'ticket.titleSupport': 'Abrir ticket de soporte', 'ticket.subSupport': 'Cuéntame por aquí cuál es el problema — el ticket llega directo a mí y te respondo lo antes posible. Sin salir a WhatsApp.',
+        'ticket.name': 'Tu nombre', 'ticket.namePh': 'Ej.: Juan Pérez', 'ticket.contact': 'Contacto (correo o WhatsApp)', 'ticket.contactPh': 'Ej.: juan@email.com o +54 9 11 1234-5678',
+        'ticket.category': 'Categoría', 'ticket.cat1': 'Presupuesto / Nuevo servicio', 'ticket.cat2': 'Soporte técnico', 'ticket.cat3': 'Duda sobre el servicio', 'ticket.cat4': 'Cobro / Pago', 'ticket.cat5': 'Otro',
+        'ticket.message': 'Describe lo que necesitas', 'ticket.messagePh': 'Ej.: la configuración de tu PC, qué quieres mejorar o el problema que estás teniendo...',
+        'ticket.coupon': 'Cupón de descuento (opcional)', 'ticket.couponPh': 'Ej.: FTNLUCCA', 'ticket.submit': 'Abrir ticket', 'ticket.sending': 'Enviando…',
+        'ticket.altBtn': 'Contactar por otras redes (opcional)', 'ticket.altHint': 'Opción 2 · Discord y WhatsApp', 'ticket.waInline': 'hablar ahora por WhatsApp',
+        'net.title': 'Hablar por otras redes', 'net.sub': '¿Prefieres hablar directo? Elige un canal oficial abajo — atención por Discord o WhatsApp Business.',
+        'net.d1name': 'Discord — Embajadores FTNLUCCA', 'net.d1desc': 'Comunidad oficial de los embajadores', 'net.d2name': 'Discord — GustavoTweaks (oficial)', 'net.d2desc': 'Servidor oficial de GuTweaks', 'net.wadesc': 'Atención directa conmigo', 'net.hint': 'Normalmente respondo en pocos minutos'
       }
     };
 
     let currentLang = 'pt';
 
+    const LANGS = ['pt', 'en', 'es'];
+
+    function tr(key, lang) {
+      const l = lang || currentLang;
+      const dict = I18N[l] || I18N.pt;
+      if (dict[key] !== undefined) return dict[key];
+      if (I18N.pt[key] !== undefined) return I18N.pt[key];
+      return '';
+    }
+    window.tr = tr;
+
     function applyTranslations(lang) {
+      if (!I18N[lang]) lang = 'pt';
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (I18N[lang][key] !== undefined) el.textContent = I18N[lang][key];
+        const val = tr(key, lang);
+        if (val) el.textContent = val;
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const val = tr(el.getAttribute('data-i18n-ph'), lang);
+        if (val) el.setAttribute('placeholder', val);
       });
       var _t = document.getElementById('pageTitle');
-      if (_t) _t.textContent = I18N[lang]['meta.title']; else document.title = I18N[lang]['meta.title'];
+      if (_t) _t.textContent = tr('meta.title', lang); else document.title = tr('meta.title', lang);
       var _d = document.getElementById('metaDesc') || document.querySelector('meta[name="description"]');
-      if (_d) _d.setAttribute('content', I18N[lang]['meta.desc']);
-      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+      if (_d) _d.setAttribute('content', tr('meta.desc', lang));
+      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : (lang === 'es' ? 'es' : 'en');
       var _bp = document.getElementById('langBtnPt'); if (_bp) _bp.classList.toggle('active', lang === 'pt');
       var _be = document.getElementById('langBtnEn'); if (_be) _be.classList.toggle('active', lang === 'en');
+      var _bs = document.getElementById('langBtnEs'); if (_bs) _bs.classList.toggle('active', lang === 'es');
+      try { window.dispatchEvent(new CustomEvent('gutweaks:lang', { detail: lang })); } catch (e) {}
     }
 
     function setLanguage(lang) {
@@ -1571,7 +1995,7 @@
     (function initLanguage(){
       let saved = null;
       try { saved = localStorage.getItem('gutweaks_lang'); } catch(e) {}
-      if (saved === 'pt' || saved === 'en') {
+      if (LANGS.indexOf(saved) !== -1) {
         currentLang = saved;
         applyTranslations(saved);
         document.getElementById('langOverlay').classList.add('hidden');
@@ -1836,17 +2260,10 @@
       const titleEl = document.getElementById('ticketTitle');
       const subEl = document.getElementById('ticketSub');
       const isEn = currentLang === 'en';
-      if (isOrcamento) {
-        titleEl.textContent = isEn ? 'Request your quote' : 'Peça seu orçamento';
-        subEl.textContent = isEn
-          ? "Tell me what you need here — your request comes straight to me and I'll reply as soon as possible. No need to leave for WhatsApp."
-          : 'Me conta o que você precisa por aqui — o pedido vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.';
-      } else {
-        titleEl.textContent = isEn ? 'Open a support ticket' : 'Abrir chamado de suporte';
-        subEl.textContent = isEn
-          ? "Tell me what's going on here — your ticket comes straight to me and I'll reply as soon as possible. No need to leave for WhatsApp."
-          : 'Me conta qual é o problema por aqui — o chamado vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.';
-      }
+      titleEl.textContent = tr(isOrcamento ? 'ticket.title' : 'ticket.titleSupport');
+      titleEl.setAttribute('data-i18n', isOrcamento ? 'ticket.title' : 'ticket.titleSupport');
+      subEl.textContent = tr(isOrcamento ? 'ticket.sub' : 'ticket.subSupport');
+      subEl.setAttribute('data-i18n', isOrcamento ? 'ticket.sub' : 'ticket.subSupport');
       const waInline = document.getElementById('ticketWaInline');
       if (waInline) {
         const waText = isOrcamento
@@ -1855,7 +2272,7 @@
         waInline.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
       }
       ticketSubmitBtn.disabled = false;
-      ticketSubmitBtn.textContent = 'Abrir chamado';
+      ticketSubmitBtn.textContent = tr('ticket.submit');
     }
     function closeTicket(){ ticketOverlay.classList.add('hidden'); }
 
@@ -1878,7 +2295,7 @@
       }
 
       ticketSubmitBtn.disabled = true;
-      ticketSubmitBtn.textContent = 'Enviando…';
+      ticketSubmitBtn.textContent = tr('ticket.sending');
       try {
         const ticketId = await window.GT.saveTicket({ nome, contato, categoria, mensagem, cupom, isOrcamento, lang: currentLang });
         const shortId = '#' + ticketId.slice(-6).toUpperCase();
@@ -1893,11 +2310,11 @@
         closeTicket();
         GT.openLiveChat(ticketId, shortId, waText);
         ticketSubmitBtn.disabled = false;
-        ticketSubmitBtn.textContent = 'Abrir chamado';
+        ticketSubmitBtn.textContent = tr('ticket.submit');
       } catch(e) {
         ticketError.textContent = 'Não consegui abrir o chamado agora. Tenta de novo em instantes, ou fala direto no WhatsApp.';
         ticketSubmitBtn.disabled = false;
-        ticketSubmitBtn.textContent = 'Abrir chamado';
+        ticketSubmitBtn.textContent = tr('ticket.submit');
       }
     }
 
@@ -2470,10 +2887,10 @@
     currentUser = user;
     if (user) {
       currentProfile = await ensureProfile(user).catch(()=>null);
-      $('acctBtnLabel').textContent = currentProfile ? 'Minha conta' : (user.email || 'Conta');
+      $('acctBtnLabel').textContent = currentProfile ? tr('acct.myAccount') : (user.email || 'Conta');
     } else {
       currentProfile = null;
-      $('acctBtnLabel').textContent = 'Entrar';
+      $('acctBtnLabel').textContent = tr('acct.login');
       cache.leads = cache.creators = cache.coupons = cache.myLeads = cache.manual = cache.myManual = cache.linkClicks = cache.myLinkClicks = cache.tickets = null;
     }
   });
@@ -3037,28 +3454,51 @@
       var target = parseFloat(el.getAttribute('data-count'));
       var prefix = el.getAttribute('data-prefix') || '';
       var suffix = el.getAttribute('data-suffix') || '';
+      var decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
       if (isNaN(target)) return;
-      if (reduce) { el.textContent = prefix + target + suffix; return; }
-      var dur = 1900, start = null;
+      var loc = (document.documentElement.lang || 'pt-BR');
+      function fmt(v) {
+        return v.toLocaleString(loc, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+      }
+      if (reduce) { el.textContent = prefix + fmt(target) + suffix; return; }
+      var dur = 1700, start = null;
       function step(ts) {
         if (start === null) start = ts;
         var p = Math.min((ts - start) / dur, 1);
         var eased = 1 - Math.pow(1 - p, 3);
-        var val = Math.round(target * eased);
-        if (p < 0.92) { val = Math.max(0, val + Math.round((Math.random() - 0.5) * target * 0.06 * (1 - p))); }
-        el.textContent = prefix + val.toLocaleString('pt-BR') + suffix;
+        var val = target * eased;
+        if (p < 0.9) { val = Math.max(0, val + (Math.random() - 0.5) * target * 0.05 * (1 - p)); }
+        var factor = Math.pow(10, decimals);
+        val = Math.round(val * factor) / factor;
+        el.textContent = prefix + fmt(val) + suffix;
         if (p < 1) requestAnimationFrame(step);
-        else el.textContent = prefix + target.toLocaleString('pt-BR') + suffix;
+        else el.textContent = prefix + fmt(target) + suffix;
       }
+      el.classList.add('is-counting');
+      setTimeout(function () { el.classList.remove('is-counting'); }, dur + 100);
       requestAnimationFrame(step);
+    }
+
+    function ready() {
+      var o = document.getElementById('langOverlay');
+      if (!o) return true;
+      if (o.classList.contains('hidden')) return true;
+      var st = window.getComputedStyle(o);
+      return st.display === 'none' || st.visibility === 'hidden' || parseFloat(st.opacity) === 0;
     }
 
     function init() {
       if (initialized) return;
-      var languageOverlay = document.getElementById('langOverlay');
-      if (languageOverlay && !languageOverlay.classList.contains('hidden')) return;
+      if (!ready()) return;
       initialized = true;
       var counters = document.querySelectorAll('[data-count]');
+      if (!reduce) {
+        counters.forEach(function (el) {
+          var d = parseInt(el.getAttribute('data-decimals') || '0', 10);
+          var zero = d ? (0).toFixed(d).replace('.', (document.documentElement.lang || 'pt').indexOf('en') === 0 ? '.' : ',') : '0';
+          el.textContent = (el.getAttribute('data-prefix') || '') + zero + (el.getAttribute('data-suffix') || '');
+        });
+      }
       var revealSel = '.stat-item, .surface-card, .section-head, .process-card, .opt-card';
       var reveals = [];
       if (!reduce) {
@@ -3083,17 +3523,88 @@
           el.classList.add('in-view');
           io.unobserve(el);
         });
-      }, { threshold: 0.35, rootMargin: '0px 0px -18% 0px' });
+      }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
 
       counters.forEach(function (el) { io.observe(el); });
       reveals.forEach(function (el, i) { el.style.transitionDelay = (Math.min(i % 4, 3) * 70) + 'ms'; io.observe(el); });
+
+      /* rede de segurança: se por qualquer motivo o observer não disparar,
+         anima todo contador que estiver visível na tela */
+      function sweep() {
+        var vh = window.innerHeight || 0;
+        counters.forEach(function (el) {
+          if (el.dataset.counted) return;
+          var r = el.getBoundingClientRect();
+          if (r.height === 0 && r.width === 0) return;
+          if (r.top < vh * 0.95 && r.bottom > 0) { el.dataset.counted = '1'; animateCount(el); el.classList.add('in-view'); }
+        });
+      }
+      window.addEventListener('scroll', function () { requestAnimationFrame(sweep); }, { passive: true });
+      window.addEventListener('resize', sweep, { passive: true });
+      var sw = setInterval(sweep, 600);
+      setTimeout(function () { clearInterval(sw); }, 60000);
+      setTimeout(sweep, 300);
     }
 
-    window.addEventListener('gutweaks:site-ready', function () {
-      window.setTimeout(init, 180);
-    }, { once: true });
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-    else init();
+    /* tenta iniciar assim que o site estiver visível (após escolher idioma) */
+    function watch() {
+      init();
+      if (initialized) return;
+      var tries = 0;
+      var t = setInterval(function () {
+        tries++;
+        init();
+        if (initialized || tries > 600) clearInterval(t);
+      }, 250);
+      document.addEventListener('click', function () { setTimeout(init, 120); }, true);
+    }
+
+    /* barra de progresso de rolagem */
+    function progressBar() {
+      if (document.getElementById('gt-progress')) return;
+      var bar = document.createElement('div');
+      bar.id = 'gt-progress';
+      document.body.appendChild(bar);
+      var ticking = false;
+      function upd() {
+        var h = document.documentElement.scrollHeight - window.innerHeight;
+        var p = h > 0 ? Math.min(window.scrollY / h, 1) : 0;
+        bar.style.transform = 'scaleX(' + p + ')';
+        ticking = false;
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(upd); }
+      }, { passive: true });
+      upd();
+    }
+
+    /* parallax discreto nos títulos de seção */
+    function parallax() {
+      if (reduce) return;
+      var heads = [].slice.call(document.querySelectorAll('.section-head, .footer-hero img'));
+      if (!heads.length) return;
+      var ticking = false;
+      function upd() {
+        var vh = window.innerHeight;
+        heads.forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          if (r.bottom < -200 || r.top > vh + 200) return;
+          var d = (r.top + r.height / 2 - vh / 2) / vh;
+          el.style.transform = 'translateY(' + (d * -10).toFixed(2) + 'px)';
+        });
+        ticking = false;
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(upd); }
+      }, { passive: true });
+      upd();
+    }
+
+    function boot() { watch(); progressBar(); parallax(); }
+
+    window.addEventListener('gutweaks:site-ready', function () { setTimeout(boot, 120); }, { once: true });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+    else boot();
   })();
   </script>
   <script>
@@ -3102,5 +3613,265 @@
   window.openNetworks = openNetworks; window.closeNetworks = closeNetworks;
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeNetworks(); });
   </script>
+  <!-- ================= TERMOS DE SERVIÇO ================= -->
+  <div id="tosPage" class="legal-page hidden" role="dialog" aria-modal="true">
+    <div class="legal-wrap">
+      <button type="button" class="legal-back" onclick="GTLegal.close()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span data-i18n="legal.back"></span></button>
+      <div class="legal-head">
+        <span class="legal-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5M9 13h6M9 17h4"/></svg></span>
+        <div><h2 data-i18n="tos.title"></h2><p data-i18n="tos.sub"></p></div>
+      </div>
+      <div class="legal-list">
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c1.t"></h3>
+            <p data-i18n="tos.c1.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 5.5L20.5 9l-4.2 4 1 6-5.3-2.8L6.7 19l1-6-4.2-4 6-.5z"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c2.t"></h3>
+            <p data-i18n="tos.c2.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c3.t"></h3>
+            <p data-i18n="tos.c3.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c4.t"></h3>
+            <p data-i18n="tos.c4.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 10a2 2 0 1 1 0 4 1.6 1.6 0 0 0-1.6 1z"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c5.t"></h3>
+            <p data-i18n="tos.c5.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4c3 0 6 3 6 6-2.5 4.5-6 7-10 8l-4-4c1-4 3.5-7.5 8-10z"/><circle cx="14.5" cy="9.5" r="1.5"/><path d="M6 14c-1.5 1-2 4-2 4s3-.5 4-2"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c6.t"></h3>
+            <p data-i18n="tos.c6.d"></p>
+          </div>
+        </div>
+      </div>
+      <p class="legal-foot" data-i18n="tos.foot"></p>
+    </div>
+  </div>
+
+  <!-- ================= POLÍTICA DE COOKIES ================= -->
+  <div id="cookiePage" class="legal-page hidden" role="dialog" aria-modal="true">
+    <div class="legal-wrap">
+      <button type="button" class="legal-back" onclick="GTLegal.close()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span data-i18n="legal.back"></span></button>
+      <div class="legal-head">
+        <span class="legal-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4 4 0 0 1-5-5 3.5 3.5 0 0 1-4-4z"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="14" r="1"/><circle cx="10" cy="15" r="1"/></svg></span>
+        <div><h2 data-i18n="ck.title"></h2><p data-i18n="ck.sub"></p></div>
+      </div>
+      <div class="legal-list">
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c1.t"></h3>
+            <p data-i18n="ck.c1.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c2.t"></h3>
+            <p data-i18n="ck.c2.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c3.t"></h3>
+            <p data-i18n="ck.c3.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 10a2 2 0 1 1 0 4 1.6 1.6 0 0 0-1.6 1z"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c4.t"></h3>
+            <p data-i18n="ck.c4.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.5"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c5.t"></h3>
+            <p data-i18n="ck.c5.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c6.t"></h3>
+            <p data-i18n="ck.c6.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="6"/><circle cx="8" cy="12" r="3"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c7.t"></h3>
+            <p data-i18n="ck.c7.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c8.t"></h3>
+            <p data-i18n="ck.c8.d"></p>
+          </div>
+        </div>
+      </div>
+      <div class="legal-note">
+        <p data-i18n="ck.noteText"></p>
+        <button type="button" class="brand-btn ripple-fx" onclick="GTCookies.accept(true)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4 4 0 0 1-5-5 3.5 3.5 0 0 1-4-4z"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="14" r="1"/><circle cx="10" cy="15" r="1"/></svg><span data-i18n="ck.noteBtn"></span></button>
+      </div>
+      <p class="legal-foot" data-i18n="ck.foot"></p>
+    </div>
+  </div>
+
+  <!-- ================= COOKIE BANNER ================= -->
+  <div id="cookieBar" class="cookie-bar hidden" role="region" aria-label="Cookies">
+    <p><span data-i18n="ckbar.text"></span> <a onclick="GTLegal.openCookies()" data-i18n="ckbar.link"></a></p>
+    <div class="cookie-actions">
+      <button type="button" class="ck-reject" onclick="GTCookies.reject()" data-i18n="ckbar.reject"></button>
+      <button type="button" class="ck-accept" onclick="GTCookies.accept()" data-i18n="ckbar.accept"></button>
+    </div>
+  </div>
+
+  <script>
+  /* ================= LEGAL PAGES ================= */
+  (function () {
+    function open(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      document.querySelectorAll('.legal-page').forEach(function (p) { p.classList.add('hidden'); });
+      el.classList.remove('hidden');
+      el.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      if (window.GTA) window.GTA.track('view_page', { page: id });
+    }
+    function close() {
+      document.querySelectorAll('.legal-page').forEach(function (p) { p.classList.add('hidden'); });
+      document.body.style.overflow = '';
+    }
+    window.GTLegal = {
+      openTos: function () { open('tosPage'); },
+      openCookies: function () { open('cookiePage'); },
+      close: close
+    };
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    if (location.hash === '#termos' || location.hash === '#terms') open('tosPage');
+    if (location.hash === '#cookies') open('cookiePage');
+  })();
+
+  /* ================= COOKIES + ANALYTICS ================= */
+  (function () {
+    var KEY = 'gutweaks_cookie_consent';
+    var DKEY = 'gutweaks_analytics';
+
+    function get(k, def) { try { var v = localStorage.getItem(k); return v === null ? def : v; } catch (e) { return def; } }
+    function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function consent() { return get(KEY, null); }
+
+    function setCookie(name, value, days) {
+      var d = new Date(); d.setTime(d.getTime() + days * 864e5);
+      document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+    }
+    function readCookie(name) {
+      var m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+      return m ? decodeURIComponent(m[2]) : null;
+    }
+
+    var store = { visits: 0, events: [], firstVisit: null, lastVisit: null, maxScroll: 0, totalTime: 0 };
+    try { var raw = localStorage.getItem(DKEY); if (raw) store = Object.assign(store, JSON.parse(raw)); } catch (e) {}
+    function save() { try { localStorage.setItem(DKEY, JSON.stringify(store)); } catch (e) {} }
+
+    function allowed() { return consent() === 'all'; }
+
+    function track(name, data) {
+      if (!allowed()) return;
+      store.events.push({ e: name, d: data || {}, t: Date.now() });
+      if (store.events.length > 300) store.events = store.events.slice(-300);
+      save();
+    }
+
+    function startSession() {
+      if (!allowed()) return;
+      var vid = readCookie('gt_visitor');
+      if (!vid) { vid = 'v' + Math.random().toString(36).slice(2) + Date.now().toString(36); setCookie('gt_visitor', vid, 365); }
+      setCookie('gt_session', Date.now(), 1);
+      store.visits = (store.visits || 0) + 1;
+      store.firstVisit = store.firstVisit || new Date().toISOString();
+      store.lastVisit = new Date().toISOString();
+      save();
+      track('page_view', { ref: document.referrer || 'direct', lang: document.documentElement.lang, w: window.innerWidth });
+
+      var start = Date.now(), ticking = false;
+      window.addEventListener('scroll', function () {
+        if (ticking) return; ticking = true;
+        requestAnimationFrame(function () {
+          var h = document.documentElement.scrollHeight - window.innerHeight;
+          var pct = h > 0 ? Math.round((window.scrollY / h) * 100) : 0;
+          if (pct > (store.maxScroll || 0)) { store.maxScroll = pct; if (pct % 25 === 0) track('scroll_depth', { pct: pct }); }
+          ticking = false;
+        });
+      }, { passive: true });
+
+      document.addEventListener('click', function (ev) {
+        var el = ev.target.closest('button, a');
+        if (!el) return;
+        track('click', { label: (el.innerText || el.getAttribute('aria-label') || '').trim().slice(0, 40), href: el.getAttribute('href') || '' });
+      }, true);
+
+      window.addEventListener('beforeunload', function () {
+        store.totalTime = (store.totalTime || 0) + Math.round((Date.now() - start) / 1000);
+        save();
+      });
+    }
+
+    function hideBar() { var b = document.getElementById('cookieBar'); if (b) b.classList.add('hidden'); }
+    function showBar() { var b = document.getElementById('cookieBar'); if (b) b.classList.remove('hidden'); }
+
+    window.GTCookies = {
+      accept: function (fromPage) {
+        set(KEY, 'all'); setCookie('gt_consent', 'all', 365);
+        hideBar(); startSession(); track('consent', { value: 'all' });
+        if (fromPage) window.GTLegal.close();
+      },
+      reject: function () { set(KEY, 'essential'); setCookie('gt_consent', 'essential', 365); hideBar(); },
+      reset: function () { try { localStorage.removeItem(KEY); } catch (e) {} showBar(); },
+      status: consent,
+      data: function () { return store; }
+    };
+    window.GTA = { track: track };
+
+    function boot() {
+      if (consent() === null) {
+        var o = document.getElementById('langOverlay');
+        if (o && !o.classList.contains('hidden')) { setTimeout(boot, 500); return; }
+        showBar();
+      } else if (consent() === 'all') {
+        startSession();
+      }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(boot, 800); });
+    else setTimeout(boot, 800);
+  })();
+  </script>
+
 </body>
 </html>
