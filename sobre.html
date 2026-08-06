@@ -4,9 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Sobre — GustavoTweaks | Otimização profissional de PC</title>
-<meta name="description" content="Conheça o GustavoTweaks: já otimizei mais de 1500 PCs no Brasil, extraindo máxima performance com ajustes finos de BIOS, Windows e hardware." />
+<meta name="description" content="Conheça o GustavoTweaks: já otimizei mais de 2000 PCs no Brasil, extraindo máxima performance com ajustes finos de BIOS, Windows e hardware." />
 <meta property="og:title" content="Sobre — GustavoTweaks" />
-<meta property="og:description" content="Mais de 1500 PCs otimizados. Engenharia de alta performance para gamers e criadores." />
+<meta property="og:description" content="Mais de 2000 PCs otimizados. Engenharia de alta performance para gamers e criadores." />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="icon" type="image/png" sizes="32x32" href="/gutweaks-logo.png" />
@@ -15,12 +15,30 @@
 <link rel="shortcut icon" href="/gutweaks-logo.png" />
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  html,body{background:#0a0a0c;color:#fff;-webkit-font-smoothing:antialiased}
-  body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .vignette{background:radial-gradient(ellipse at center,transparent 20%,#0a0a0c 85%)}
-  .hero-glow{background:radial-gradient(1000px 500px at 50% -10%,rgba(255,255,255,0.08),transparent 60%)}
-  .cta-glow{background:radial-gradient(700px 400px at 50% 0%,rgba(255,255,255,0.08),transparent 60%)}
+  /* Fundo idêntico ao do site principal (GuTweaks) */
+  :root{ --bg:#080808; --bg-2:#0f0f0f; --bg-3:#141414; }
+  html,body{background:var(--bg);color:#fff;-webkit-font-smoothing:antialiased}
+  body{
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background-image:
+      radial-gradient(1200px 600px at 50% -10%, rgba(255,255,255,0.05), transparent 60%),
+      radial-gradient(900px 600px at 90% 10%, rgba(255,255,255,0.03), transparent 60%);
+    background-attachment: fixed;
+  }
+  .vignette{background:radial-gradient(ellipse at center,transparent 25%,rgba(8,8,8,0.92) 88%)}
+  .hero-glow{background:radial-gradient(1000px 500px at 50% -10%,rgba(255,255,255,0.07),transparent 60%)}
+  .cta-glow{background:radial-gradient(700px 400px at 50% 0%,rgba(255,255,255,0.07),transparent 60%)}
   .sig{filter:drop-shadow(0 0 18px rgba(255,255,255,0.12))}
+
+  /* Contadores animados (mesmo comportamento do site principal) */
+  [data-count]{ font-variant-numeric: tabular-nums; }
+  [data-count].is-counting{ animation: gt-count-pulse 1.7s ease-out; }
+  @keyframes gt-count-pulse{
+    0%{ transform: scale(0.985); opacity:.75; filter: blur(.4px); }
+    60%{ transform: scale(1.012); opacity:1; filter: blur(0); }
+    100%{ transform: scale(1); }
+  }
+
   /* Padrão abstrato em CSS puro — não depende de nenhuma imagem extra */
   .abstract-lines{
     background-image:
@@ -30,11 +48,11 @@
       linear-gradient(65deg, transparent 0 85%, rgba(255,255,255,0.04) 85% 85.2%, transparent 85.2%);
     -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
     mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
-    animation: linesDrift 22s ease-in-out infinite;
+    animation: linesDrift 15s ease-in-out infinite;
   }
   @keyframes linesDrift {
     0%, 100% { transform: translate3d(0,0,0) scale(1); opacity: 1; }
-    50% { transform: translate3d(-1.2%, 0.8%, 0) scale(1.015); opacity: 0.85; }
+    50% { transform: translate3d(-1.6%, 1.1%, 0) scale(1.02); opacity: 0.9; }
   }
   .grain-dots{
     background-image: radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px);
@@ -44,14 +62,44 @@
   /* Orbes de fundo, sutis, mono — mesma linguagem visual da home */
   .bg-orbs { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
   .bg-orb { position: absolute; border-radius: 999px; filter: blur(90px); will-change: transform; }
-  .bg-orb--1 { width: 42rem; height: 42rem; top: -14rem; left: -8rem; background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%); animation: orbFloat1 26s ease-in-out infinite; }
-  .bg-orb--2 { width: 34rem; height: 34rem; top: 30%; right: -12rem; background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%); animation: orbFloat2 32s ease-in-out infinite; }
-  .bg-orb--3 { width: 30rem; height: 30rem; bottom: -10rem; left: 20%; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); animation: orbFloat3 28s ease-in-out infinite; }
-  @keyframes orbFloat1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(4%, 6%); } }
-  @keyframes orbFloat2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-5%, -4%); } }
-  @keyframes orbFloat3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(3%, -5%); } }
+  .bg-orb--1 { width: 42rem; height: 42rem; top: -14rem; left: -8rem; background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%); animation: orbFloat1 17s ease-in-out infinite; }
+  .bg-orb--2 { width: 34rem; height: 34rem; top: 30%; right: -12rem; background: radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 70%); animation: orbFloat2 21s ease-in-out infinite; }
+  .bg-orb--3 { width: 30rem; height: 30rem; bottom: -10rem; left: 20%; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); animation: orbFloat3 19s ease-in-out infinite; }
+  @keyframes orbFloat1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(5%, 7%) scale(1.08); } }
+  @keyframes orbFloat2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-7%, -5%) scale(1.1); } }
+  @keyframes orbFloat3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(4%, -7%) scale(1.06); } }
   @media (prefers-reduced-motion: reduce) {
     .abstract-lines, .bg-orb { animation: none !important; }
+  }
+
+  /* Cards com leve elevação e brilho ao passar o mouse */
+  .stat-card{ transition: transform .35s cubic-bezier(.2,.7,.2,1), border-color .35s, box-shadow .35s, background .35s; }
+  .stat-card:hover{ transform: translateY(-6px); border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.045); box-shadow: 0 18px 50px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06); }
+  .stat-card .h-1\.5{ transition: box-shadow .35s, transform .35s; }
+  .stat-card:hover .h-1\.5{ box-shadow: 0 0 12px 3px rgba(255,255,255,0.6); transform: scale(1.4); }
+
+  /* Título com brilho sutil percorrendo o texto */
+  .shine-text{
+    background-image: linear-gradient(100deg, rgba(255,255,255,0.65) 0%, #fff 35%, rgba(255,255,255,0.65) 50%, #fff 65%, rgba(255,255,255,0.65) 100%);
+    background-size: 250% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shineMove 6s ease-in-out infinite;
+  }
+  @keyframes shineMove { 0%{ background-position: 200% 0; } 100%{ background-position: -50% 0; } }
+
+  /* Botão de CTA com pulso vivo */
+  .cta-pulse{ animation: ctaPulse 2.4s ease-in-out infinite; }
+  @keyframes ctaPulse {
+    0%,100%{ box-shadow: 0 0 0 0 rgba(255,255,255,0.35), 0 6px 20px rgba(255,255,255,0.12); }
+    50%{ box-shadow: 0 0 0 10px rgba(255,255,255,0), 0 10px 30px rgba(255,255,255,0.22); }
+  }
+
+  /* Pontinho "ao vivo" nos cards */
+  @keyframes livePulse { 0%,100%{ opacity:1; transform: scale(1);} 50%{ opacity:.45; transform: scale(1.5);} }
+  .live-dot{ animation: livePulse 1.8s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shine-text, .cta-pulse, .live-dot, .stat-card{ animation: none !important; }
   }
 
   /* Reveal suave ao rolar */
@@ -115,8 +163,8 @@
     <div class="pointer-events-none absolute inset-0 hero-glow"></div>
     <div class="mx-auto max-w-6xl px-6 pt-28 pb-24 text-center">
       <p class="text-[0.7rem] tracking-[0.35em] text-white/50">ENGENHARIA DE PERFORMANCE</p>
-      <h1 class="mt-6 font-light tracking-tight text-white text-4xl sm:text-6xl md:text-7xl leading-[1.05]">
-        OTIMIZAÇÃO DE PC<br /><span class="text-white/60">FEITA COM MÉTODO.</span>
+      <h1 class="mt-6 font-light tracking-tight text-4xl sm:text-6xl md:text-7xl leading-[1.05]">
+        <span class="shine-text">OTIMIZAÇÃO DE PC</span><br /><span class="text-white/60">FEITA COM MÉTODO.</span>
       </h1>
       <div class="mx-auto mt-8 h-px w-24 bg-white/40"></div>
       <p class="mx-auto mt-8 max-w-2xl text-white/60 text-base sm:text-lg">
@@ -124,12 +172,12 @@
       </p>
 
       <div class="mt-16 grid gap-4 sm:grid-cols-3">
-        <div class="relative rounded-2xl border border-white/10 bg-white/[0.02] p-6 text-left backdrop-blur-sm">
+        <div class="stat-card relative rounded-2xl border border-white/10 bg-white/[0.02] p-6 text-left backdrop-blur-sm">
           <div class="flex items-center justify-between">
             <p class="text-[0.65rem] tracking-[0.3em] text-white/50">SETUPS OTIMIZADOS</p>
-            <span class="h-1.5 w-1.5 rounded-full bg-white/70"></span>
+            <span class="live-dot h-1.5 w-1.5 rounded-full bg-white/70"></span>
           </div>
-          <p class="mt-6 text-4xl font-light text-white">1.500+</p>
+          <p class="mt-6 text-4xl font-light text-white" data-count="2000" data-suffix="+">2.000+</p>
           <p class="mt-2 text-[0.7rem] tracking-[0.2em] text-white/70">PCS OTIMIZADOS</p>
           <p class="mt-3 text-sm text-white/50">Máxima performance extraída com ajuste fino de hardware.</p>
         </div>
@@ -152,12 +200,12 @@
           </svg>
         </div>
 
-        <div class="relative rounded-2xl border border-white/10 bg-white/[0.02] p-6 text-left backdrop-blur-sm">
+        <div class="stat-card relative rounded-2xl border border-white/10 bg-white/[0.02] p-6 text-left backdrop-blur-sm">
           <div class="flex items-center justify-between">
             <p class="text-[0.65rem] tracking-[0.3em] text-white/50">ATENDIMENTO</p>
-            <span class="h-1.5 w-1.5 rounded-full bg-white/70"></span>
+            <span class="live-dot h-1.5 w-1.5 rounded-full bg-white/70"></span>
           </div>
-          <p class="mt-6 text-4xl font-light text-white">100%</p>
+          <p class="mt-6 text-4xl font-light text-white" data-count="100" data-suffix="%">100%</p>
           <p class="mt-2 text-[0.7rem] tracking-[0.2em] text-white/70">REMOTO E PERSONALIZADO</p>
           <p class="mt-3 text-sm text-white/50">Cada máquina recebe um plano sob medida, do início ao fim.</p>
         </div>
@@ -200,33 +248,33 @@
 
       <ol class="relative mt-16 border-l border-white/15 pl-8">
         <li class="relative mb-14">
-          <span class="absolute -left-[37px] top-2 grid h-4 w-4 place-items-center rounded-full border border-white/40 bg-[#0a0a0c]"><span class="h-1.5 w-1.5 rounded-full bg-white"></span></span>
+          <span class="absolute -left-[37px] top-2 grid h-4 w-4 place-items-center rounded-full border border-white/40 bg-[#080808]"><span class="h-1.5 w-1.5 rounded-full bg-white"></span></span>
           <div class="flex flex-wrap items-baseline gap-x-6 gap-y-2">
-            <span class="text-3xl font-light text-white/40">2018</span>
+            <span class="text-3xl font-light text-white/40" data-count="2018" data-plain="1">2018</span>
             <h3 class="text-lg tracking-[0.15em] text-white">O PRIMEIRO NOTEBOOK</h3>
           </div>
           <p class="mt-3 max-w-2xl text-white/60 leading-[1.8]">Ganhei meu primeiro notebook e descobri, na prática, os limites do hardware básico. Foi ali que comecei a estudar como o Windows funcionava por dentro para conseguir jogar de verdade.</p>
         </li>
         <li class="relative mb-14">
-          <span class="absolute -left-[37px] top-2 grid h-4 w-4 place-items-center rounded-full border border-white/40 bg-[#0a0a0c]"><span class="h-1.5 w-1.5 rounded-full bg-white"></span></span>
+          <span class="absolute -left-[37px] top-2 grid h-4 w-4 place-items-center rounded-full border border-white/40 bg-[#080808]"><span class="h-1.5 w-1.5 rounded-full bg-white"></span></span>
           <div class="flex flex-wrap items-baseline gap-x-6 gap-y-2">
-            <span class="text-3xl font-light text-white/40">2020</span>
+            <span class="text-3xl font-light text-white/40" data-count="2020" data-plain="1">2020</span>
             <h3 class="text-lg tracking-[0.15em] text-white">MERGULHO TÉCNICO</h3>
           </div>
           <p class="mt-3 max-w-2xl text-white/60 leading-[1.8]">Passei a estudar BIOS, drivers, gerenciamento de memória, processos, armazenamento e redes. Cada máquina que passava pelas minhas mãos virava um laboratório novo.</p>
         </li>
         <li class="relative mb-14">
-          <span class="absolute -left-[37px] top-2 grid h-4 w-4 place-items-center rounded-full border border-white/40 bg-[#0a0a0c]"><span class="h-1.5 w-1.5 rounded-full bg-white"></span></span>
+          <span class="absolute -left-[37px] top-2 grid h-4 w-4 place-items-center rounded-full border border-white/40 bg-[#080808]"><span class="h-1.5 w-1.5 rounded-full bg-white"></span></span>
           <div class="flex flex-wrap items-baseline gap-x-6 gap-y-2">
-            <span class="text-3xl font-light text-white/40">2023</span>
+            <span class="text-3xl font-light text-white/40" data-count="2023" data-plain="1">2023</span>
             <h3 class="text-lg tracking-[0.15em] text-white">METODOLOGIA PRÓPRIA</h3>
           </div>
           <p class="mt-3 max-w-2xl text-white/60 leading-[1.8]">Comecei a montar minhas próprias rotinas de otimização, testando hipóteses e medindo resultados. Deixei de aplicar tweaks prontos para entender o porquê de cada ajuste.</p>
         </li>
         <li class="relative">
-          <span class="absolute -left-[37px] top-2 grid h-4 w-4 place-items-center rounded-full border border-white/40 bg-[#0a0a0c]"><span class="h-1.5 w-1.5 rounded-full bg-white"></span></span>
+          <span class="absolute -left-[37px] top-2 grid h-4 w-4 place-items-center rounded-full border border-white/40 bg-[#080808]"><span class="h-1.5 w-1.5 rounded-full bg-white"></span></span>
           <div class="flex flex-wrap items-baseline gap-x-6 gap-y-2">
-            <span class="text-3xl font-light text-white/40">2025</span>
+            <span class="text-3xl font-light text-white/40" data-count="2025" data-plain="1">2025</span>
             <h3 class="text-lg tracking-[0.15em] text-white">GUSTAVO TWEAKS</h3>
           </div>
           <p class="mt-3 max-w-2xl text-white/60 leading-[1.8]">Após anos de estudo constante, consolidei uma metodologia própria, priorizando desempenho, estabilidade e experiência real para cada usuário — e sigo evoluindo a cada nova versão do Windows.</p>
@@ -242,7 +290,7 @@
       <h2 class="font-light text-3xl sm:text-5xl leading-[1.1] text-white">PERFORMANCE NÃO SE<br />PRESUME. SE MEDE.</h2>
       <p class="mx-auto mt-6 max-w-xl italic text-white/60"><span class="not-italic text-white">Assuma o controle real</span> sobre o seu hardware. Latência mínima, FPS estável, temperatura reduzida e resposta imediata.</p>
       <div class="mt-10">
-        <a href="/#orcamento" class="inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-black transition hover:bg-white/90">
+        <a href="/#orcamento" class="cta-pulse inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-semibold uppercase tracking-[0.15em] text-black transition hover:scale-[1.04] hover:bg-white/90">
           Agendar otimização agora <span aria-hidden>&rarr;</span>
         </a>
       </div>
@@ -338,6 +386,61 @@
     document.addEventListener('mouseup',   function(){ document.body.classList.remove('cursor-active'); });
     document.addEventListener('mouseleave', function(){ cursor.style.opacity='0'; });
     document.addEventListener('mouseenter', function(){ cursor.style.opacity='1'; });
+  })();
+
+  /* --- contadores animados (idêntico ao site principal) --- */
+  (function(){
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var els = Array.prototype.slice.call(document.querySelectorAll('[data-count]'));
+    if (!els.length) return;
+
+    function fmt(el, v){
+      var plain = el.getAttribute('data-plain') === '1';
+      var decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
+      var n = plain
+        ? String(Math.round(v))
+        : v.toLocaleString(document.documentElement.lang || 'pt-BR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+      return (el.getAttribute('data-prefix') || '') + n + (el.getAttribute('data-suffix') || '');
+    }
+
+    function animate(el){
+      if (el.dataset.counted === '1') return;
+      el.dataset.counted = '1';
+      var target = parseFloat(el.getAttribute('data-count'));
+      if (isNaN(target)) return;
+      if (reduce) { el.textContent = fmt(el, target); return; }
+      var dur = 1700, start = null;
+      el.classList.add('is-counting');
+      setTimeout(function(){ el.classList.remove('is-counting'); }, dur + 120);
+      function step(ts){
+        if (start === null) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        var val = target * eased;
+        if (p < 0.9) val = Math.max(0, val + (Math.random() - 0.5) * target * 0.03 * (1 - p));
+        el.textContent = fmt(el, val);
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = fmt(el, target);
+      }
+      requestAnimationFrame(step);
+    }
+
+    if (!reduce) els.forEach(function(el){ el.textContent = fmt(el, 0); });
+
+    if (!('IntersectionObserver' in window)) { els.forEach(animate); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { animate(e.target); io.unobserve(e.target); } });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function(el){ io.observe(el); });
+
+    /* varredura de segurança: garante que nada fique zerado na tela */
+    setInterval(function(){
+      els.forEach(function(el){
+        if (el.dataset.counted === '1') return;
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight) animate(el);
+      });
+    }, 800);
   })();
 
   /* --- reveal suave ao rolar --- */
