@@ -520,25 +520,108 @@
     .opt-hi { color: #e9e9e9; }
 
 
-    /* CUSTOM CURSOR — dot fino + anel com leve lag, clean e minimalista */
-    html, body, a, button, [role="button"], .ripple-fx, .lang-card, summary, .brand-btn, .secondary-btn, textarea, input { cursor: none !important; }
-    #cursor-dot, #cursor-ring { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; border-radius: 50%; opacity: 0; }
-    #cursor-dot {
-      width: 5px; height: 5px; background: #fff;
-      transform: translate(-50%,-50%);
-      transition: width .18s ease, height .18s ease, opacity .2s ease;
+    /* CUSTOM CURSOR — seta branca (arrow) minimalista + halo suave */
+    html, body, a, button, [role="button"], .ripple-fx, .lang-card, summary, .brand-btn, .secondary-btn, textarea, input, select, .term { cursor: none !important; }
+    #cursor-arrow {
+      position: fixed; top: 0; left: 0; z-index: 10000; pointer-events: none; opacity: 0;
+      width: 22px; height: 22px;
+      transform: translate(-2px, -1px) scale(1);
+      transition: opacity .2s ease, transform .12s cubic-bezier(.2,.8,.2,1);
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.65));
+      will-change: transform;
     }
-    #cursor-ring {
-      width: 30px; height: 30px;
-      border: 1px solid rgba(255,255,255,0.32);
-      transform: translate(-50%,-50%);
+    #cursor-halo {
+      position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; opacity: 0;
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.22);
+      transform: translate(-50%, -50%);
       transition: width .25s cubic-bezier(.2,.8,.2,1), height .25s cubic-bezier(.2,.8,.2,1), border-color .2s ease, opacity .2s ease;
+      will-change: transform;
     }
-    body.cursor-hover #cursor-ring { width: 46px; height: 46px; border-color: rgba(255,255,255,0.7); }
-    body.cursor-hover #cursor-dot { width: 0; height: 0; }
-    body.cursor-active #cursor-ring { width: 22px; height: 22px; }
-    body.cursor-active #cursor-dot { width: 3px; height: 3px; }
-    @media (hover: none) { #cursor-dot, #cursor-ring { display: none !important; } html, body, a, button { cursor: auto !important; } }
+    body.cursor-hover #cursor-halo { width: 48px; height: 48px; border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.05); }
+    body.cursor-active #cursor-arrow { transform: translate(-2px,-1px) scale(0.86); }
+    body.cursor-active #cursor-halo { width: 26px; height: 26px; }
+    @media (hover: none) { #cursor-arrow, #cursor-halo { display: none !important; } html, body, a, button, .term { cursor: auto !important; } }
+
+    /* ============ TERMOS DIDÁTICOS (tooltip) ============ */
+    .term, .opt-hi {
+      color: #ffffff; font-weight: 600;
+      text-shadow: 0 0 14px rgba(255,255,255,0.45);
+      border-bottom: 1px dashed rgba(255,255,255,0.4);
+      transition: text-shadow .2s ease, border-color .2s ease;
+    }
+    .term:hover, .opt-hi:hover { text-shadow: 0 0 22px rgba(255,255,255,0.85); border-bottom-color: rgba(255,255,255,0.9); }
+    #gt-tip {
+      position: fixed; z-index: 10001; pointer-events: none; opacity: 0;
+      max-width: 20rem; padding: 0.7rem 0.9rem;
+      background: rgba(12,12,12,0.97);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 0.7rem;
+      box-shadow: 0 24px 60px -20px rgba(0,0,0,0.9);
+      font-size: 0.78rem; line-height: 1.55; color: #d8d8d8;
+      transform: translateY(6px);
+      transition: opacity .16s ease, transform .16s ease;
+      backdrop-filter: blur(8px);
+    }
+    #gt-tip.show { opacity: 1; transform: translateY(0); }
+    #gt-tip .gt-tip-term { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: #fff; margin-bottom: 0.35rem; }
+
+    .tip-hint {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      border: 1px solid var(--border); border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      padding: 0.6rem 1.1rem; font-size: 0.75rem; color: var(--muted);
+    }
+    .tip-hint strong { color: #fff; font-weight: 700; letter-spacing: 0.06em; }
+    .tip-hint svg { color: #fff; flex-shrink: 0; }
+
+    /* ============ PASSOS DA OTIMIZAÇÃO ============ */
+    .steps-head { display: grid; gap: 2rem; align-items: end; margin-bottom: 4.5rem; }
+    @media (min-width: 1024px) { .steps-head { grid-template-columns: 1.2fr 0.8fr; } }
+    .steps-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; line-height: 0.95; letter-spacing: -0.035em; text-transform: uppercase; font-size: clamp(2.6rem, 7vw, 5.2rem); margin-top: 1.25rem; }
+    .steps-title .l2 { display: block; color: #fff; text-shadow: 0 0 40px rgba(255,255,255,0.28); }
+    .steps-title .l1 { display: block; background: linear-gradient(180deg,#fff 0%,#9a9a9a 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .steps-side { display: flex; flex-direction: column; gap: 1.1rem; align-items: flex-start; }
+    .steps-side p { font-size: 0.95rem; font-style: italic; color: var(--muted); line-height: 1.6; }
+    .steps-grid { display: grid; gap: 2.5rem 2rem; grid-template-columns: 1fr; }
+    @media (min-width: 640px) { .steps-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .steps-grid { grid-template-columns: repeat(4, 1fr); } }
+    .step-item { position: relative; padding-top: 2.9rem; }
+    .step-item::before {
+      content: ""; position: absolute; top: 2.35rem; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.35), rgba(255,255,255,0.02));
+    }
+    .step-num { position: absolute; top: 0; left: 0; font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 500; font-style: italic; color: rgba(255,255,255,0.32); letter-spacing: -0.02em; }
+    .step-title { font-family: 'Space Grotesk', sans-serif; text-transform: uppercase; font-size: 1.02rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; margin: 1.6rem 0 0.9rem; }
+    .step-desc { font-size: 0.85rem; font-style: italic; color: var(--muted); line-height: 1.75; }
+    .step-item:hover .step-num { color: #fff; text-shadow: 0 0 24px rgba(255,255,255,0.5); }
+    .step-num { transition: color .25s ease, text-shadow .25s ease; }
+
+    /* ============ VALORES / PLANOS ============ */
+    .plans-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; margin-top: 3rem; }
+    @media (min-width: 900px) { .plans-grid { grid-template-columns: repeat(2, 1fr); } }
+    .plan-card { position: relative; padding: 2.5rem 2rem; display: flex; flex-direction: column; overflow: hidden; }
+    .plan-card--pro { border-color: rgba(255,255,255,0.24); box-shadow: 0 40px 90px -50px rgba(255,255,255,0.35); }
+    .plan-badge { position: absolute; top: 1.5rem; right: 1.5rem; color: #fff; opacity: .85; }
+    .plan-flag { position: absolute; top: 0; left: 0; font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; background: #fff; color: var(--brand-fg); padding: 0.3rem 0.9rem; border-bottom-right-radius: 0.7rem; font-weight: 700; }
+    .plan-name { font-family: 'Space Grotesk', sans-serif; text-transform: uppercase; font-size: 1.35rem; font-style: italic; font-weight: 600; letter-spacing: -0.01em; }
+    .plan-sub { font-size: 0.85rem; font-style: italic; color: var(--muted); margin-top: 0.5rem; line-height: 1.6; max-width: 24rem; }
+    .plan-price-row { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin: 2rem 0 1.75rem; }
+    .plan-price { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.6rem, 6vw, 3.6rem); font-weight: 600; font-style: italic; letter-spacing: -0.04em; color: #fff; text-shadow: 0 0 44px rgba(255,255,255,0.35); line-height: 1; }
+    .plan-price-note { font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .plan-list { list-style: none; display: flex; flex-direction: column; gap: 0.85rem; flex: 1; }
+    .plan-list li { display: flex; gap: 0.7rem; align-items: flex-start; font-size: 0.85rem; font-style: italic; color: #cfcfcf; line-height: 1.5; }
+    .plan-list li svg { flex-shrink: 0; margin-top: 0.15rem; color: #fff; }
+    .plan-btn { margin-top: 2.25rem; width: 100%; justify-content: center; }
+    .plan-btn-ghost {
+      margin-top: 2.25rem; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: var(--fg);
+      padding: 0.95rem 1.25rem; border-radius: 0.8rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+    .plan-btn-ghost:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.35); transform: translateY(-2px); }
+    .plan-foot { margin-top: 1.1rem; text-align: center; font-size: 0.7rem; color: var(--muted); }
+
 
     /* =========================================================
        CONTAS / DASHBOARDS (Auth + Firebase)
@@ -948,6 +1031,8 @@
       <nav class="nav-links">
         <a href="#servicos" data-i18n="nav.services">Serviços</a>
         <a href="#processo" data-i18n="nav.process">Como funciona</a>
+        <a href="#passos">Passos</a>
+        <a href="#valores">Valores</a>
         <a href="#dados" data-i18n="nav.data">Dados</a>
         <a href="#depoimentos" data-i18n="nav.results">Resultados</a>
         <a href="#parceiros" data-i18n="nav.partners">Parceiros</a>
@@ -963,7 +1048,7 @@
         </div>
         <button class="brand-btn ripple-fx" onclick="openTicket('orcamento')">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-          <span data-i18n="nav.cta">Fazer orçamento</span>
+          <span data-i18n="nav.cta">Agendar agora</span>
         </button>
         <button id="acctBtn" class="acc-btn ripple-fx" onclick="GT.openAccountArea()">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1165,7 +1250,7 @@
         <p data-i18n="hero.desc">Otimização completa por R$ 95. Ajustes de BIOS, redução de input lag e estabilidade total, sob medida pra sua máquina e o seu jogo.</p>
         <div class="hero-actions">
           <button class="brand-btn ripple-fx" onclick="openTicket('orcamento')">
-            <span data-i18n="hero.cta1">Fazer orçamento personalizado</span>
+            <span data-i18n="hero.cta1">Agendar agora</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
           <a href="#servicos" class="secondary-btn ripple-fx" data-i18n="hero.cta2">Ver serviços</a>
@@ -1290,7 +1375,7 @@
               <p style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)" data-i18n="services.paymentLabel">Pagamento</p>
               <p style="font-size:0.875rem;margin-top:0.25rem" data-i18n="services.paymentValue">PIX · Cartão · Internacional</p>
             </div>
-            <button class="brand-btn ripple-fx" onclick="openTicket('orcamento')"><span data-i18n="nav.cta">Fazer orçamento</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+            <button class="brand-btn ripple-fx" onclick="openTicket('orcamento')"><span data-i18n="nav.cta">Agendar agora</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
           </div>
         </div>
         <div class="mini-cards">
@@ -1323,6 +1408,107 @@
         <div class="surface-card process-card"><div class="process-num">02</div><div class="process-title" data-i18n="process2.title">Analiso sua máquina</div><div class="process-desc" data-i18n="process2.desc">Estudo cada peça, sistema e uso, e monto uma proposta feita sob medida pra você.</div></div>
         <div class="surface-card process-card"><div class="process-num">03</div><div class="process-title" data-i18n="process3.title">Agendamos e otimizo</div><div class="process-desc" data-i18n="process3.desc">Marcamos horário, faço a otimização remota com você acompanhando e testando ao vivo.</div></div>
         <div class="surface-card process-card"><div class="process-num">04</div><div class="process-title" data-i18n="process4.title">Suporte contínuo</div><div class="process-desc" data-i18n="process4.desc">Depois da entrega, seguimos em contato pra ajuste fino e qualquer dúvida futura.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="passos">
+    <div class="container-x">
+      <div class="steps-head">
+        <div>
+          <p class="section-label">Metodologia exclusiva</p>
+          <h2 class="steps-title">
+            <span class="l1">Passos da</span>
+            <span class="l2">otimização</span>
+          </h2>
+        </div>
+        <div class="steps-side">
+          <p>Transparência total. Você assiste e autoriza tudo remotamente.</p>
+          <span class="tip-hint">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            <span><strong>DICA:</strong> passe o mouse nos termos em <strong>BRANCO</strong> para ver a explicação didática</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-item">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Preparo do pendrive.</h3>
+          <p class="step-desc">Durante o agendamento, é enviado um vídeo gravado por mim orientando como preparar o <span class="term" data-term="pendrive">pendrive</span> com a instalação do meu Windows customizado. Utilizaremos ele no dia agendado!</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Análise e diagnóstico do PC.</h3>
+          <p class="step-desc">Escaneio seu computador de ponta a ponta. Identifico se ele está esquentando muito ou se alguma peça está trabalhando <span class="term" data-term="throttling">sobrecarregada</span>, para resolvermos no próximo passo.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Configurações da placa-mãe (<span class="term" data-term="BIOS">BIOS</span>).</h3>
+          <p class="step-desc">Altero as configurações físicas de <span class="term" data-term="frequências">frequências</span>, <span class="term" data-term="tensões">tensões</span> e <span class="term" data-term="latências">latências</span> de suas peças, de forma 100% segura para extrair a máxima velocidade além de reduzir sua temperatura.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">04</div>
+          <h3 class="step-title">Instalação do Windows otimizado.</h3>
+          <p class="step-desc">Formato seu computador para um sistema limpo, modificado por mim. Sem lixos ou <span class="term" data-term="bloatwares">bloatwares</span>, para garantir o máximo de FPS e o mínimo de <span class="term" data-term="input lag">atraso de entrada</span>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="valores">
+    <div class="container-x">
+      <p class="section-label">Valores</p>
+      <h2 class="section-title"><span>Escolha o nível</span><br><span style="color:var(--muted)">da sua performance.</span></h2>
+      <p class="section-desc">Pagamento único, sem mensalidade e sem letra miúda. Você escolhe o pacote e agendamos o horário.</p>
+
+      <div class="plans-grid">
+        <div class="surface-card plan-card plan-card--pro">
+          <div class="plan-flag">Mais escolhido</div>
+          <div class="plan-badge">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+          </div>
+          <p class="plan-name">Otimização avançada</p>
+          <p class="plan-sub">A otimização completa para performance real no dia a dia e nos jogos competitivos.</p>
+          <div class="plan-price-row">
+            <span class="plan-price">R$ 95</span>
+            <span class="plan-price-note">Pagamento único</span>
+          </div>
+          <ul class="plan-list">
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Windows customizado (Zero <span class="term" data-term="bloatwares">Bloat</span>)</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Redução extrema de <span class="term" data-term="input lag">Input Lag</span></span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Ajustes de <span class="term" data-term="BIOS">BIOS</span> e plano de energia</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Análise e diagnóstico do hardware</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Suporte remoto via <span class="term" data-term="TeamViewer">TeamViewer</span></span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Manual de cuidados recomendados</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Recomendações de upgrade de peças</span></li>
+          </ul>
+          <button class="brand-btn ripple-fx plan-btn" onclick="openTicket('orcamento')">Garantir minha otimização</button>
+          <p class="plan-foot">PIX · Cartão · Internacional</p>
+        </div>
+
+        <div class="surface-card plan-card">
+          <div class="plan-badge">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-3 7h5l-3 13"/></svg>
+          </div>
+          <p class="plan-name">Overclock Pro</p>
+          <p class="plan-sub">Para quem quer o limite da máquina: tuning fino de hardware com estabilidade garantida.</p>
+          <div class="plan-price-row">
+            <span class="plan-price">R$ 150</span>
+            <span class="plan-price-note">Pagamento único</span>
+          </div>
+          <ul class="plan-list">
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Tudo da Otimização Avançada</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span><span class="term" data-term="overclock">Overclock</span> seguro de CPU, GPU e RAM</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span><span class="term" data-term="undervolt">Undervolt</span> (reduzir temperaturas)</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Ajuste fino de <span class="term" data-term="tensões">tensões</span> e <span class="term" data-term="PBO">PBO</span></span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Perfil de memória (<span class="term" data-term="XMP">XMP</span> / EXPO) e <span class="term" data-term="latências">latências</span></span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Testes de estresse e estabilidade</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg><span>Curva de ventoinhas e controle térmico</span></li>
+          </ul>
+          <button class="plan-btn-ghost ripple-fx" onclick="openTicket('orcamento')">Fazer agendamento</button>
+          <p class="plan-foot">Agenda limitada por semana</p>
+        </div>
       </div>
     </div>
   </section>
@@ -1505,7 +1691,7 @@
           <p class="section-desc" style="max-width:28rem;margin-inline:auto;text-align:center" data-i18n="cta.desc">Abre o orçamento, me passa sua config e agendamos hoje mesmo.</p>
           <button class="brand-btn ripple-fx" style="margin-top:2rem" onclick="openTicket('orcamento')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-            <span data-i18n="cta.button">Fazer orçamento personalizado</span>
+            <span data-i18n="cta.button">Agendar agora</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
         </div>
@@ -1547,7 +1733,7 @@
 
   <button class="floating-cta ripple-fx" onclick="openTicket('orcamento')">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
-    <span data-i18n="floating.cta">Orçamento</span>
+    <span data-i18n="floating.cta">Agendar</span>
   </button>
 
   <!-- CHAT MODAL -->
@@ -1596,11 +1782,11 @@
       pt: {
         'meta.title': 'GustavoTweaks — Otimização profissional de PC gamer',
         'meta.desc': 'Menos delay, mais frame. Otimização sob medida, ajustes de BIOS, overclock seguro e redução de input lag. Configuração personalizada, sem gambiarra.',
-        'nav.services': 'Serviços', 'nav.process': 'Como funciona', 'nav.data': 'Dados', 'nav.results': 'Resultados', 'nav.faq': 'FAQ', 'nav.support': 'Suporte', 'nav.about': 'Sobre Mim', 'nav.cta': 'Fazer orçamento',
+        'nav.services': 'Serviços', 'nav.process': 'Como funciona', 'nav.data': 'Dados', 'nav.results': 'Resultados', 'nav.faq': 'FAQ', 'nav.support': 'Suporte', 'nav.about': 'Sobre Mim', 'nav.cta': 'Agendar agora',
         'hero.badge': 'Atendendo agora',
         'hero.title1': 'Otimização profissional', 'hero.title2': 'de PC ao extremo.',
         'hero.desc': 'Otimização completa por R$ 95. Ajustes de BIOS, redução de input lag e estabilidade total, sob medida pra sua máquina e o seu jogo.',
-        'hero.cta1': 'Fazer orçamento personalizado', 'hero.cta2': 'Ver serviços',
+        'hero.cta1': 'Agendar agora', 'hero.cta2': 'Ver serviços',
         'hero.tag1': 'Overclock seguro', 'hero.tag2': 'Zero delay', 'hero.tag3': 'Estabilidade total',
         'feature1.label': 'Zero Delay', 'feature1.title': 'FPS alto e resposta imediata', 'feature1.desc': 'Latência praticamente imperceptível — cada movimento traduzido em performance real.',
         'feature2.label': 'Estabilidade', 'feature2.title': 'Temperaturas sob controle', 'feature2.desc': 'Sistema tunado sem travadas, sem stutter e sem esquentar em partidas longas.',
@@ -1651,7 +1837,7 @@
         'faq5.q': 'Vocês entram em call durante a otimização?', 'faq5.a': 'Sim. Todo o processo é feito com você presente na call, podendo testar antes e depois de cada ajuste.',
         'faq6.q': 'Tem garantia ou reembolso?', 'faq6.a': 'Garantia sim, reembolso não. Eu valorizo muito o meu serviço e cada otimização é feita de forma personalizada, com tempo dedicado só pra sua máquina — por isso não trabalho com reembolso. O que eu garanto é o acompanhamento: se algo não ficar como combinado, eu ajusto quantas vezes for preciso até o resultado ficar redondo.',
         'cta.title1': 'Pronto pra extrair o', 'cta.titleGradient': 'máximo', 'cta.title2': 'do seu PC?',
-        'cta.desc': 'Abre o orçamento, me passa sua config e agendamos hoje mesmo.', 'cta.button': 'Fazer orçamento personalizado',
+        'cta.desc': 'Abre o orçamento, me passa sua config e agendamos hoje mesmo.', 'cta.button': 'Agendar agora',
         'legal.back': 'Voltar ao início',
         'footer.tos': 'Termos de Uso',
         'footer.cookies': 'Política de Cookies',
@@ -1695,7 +1881,7 @@
         'ckbar.link': 'Ver Política de Cookies',
         'ckbar.accept': 'Aceitar',
         'ckbar.reject': 'Só essenciais',
-        'footer.tagline': 'Feito por gamer, pra gamer.', 'footer.support': 'Já é cliente? Abrir chamado de suporte', 'floating.cta': 'Orçamento',
+        'footer.tagline': 'Feito por gamer, pra gamer.', 'footer.support': 'Já é cliente? Abrir chamado de suporte', 'floating.cta': 'Agendar',
         'chat.name': 'Atendimento GustavoTweaks', 'chat.sub': 'Online — resposta em minutos', 'chat.waButton': 'Falar agora no WhatsApp', 'chat.waOptionLabel': 'Opção 2 (opcional):',
         'opt.tag1': 'Deep Tuning', 'opt.tag2': 'Resposta rápida', 'opt.tag3': 'Para o seu conforto', 'opt.tag4': 'Autonomia',
         'acct.login': 'Entrar', 'acct.myAccount': 'Minha conta', 'acct.title': 'Entrar na conta', 'acct.sub': 'Acesso para administrador do site e criadores de conteúdo parceiros.', 'acct.email': 'E-mail', 'acct.password': 'Senha', 'acct.submit': 'Entrar',
@@ -1712,11 +1898,11 @@
       en: {
         'meta.title': 'GustavoTweaks — Professional gaming PC optimization',
         'meta.desc': 'Less delay, more frames. Tailored optimization, BIOS tuning, safe overclocking and input lag reduction. Custom setup, no shortcuts.',
-        'nav.services': 'Services', 'nav.process': 'How it works', 'nav.data': 'Data', 'nav.results': 'Results', 'nav.faq': 'FAQ', 'nav.support': 'Support', 'nav.about': 'About Me', 'nav.cta': 'Get a quote',
+        'nav.services': 'Services', 'nav.process': 'How it works', 'nav.data': 'Data', 'nav.results': 'Results', 'nav.faq': 'FAQ', 'nav.support': 'Support', 'nav.about': 'About Me', 'nav.cta': 'Schedule now',
         'hero.badge': 'Online now',
         'hero.title1': 'Professional PC optimization', 'hero.title2': 'taken to the extreme.',
         'hero.desc': 'BIOS tuning, safe overclocking, input lag reduction and total stability. 100% personalized service, tailored to your machine and your game.',
-        'hero.cta1': 'Get a personalized quote', 'hero.cta2': 'See services',
+        'hero.cta1': 'Schedule now', 'hero.cta2': 'See services',
         'hero.tag1': 'Safe overclocking', 'hero.tag2': 'Zero delay', 'hero.tag3': 'Total stability',
         'feature1.label': 'Zero Delay', 'feature1.title': 'High FPS and instant response', 'feature1.desc': 'Practically imperceptible latency — every move translated into real performance.',
         'feature2.label': 'Stability', 'feature2.title': 'Temperatures under control', 'feature2.desc': 'A tuned system with no freezes, no stutter and no overheating in long sessions.',
@@ -1767,7 +1953,7 @@
         'faq5.q': 'Do you stay on a call during the optimization?', 'faq5.a': 'Yes. The whole process happens with you present on the call, so you can test before and after every change.',
         'faq6.q': 'Is there a warranty or refund?', 'faq6.a': 'Warranty yes, refunds no. I truly value my work and every optimization is fully personalized, with time dedicated only to your machine — that is why I do not offer refunds. What I do guarantee is follow-up: if anything is not as agreed, I will adjust it as many times as needed until the result is right.',
         'cta.title1': 'Ready to get the', 'cta.titleGradient': 'most', 'cta.title2': 'out of your PC?',
-        'cta.desc': 'Open the quote request, send me your specs and let\'s schedule it for today.', 'cta.button': 'Get a personalized quote',
+        'cta.desc': 'Open the quote request, send me your specs and let\'s schedule it for today.', 'cta.button': 'Schedule now',
         'legal.back': 'Back to home',
         'footer.tos': 'Terms of Use',
         'footer.cookies': 'Cookie Policy',
@@ -1811,7 +1997,7 @@
         'ckbar.link': 'View Cookie Policy',
         'ckbar.accept': 'Accept',
         'ckbar.reject': 'Essential only',
-        'footer.tagline': 'Built by a gamer, for gamers.', 'footer.support': 'Already a client? Open a support ticket', 'floating.cta': 'Get a quote',
+        'footer.tagline': 'Built by a gamer, for gamers.', 'footer.support': 'Already a client? Open a support ticket', 'floating.cta': 'Schedule',
         'chat.name': 'GustavoTweaks Support', 'chat.sub': 'Online — reply within minutes', 'chat.waButton': 'Talk on WhatsApp now', 'chat.waOptionLabel': 'Option 2 (optional):',
         'opt.tag1': 'Deep Tuning', 'opt.tag2': 'Fast response', 'opt.tag3': 'For your comfort', 'opt.tag4': 'Autonomy',
         'acct.login': 'Sign in', 'acct.myAccount': 'My account', 'acct.title': 'Sign in to your account', 'acct.sub': 'Access for the site administrator and partner content creators.', 'acct.email': 'E-mail', 'acct.password': 'Password', 'acct.submit': 'Sign in',
@@ -1828,11 +2014,11 @@
       es: {
         'meta.title': 'GustavoTweaks — Optimización profesional de PC gamer',
         'meta.desc': 'Menos delay, más FPS. Optimización a medida, ajustes de BIOS, overclock seguro y reducción de input lag. Configuración personalizada, sin atajos.',
-        'nav.services': 'Servicios', 'nav.process': 'Cómo funciona', 'nav.data': 'Datos', 'nav.results': 'Resultados', 'nav.faq': 'FAQ', 'nav.support': 'Soporte', 'nav.about': 'Sobre mí', 'nav.cta': 'Pedir presupuesto',
+        'nav.services': 'Servicios', 'nav.process': 'Cómo funciona', 'nav.data': 'Datos', 'nav.results': 'Resultados', 'nav.faq': 'FAQ', 'nav.support': 'Soporte', 'nav.about': 'Sobre mí', 'nav.cta': 'Agendar ahora',
         'hero.badge': 'Atendiendo ahora',
         'hero.title1': 'Optimización profesional', 'hero.title2': 'de PC al extremo.',
         'hero.desc': 'Ajustes de BIOS, overclock seguro, reducción de input lag y estabilidad total. Servicio 100% personalizado, a la medida de tu máquina y tu juego.',
-        'hero.cta1': 'Pedir presupuesto personalizado', 'hero.cta2': 'Ver servicios',
+        'hero.cta1': 'Agendar ahora', 'hero.cta2': 'Ver servicios',
         'hero.tag1': 'Overclock seguro', 'hero.tag2': 'Cero delay', 'hero.tag3': 'Estabilidad total',
         'feature1.label': 'Cero Delay', 'feature1.title': 'FPS altos y respuesta inmediata', 'feature1.desc': 'Latencia prácticamente imperceptible — cada movimiento se traduce en rendimiento real.',
         'feature2.label': 'Estabilidad', 'feature2.title': 'Temperaturas bajo control', 'feature2.desc': 'Sistema afinado sin tirones, sin stutter y sin calentarse en partidas largas.',
@@ -1883,7 +2069,7 @@
         'faq5.q': '¿Entran en llamada durante la optimización?', 'faq5.a': 'Sí. Todo el proceso se hace contigo presente en la llamada, pudiendo probar antes y después de cada ajuste.',
         'faq6.q': '¿Hay garantía o reembolso?', 'faq6.a': 'Garantía sí, reembolso no. Valoro mucho mi servicio y cada optimización es personalizada, con tiempo dedicado solo a tu máquina — por eso no trabajo con reembolsos. Lo que sí garantizo es el acompañamiento: si algo no queda como lo acordado, lo ajusto las veces que haga falta hasta que el resultado sea perfecto.',
         'cta.title1': '¿Listo para sacar el', 'cta.titleGradient': 'máximo', 'cta.title2': 'de tu PC?',
-        'cta.desc': 'Abre el presupuesto, mándame tu configuración y lo agendamos hoy mismo.', 'cta.button': 'Pedir presupuesto personalizado',
+        'cta.desc': 'Abre el presupuesto, mándame tu configuración y lo agendamos hoy mismo.', 'cta.button': 'Agendar ahora',
         'legal.back': 'Volver al inicio',
         'footer.tos': 'Términos de Uso',
         'footer.cookies': 'Política de Cookies',
@@ -1927,7 +2113,7 @@
         'ckbar.link': 'Ver Política de Cookies',
         'ckbar.accept': 'Aceptar',
         'ckbar.reject': 'Solo esenciales',
-        'footer.tagline': 'Hecho por un gamer, para gamers.', 'footer.support': '¿Ya eres cliente? Abrir ticket de soporte', 'floating.cta': 'Presupuesto',
+        'footer.tagline': 'Hecho por un gamer, para gamers.', 'footer.support': '¿Ya eres cliente? Abrir ticket de soporte', 'floating.cta': 'Agendar',
         'chat.name': 'Atención GustavoTweaks', 'chat.sub': 'En línea — respuesta en minutos', 'chat.waButton': 'Hablar ahora por WhatsApp', 'chat.waOptionLabel': 'Opción 2 (opcional):',
         'opt.eyebrow': 'Ingeniería de rendimiento', 'opt.title1': '¿Qué es la', 'opt.title2': 'optimización?',
         'opt.desc': 'Cada ajuste tiene un propósito: más frames, menos delay, menos calor y más años de vida útil para tu PC.',
@@ -2604,7 +2790,85 @@
   </script>
 
 
-<div id="cursor-ring"></div><div id="cursor-dot"></div>
+
+<div id="gt-tip" role="tooltip"></div>
+<script>
+/* ===== GLOSSÁRIO DIDÁTICO — tooltips nos termos em branco ===== */
+(function(){
+  var GLOSSARY = {
+    'bios': 'BIOS/UEFI é o "painel de controle" da placa-mãe. É lá que ajusto frequências, tensões e perfis de memória antes mesmo do Windows iniciar.',
+    'frequências': 'É a velocidade em que o processador, a placa de vídeo e a memória trabalham (medida em MHz/GHz). Mais frequência, com estabilidade, significa mais desempenho.',
+    'tensões': 'É a quantidade de energia (voltagem) entregue a cada peça. Ajustando com precisão, ganho estabilidade e reduzo a temperatura.',
+    'latências': 'É o tempo de resposta da memória RAM. Latências menores deixam o sistema mais rápido para reagir aos seus comandos.',
+    'overclock': 'Aumento controlado da velocidade das peças além do padrão de fábrica, sempre dentro de limites seguros e validado com testes de estabilidade.',
+    'undervolt': 'Redução da voltagem mantendo o desempenho. Resultado: menos calor, menos ruído das ventoinhas e mais vida útil.',
+    'pbo': 'Precision Boost Overdrive: recurso das CPUs AMD que amplia os limites de boost automático de forma inteligente e segura.',
+    'xmp': 'XMP (Intel) e EXPO (AMD) são perfis que fazem sua memória RAM rodar na velocidade real anunciada, e não na velocidade básica padrão.',
+    'bloatwares': 'Programas e serviços inúteis que vêm instalados de fábrica, consomem memória e processamento em segundo plano e roubam FPS.',
+    'input lag': 'É o atraso entre você mover o mouse ou apertar a tecla e a ação aparecer na tela. Quanto menor, mais preciso e responsivo fica o jogo.',
+    'throttling': 'Quando a peça esquenta demais e reduz a própria velocidade para se proteger, causando quedas de FPS e travamentos.',
+    'pendrive': 'Usamos um pendrive de no mínimo 8GB para instalar o Windows customizado. Envio um vídeo mostrando o passo a passo do preparo.',
+    'teamviewer': 'Programa de acesso remoto. Você acompanha e autoriza tudo em tempo real, na sua tela, e pode encerrar quando quiser.',
+    'fps': 'Frames por segundo: quantas imagens seu PC desenha por segundo. Mais FPS = imagem mais fluida e mira mais precisa.'
+  };
+
+  var tip = document.getElementById('gt-tip');
+  var current = null;
+
+  function textOf(el){
+    return (el.getAttribute('data-term') || el.textContent || '').trim().toLowerCase().replace(/[.,;:()]/g,'');
+  }
+
+  function place(el){
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width/2 - t.width/2;
+    var top = r.top - t.height - 12;
+    if (top < 12) top = r.bottom + 12;
+    left = Math.max(12, Math.min(left, window.innerWidth - t.width - 12));
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+  }
+
+  function show(el){
+    var key = textOf(el);
+    var txt = GLOSSARY[key];
+    if (!txt) return;
+    current = el;
+    tip.innerHTML = '<span class="gt-tip-term"></span>';
+    tip.firstChild.textContent = (el.getAttribute('data-term') || el.textContent).trim();
+    tip.appendChild(document.createTextNode(txt));
+    tip.classList.add('show');
+    place(el);
+  }
+  function hide(){ current = null; tip.classList.remove('show'); }
+
+  function bind(el){
+    if (el.__gtBound) return;
+    if (!GLOSSARY[textOf(el)]) return;
+    el.__gtBound = true;
+    el.classList.add('term');
+    el.setAttribute('tabindex','0');
+    el.addEventListener('mouseenter', function(){ show(el); });
+    el.addEventListener('mouseleave', hide);
+    el.addEventListener('focus', function(){ show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function(e){ e.preventDefault(); current === el ? hide() : show(el); });
+  }
+
+  function scan(){
+    document.querySelectorAll('.term, .opt-hi').forEach(bind);
+  }
+
+  scan();
+  window.addEventListener('scroll', function(){ if (current) place(current); }, { passive: true });
+  window.addEventListener('resize', hide);
+  document.addEventListener('click', function(e){ if (current && !current.contains(e.target)) hide(); });
+  new MutationObserver(function(){ scan(); }).observe(document.body, { childList: true, subtree: true });
+})();
+</script>
+<div id="cursor-halo"></div>
+<svg id="cursor-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 2.5 19 12.2l-6.4.7 3.4 7.1-2.6 1.2-3.4-7.2L5 18.6z" fill="#0b0b0b" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"/></svg>
 <script>
 (function(){
   var track = document.getElementById('tcTrack');
@@ -2679,8 +2943,8 @@
 
 (function(){
   if (matchMedia('(hover: none)').matches) return;
-  var dot = document.getElementById('cursor-dot');
-  var ring = document.getElementById('cursor-ring');
+  var dot = document.getElementById('cursor-arrow');
+  var ring = document.getElementById('cursor-halo');
   var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
 
   document.addEventListener('mousemove', function(e){
