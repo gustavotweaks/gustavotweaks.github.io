@@ -9,10 +9,10 @@
   <meta property="og:description" content="Menos delay, mais frame. Otimização sob medida, ajustes de BIOS, overclock seguro e redução de input lag." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" />
-  <link rel="shortcut icon" href="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" />
+  <link rel="shortcut icon" href="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -29,8 +29,9 @@
       --radius: 0.75rem;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 112.5%; }
-    @media (max-width: 640px) { html { font-size: 105%; } }
+    html { scroll-behavior: smooth; font-size: 100%; }
+    @media (min-width: 1600px) { html { font-size: 106%; } }
+    @media (max-width: 640px) { html { font-size: 94%; } }
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg);
@@ -990,6 +991,21 @@
     .ck-reject { border: 1px solid var(--border); background: transparent; color: var(--fg); }
     .ck-reject:hover { background: rgba(255,255,255,.07); }
 
+    /* ===== FIX: sem rolagem horizontal / proporção da aba ===== */
+    html, body { max-width: 100%; overflow-x: hidden; }
+    *, *::before, *::after { min-width: 0; }
+    img, svg, video, canvas { max-width: 100%; }
+    .container-x { width: 100%; margin-inline: auto; box-sizing: border-box; }
+    .nav-inner { min-width: 0; }
+    .logo { min-width: 0; }
+    .logo-text p { overflow: hidden; text-overflow: ellipsis; }
+    .nav-links { min-width: 0; overflow: hidden; }
+    @media (max-width: 1279px) { .nav-links { display: none !important; } }
+    .nav-right { min-width: 0; flex-shrink: 1; }
+    .bg-orb { pointer-events: none; }
+    .hero-watermark { max-width: 100%; overflow: hidden; }
+    section, footer, header { max-width: 100vw; }
+
 </style>
 </head>
 <body>
@@ -1032,7 +1048,7 @@
   <header>
     <div class="container-x nav-inner">
       <a href="#" class="logo">
-        <img src="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" alt="GustavoTweaks" />
+        <img src="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" alt="GustavoTweaks" />
         <div class="logo-text">
           <p>GustavoTweaks</p>
           <p>Pro Optimization</p>
@@ -1177,7 +1193,7 @@
     <div class="surface-card chat-modal" role="dialog" aria-modal="true" aria-label="Conversa com Gustavo">
       <div class="chat-header">
         <div class="chat-agent">
-          <div class="chat-avatar"><img src="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" alt="GustavoTweaks" /><span class="chat-status"></span></div>
+          <div class="chat-avatar"><img src="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" alt="GustavoTweaks" /><span class="chat-status"></span></div>
           <div>
             <p class="chat-name">Gustavo · GustavoTweaks</p>
             <p class="chat-sub">Chamado <strong id="liveChatCode">#000000</strong> · só você e eu vemos essa conversa</p>
@@ -1210,7 +1226,7 @@
     <div class="surface-card chat-modal" role="dialog" aria-modal="true" aria-label="Chat com cliente">
       <div class="chat-header">
         <div class="chat-agent">
-          <div class="chat-avatar"><img src="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" alt="GustavoTweaks" /><span class="chat-status"></span></div>
+          <div class="chat-avatar"><img src="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" alt="GustavoTweaks" /><span class="chat-status"></span></div>
           <div>
             <p class="chat-name" id="adminChatName">Cliente</p>
             <p class="chat-sub">Chamado <strong id="adminChatCode">#000000</strong> · conversa privada</p>
@@ -1233,7 +1249,7 @@
     <div class="gt-dash-header">
       <div class="gt-dash-header-inner">
         <div class="logo">
-          <img src="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" alt="GustavoTweaks" />
+          <img src="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" alt="GustavoTweaks" />
           <div class="logo-text">
             <p id="dashTitle">Dashboard</p>
             <p id="dashUserEmail">—</p>
@@ -1252,7 +1268,7 @@
 
   <section class="hero">
     <div class="abstract-lines"></div>
-    <div class="hero-watermark"><img src="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" alt="" /></div>
+    <div class="hero-watermark"><img src="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" alt="" /></div>
     <div class="container-x hero-grid">
       <div>
         <div class="badge"><span class="dot"></span><span style="color:var(--muted)" data-i18n="hero.badge">Atendendo agora</span></div>
@@ -1724,7 +1740,7 @@
   </section>
 
   <div class="footer-hero container-x">
-    <img src="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" alt="GustavoTweaks" />
+    <img src="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" alt="GustavoTweaks" />
     <p class="footer-hero-tag">GustavoTweaks · Pro Optimization</p>
     <div class="social-links">
       <a class="social-link ripple-fx" href="https://www.instagram.com/gustavotweakss/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
@@ -1742,7 +1758,7 @@
   <footer>
     <div class="container-x footer-inner">
       <div class="footer-brand">
-        <img src="/__l5e/assets-v1/e302744c-7b33-43d6-9780-f2955bb57fc6/gustavotweaks-logo.png" alt="GustavoTweaks" />
+        <img src="/__l5e/assets-v1/a95d895d-11eb-44b6-9e30-c4a3fbbcacae/gutweaks-logo.png" alt="GustavoTweaks" />
         <span>© 2026 GustavoTweaks · Pro Optimization</span>
       </div>
       <span style="font-size:0.75rem" data-i18n="footer.tagline">Feito por gamer, pra gamer.</span>
