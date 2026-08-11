@@ -981,8 +981,144 @@
     .ck-reject:hover { background: rgba(255,255,255,.07); }
 
 </style>
+
+<style>
+/* ===== Ajustes finos: logo, rodapé limpo e animações extras ===== */
+
+/* Logo um pouco mais à esquerda para equilibrar a navegação */
+header .nav-inner > .logo {
+  margin-left: -0.85rem;
+}
+@media (max-width: 640px) {
+  header .nav-inner > .logo { margin-left: -0.4rem; }
+}
+
+/* (logo mantida como estava — sem alterações de estilo na imagem) */
+
+
+/* Rodapé enxuto e discreto */
+footer.footer-slim {
+  border-top: 1px solid var(--border);
+  background: transparent;
+  padding-block: 1.1rem;
+}
+footer.footer-slim .footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+footer.footer-slim .footer-copy {
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+footer.footer-slim .footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.72rem;
+}
+footer.footer-slim .footer-legal a,
+footer.footer-slim .footer-legal button {
+  color: var(--muted);
+  background: none;
+  font-size: 0.72rem;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+footer.footer-slim .footer-legal a:hover,
+footer.footer-slim .footer-legal button:hover {
+  opacity: 1;
+  color: var(--fg);
+}
+
+/* ===== Animações extras ===== */
+.gt-rise {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.75s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform;
+}
+.gt-rise.gt-in {
+  opacity: 1;
+  transform: none;
+}
+
+.surface-card,
+.kc-card,
+.opt-card,
+.process-card {
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+.surface-card:hover,
+.kc-card:hover,
+.opt-card:hover,
+.process-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.9);
+}
+
+.brand-btn,
+.nav-links a,
+.social-link {
+  transition:
+    transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.22s ease,
+    background 0.22s ease;
+}
+.brand-btn:hover { transform: translateY(-2px) scale(1.02); }
+.brand-btn:active { transform: translateY(0) scale(0.98); }
+.social-link:hover { transform: translateY(-2px) rotate(-4deg); }
+
+.section-title .gradient-text {
+  background-size: 200% 200%;
+  animation: gt-shine 7s ease-in-out infinite;
+}
+@keyframes gt-shine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Botão de som */
+.gt-sound-toggle {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 90;
+  width: 2.35rem;
+  height: 2.35rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(15, 15, 15, 0.72);
+  backdrop-filter: blur(10px);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.gt-sound-toggle:hover {
+  color: var(--fg);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gt-rise { opacity: 1 !important; transform: none !important; }
+  .section-title .gradient-text { animation: none; }
+}
+
+</style>
 </head>
 <body>
+
 
   <div class="bg-orbs" aria-hidden="true">
     <div class="bg-orb bg-orb--1"></div>
@@ -1242,7 +1378,7 @@
 
   <section class="hero">
     <div class="abstract-lines"></div>
-    <div class="hero-watermark"><img src="gustavotweaks-logo.png" alt="" /></div>
+    <div class="hero-watermark"><img src="/gustavotweaks-logo.png" alt="" /></div>
     <div class="container-x hero-grid">
       <div>
         <div class="badge"><span class="dot"></span><span style="color:var(--muted)" data-i18n="hero.badge">Atendendo agora</span></div>
@@ -1580,7 +1716,7 @@
       <h2 class="section-title" data-i18n="testimonials.title">O que dizem sobre o serviço</h2>
 
       <div class="known-clients">
-        <div class="known-clients-label"><span data-i18n="knownClients.label">Clientes conhecidos</span></div>
+        <div class="known-clients-label"><span data-i18n="knownClients.label">Aprovado por gigantes</span></div>
         <div class="known-clients-grid">
           <figure class="kc-card">
             <span class="kc-badge" data-i18n="knownClients.badge">Cliente conhecido</span>
@@ -1715,18 +1851,13 @@
     </div>
   </div>
 
-  <footer>
+  <footer class="footer-slim">
     <div class="container-x footer-inner">
-      <div class="footer-brand">
-        <img src="/gustavotweaks-logo.png" alt="GustavoTweaks" />
-        <span>© 2026 GustavoTweaks · Pro Optimization</span>
-      </div>
-      <span style="font-size:0.75rem" data-i18n="footer.tagline">Feito por gamer, pra gamer.</span>
+      <span class="footer-copy">© 2026 GustavoTweaks · Pro Optimization</span>
       <div class="footer-legal">
         <a href="#" onclick="openTicket();return false;" data-i18n="footer.support">Já é cliente? Abrir chamado de suporte</a>
         <button type="button" onclick="GTLegal.openTos()" data-i18n="footer.tos">Termos de Uso</button>
         <button type="button" onclick="GTLegal.openCookies()" data-i18n="footer.cookies">Política de Cookies</button>
-        <a href="mailto:gustavotweaks@gmail.com">gustavotweaks@gmail.com</a>
       </div>
     </div>
   </footer>
@@ -1774,7 +1905,177 @@
     </div>
   </div>
 
-  <script>
+  
+
+
+
+<div id="gt-tip" role="tooltip"></div>
+
+<div id="cursor-halo"></div>
+<svg id="cursor-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 2.5 19 12.2l-6.4.7 3.4 7.1-2.6 1.2-3.4-7.2L5 18.6z" fill="#0b0b0b" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+
+
+<!-- =========================================================
+     GT · CONTAS, CUPONS E DASHBOARDS (Firebase)
+     Substitua firebaseConfig pelos dados do SEU projeto Firebase.
+     Veja o arquivo firestore.rules e o guia de configuração enviados junto.
+========================================================= -->
+
+
+
+
+  <!-- ================= WHATSAPP OFICIAL (canto inferior direito) ================= -->
+  <div class="social-dock" aria-label="WhatsApp oficial GustavoTweaks">
+    <a class="sd-whatsapp" href="https://api.whatsapp.com/send/?phone=5511957460235&text=%2ANovo+pedido+de+or%C3%A7amento+%E2%80%94+GustavoTweaks%2A&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" data-tip="Falar no WhatsApp" aria-label="WhatsApp oficial">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Zm-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Zm8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+    </a>
+  </div>
+
+  
+  
+  <!-- ================= TERMOS DE SERVIÇO ================= -->
+  <div id="tosPage" class="legal-page hidden" role="dialog" aria-modal="true">
+    <div class="legal-wrap">
+      <button type="button" class="legal-back" onclick="GTLegal.close()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span data-i18n="legal.back"></span></button>
+      <div class="legal-head">
+        <span class="legal-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5M9 13h6M9 17h4"/></svg></span>
+        <div><h2 data-i18n="tos.title"></h2><p data-i18n="tos.sub"></p></div>
+      </div>
+      <div class="legal-list">
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c1.t"></h3>
+            <p data-i18n="tos.c1.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 5.5L20.5 9l-4.2 4 1 6-5.3-2.8L6.7 19l1-6-4.2-4 6-.5z"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c2.t"></h3>
+            <p data-i18n="tos.c2.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c3.t"></h3>
+            <p data-i18n="tos.c3.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c4.t"></h3>
+            <p data-i18n="tos.c4.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 10a2 2 0 1 1 0 4 1.6 1.6 0 0 0-1.6 1z"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c5.t"></h3>
+            <p data-i18n="tos.c5.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4c3 0 6 3 6 6-2.5 4.5-6 7-10 8l-4-4c1-4 3.5-7.5 8-10z"/><circle cx="14.5" cy="9.5" r="1.5"/><path d="M6 14c-1.5 1-2 4-2 4s3-.5 4-2"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c6.t"></h3>
+            <p data-i18n="tos.c6.d"></p>
+          </div>
+        </div>
+      </div>
+      <p class="legal-foot" data-i18n="tos.foot"></p>
+    </div>
+  </div>
+
+  <!-- ================= POLÍTICA DE COOKIES ================= -->
+  <div id="cookiePage" class="legal-page hidden" role="dialog" aria-modal="true">
+    <div class="legal-wrap">
+      <button type="button" class="legal-back" onclick="GTLegal.close()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span data-i18n="legal.back"></span></button>
+      <div class="legal-head">
+        <span class="legal-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4 4 0 0 1-5-5 3.5 3.5 0 0 1-4-4z"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="14" r="1"/><circle cx="10" cy="15" r="1"/></svg></span>
+        <div><h2 data-i18n="ck.title"></h2><p data-i18n="ck.sub"></p></div>
+      </div>
+      <div class="legal-list">
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c1.t"></h3>
+            <p data-i18n="ck.c1.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c2.t"></h3>
+            <p data-i18n="ck.c2.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c3.t"></h3>
+            <p data-i18n="ck.c3.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 10a2 2 0 1 1 0 4 1.6 1.6 0 0 0-1.6 1z"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c4.t"></h3>
+            <p data-i18n="ck.c4.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.5"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c5.t"></h3>
+            <p data-i18n="ck.c5.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c6.t"></h3>
+            <p data-i18n="ck.c6.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="6"/><circle cx="8" cy="12" r="3"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c7.t"></h3>
+            <p data-i18n="ck.c7.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c8.t"></h3>
+            <p data-i18n="ck.c8.d"></p>
+          </div>
+        </div>
+      </div>
+      <div class="legal-note">
+        <p data-i18n="ck.noteText"></p>
+        <button type="button" class="brand-btn ripple-fx" onclick="GTCookies.accept(true)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4 4 0 0 1-5-5 3.5 3.5 0 0 1-4-4z"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="14" r="1"/><circle cx="10" cy="15" r="1"/></svg><span data-i18n="ck.noteBtn"></span></button>
+      </div>
+      <p class="legal-foot" data-i18n="ck.foot"></p>
+    </div>
+  </div>
+
+  <!-- ================= COOKIE BANNER ================= -->
+  <div id="cookieBar" class="cookie-bar hidden" role="region" aria-label="Cookies">
+    <p><span data-i18n="ckbar.text"></span> <a onclick="GTLegal.openCookies()" data-i18n="ckbar.link"></a></p>
+    <div class="cookie-actions">
+      <button type="button" class="ck-reject" onclick="GTCookies.reject()" data-i18n="ckbar.reject"></button>
+      <button type="button" class="ck-accept" onclick="GTCookies.accept()" data-i18n="ckbar.accept"></button>
+    </div>
+  </div>
+
+  
+
+
+<script>
     /* =========================================================
        I18N — traduções do site (PT / EN)
     ========================================================= */
@@ -2787,12 +3088,7 @@
       }
       document.addEventListener('click', handleInteractive, true);
     })();
-  </script>
-
-
-
-<div id="gt-tip" role="tooltip"></div>
-<script>
+  </script><script>
 /* ===== GLOSSÁRIO DIDÁTICO — tooltips nos termos em branco ===== */
 (function(){
   var GLOSSARY = {
@@ -2866,10 +3162,7 @@
   document.addEventListener('click', function(e){ if (current && !current.contains(e.target)) hide(); });
   new MutationObserver(function(){ scan(); }).observe(document.body, { childList: true, subtree: true });
 })();
-</script>
-<div id="cursor-halo"></div>
-<svg id="cursor-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 2.5 19 12.2l-6.4.7 3.4 7.1-2.6 1.2-3.4-7.2L5 18.6z" fill="#0b0b0b" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"/></svg>
-<script>
+</script><script>
 (function(){
   var track = document.getElementById('tcTrack');
   var dotsWrap = document.getElementById('tcDots');
@@ -2982,21 +3275,13 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   targets.forEach(function(el){ io.observe(el); });
 })();
-</script>
-
-<!-- =========================================================
-     GT · CONTAS, CUPONS E DASHBOARDS (Firebase)
-     Substitua firebaseConfig pelos dados do SEU projeto Firebase.
-     Veja o arquivo firestore.rules e o guia de configuração enviados junto.
-========================================================= -->
-<script>
+</script><script>
   // placeholder de segurança: evita erro no botão "Entrar" caso o módulo
   // abaixo ainda não tenha carregado (ex.: sem internet, config incompleta)
   window.GT = window.GT || {
     openAccountArea: function(){ alert('Configuração do Firebase pendente. Veja o guia enviado junto com o site (firestore.rules + instruções).'); }
   };
-</script>
-<script type="module">
+</script><script type="module">
   import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
     getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
@@ -3698,17 +3983,7 @@
     openAdminChat: (typeof openAdminChatFn === 'function') ? openAdminChatFn : function(){},
     closeAdminChat: (typeof closeAdminChatFn === 'function') ? closeAdminChatFn : function(){}
   };
-</script>
-
-
-  <!-- ================= WHATSAPP OFICIAL (canto inferior direito) ================= -->
-  <div class="social-dock" aria-label="WhatsApp oficial GustavoTweaks">
-    <a class="sd-whatsapp" href="https://api.whatsapp.com/send/?phone=5511957460235&text=%2ANovo+pedido+de+or%C3%A7amento+%E2%80%94+GustavoTweaks%2A&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" data-tip="Falar no WhatsApp" aria-label="WhatsApp oficial">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Zm-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Zm8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-    </a>
-  </div>
-
-  <script>
+</script><script>
   /* ============ ANIMAÇÕES: contadores + reveal on scroll ============ */
   (function () {
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3870,153 +4145,12 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
     else boot();
   })();
-  </script>
-  <script>
+  </script><script>
   function openNetworks(){ var el=document.getElementById('networksOverlay'); if(el) el.classList.remove('hidden'); }
   function closeNetworks(){ var el=document.getElementById('networksOverlay'); if(el) el.classList.add('hidden'); }
   window.openNetworks = openNetworks; window.closeNetworks = closeNetworks;
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeNetworks(); });
-  </script>
-  <!-- ================= TERMOS DE SERVIÇO ================= -->
-  <div id="tosPage" class="legal-page hidden" role="dialog" aria-modal="true">
-    <div class="legal-wrap">
-      <button type="button" class="legal-back" onclick="GTLegal.close()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span data-i18n="legal.back"></span></button>
-      <div class="legal-head">
-        <span class="legal-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5M9 13h6M9 17h4"/></svg></span>
-        <div><h2 data-i18n="tos.title"></h2><p data-i18n="tos.sub"></p></div>
-      </div>
-      <div class="legal-list">
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c1.t"></h3>
-            <p data-i18n="tos.c1.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 5.5L20.5 9l-4.2 4 1 6-5.3-2.8L6.7 19l1-6-4.2-4 6-.5z"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c2.t"></h3>
-            <p data-i18n="tos.c2.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c3.t"></h3>
-            <p data-i18n="tos.c3.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c4.t"></h3>
-            <p data-i18n="tos.c4.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 10a2 2 0 1 1 0 4 1.6 1.6 0 0 0-1.6 1z"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c5.t"></h3>
-            <p data-i18n="tos.c5.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4c3 0 6 3 6 6-2.5 4.5-6 7-10 8l-4-4c1-4 3.5-7.5 8-10z"/><circle cx="14.5" cy="9.5" r="1.5"/><path d="M6 14c-1.5 1-2 4-2 4s3-.5 4-2"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c6.t"></h3>
-            <p data-i18n="tos.c6.d"></p>
-          </div>
-        </div>
-      </div>
-      <p class="legal-foot" data-i18n="tos.foot"></p>
-    </div>
-  </div>
-
-  <!-- ================= POLÍTICA DE COOKIES ================= -->
-  <div id="cookiePage" class="legal-page hidden" role="dialog" aria-modal="true">
-    <div class="legal-wrap">
-      <button type="button" class="legal-back" onclick="GTLegal.close()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span data-i18n="legal.back"></span></button>
-      <div class="legal-head">
-        <span class="legal-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4 4 0 0 1-5-5 3.5 3.5 0 0 1-4-4z"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="14" r="1"/><circle cx="10" cy="15" r="1"/></svg></span>
-        <div><h2 data-i18n="ck.title"></h2><p data-i18n="ck.sub"></p></div>
-      </div>
-      <div class="legal-list">
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c1.t"></h3>
-            <p data-i18n="ck.c1.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c2.t"></h3>
-            <p data-i18n="ck.c2.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c3.t"></h3>
-            <p data-i18n="ck.c3.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 10a2 2 0 1 1 0 4 1.6 1.6 0 0 0-1.6 1z"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c4.t"></h3>
-            <p data-i18n="ck.c4.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.5"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c5.t"></h3>
-            <p data-i18n="ck.c5.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c6.t"></h3>
-            <p data-i18n="ck.c6.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="6"/><circle cx="8" cy="12" r="3"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c7.t"></h3>
-            <p data-i18n="ck.c7.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c8.t"></h3>
-            <p data-i18n="ck.c8.d"></p>
-          </div>
-        </div>
-      </div>
-      <div class="legal-note">
-        <p data-i18n="ck.noteText"></p>
-        <button type="button" class="brand-btn ripple-fx" onclick="GTCookies.accept(true)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4 4 0 0 1-5-5 3.5 3.5 0 0 1-4-4z"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="14" r="1"/><circle cx="10" cy="15" r="1"/></svg><span data-i18n="ck.noteBtn"></span></button>
-      </div>
-      <p class="legal-foot" data-i18n="ck.foot"></p>
-    </div>
-  </div>
-
-  <!-- ================= COOKIE BANNER ================= -->
-  <div id="cookieBar" class="cookie-bar hidden" role="region" aria-label="Cookies">
-    <p><span data-i18n="ckbar.text"></span> <a onclick="GTLegal.openCookies()" data-i18n="ckbar.link"></a></p>
-    <div class="cookie-actions">
-      <button type="button" class="ck-reject" onclick="GTCookies.reject()" data-i18n="ckbar.reject"></button>
-      <button type="button" class="ck-accept" onclick="GTCookies.accept()" data-i18n="ckbar.accept"></button>
-    </div>
-  </div>
-
-  <script>
+  </script><script>
   /* ================= LEGAL PAGES ================= */
   (function () {
     function open(id) {
@@ -4136,6 +4270,118 @@
     else setTimeout(boot, 800);
   })();
   </script>
+<script>
+/* ===== Extras: reveal on scroll + som de clique clean ===== */
+(function () {
+  /* ---------- Reveal ---------- */
+  var SEL = [
+    '.hero-tag', '.stats .stat-item', '.kc-card', '.testimonial',
+    '.faq-item', '.cta-card', '.footer-hero', '.section-label',
+    '.section-title', '.section-desc', '.partner-card', '.fps-row'
+  ].join(',');
 
+  function setupReveal() {
+    var els = Array.prototype.slice.call(document.querySelectorAll(SEL));
+    els.forEach(function (el) {
+      if (el.classList.contains('reveal')) return;
+      el.classList.add('gt-rise');
+    });
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('gt-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e, i) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        setTimeout(function () { el.classList.add('gt-in'); }, Math.min(i * 60, 240));
+        io.unobserve(el);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- Som de clique ---------- */
+  var KEY = 'gt-sound';
+  var enabled = true;
+  try { enabled = localStorage.getItem(KEY) !== 'off'; } catch (e) {}
+  var ctx = null;
+
+  function ac() {
+    if (!ctx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      ctx = new AC();
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  function blip(freq, gainPeak, dur) {
+    if (!enabled) return;
+    var c = ac();
+    if (!c) return;
+    var t = c.currentTime;
+    var osc = c.createOscillator();
+    var g = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, t);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.6, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(gainPeak, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.connect(g);
+    g.connect(c.destination);
+    osc.start(t);
+    osc.stop(t + dur + 0.02);
+  }
+
+  document.addEventListener('pointerdown', function (ev) {
+    var el = ev.target && ev.target.closest
+      ? ev.target.closest('button, a, .ripple-fx, summary, .tc-dot, input[type="submit"]')
+      : null;
+    if (!el) return;
+    if (el.classList && el.classList.contains('gt-sound-toggle')) return;
+    blip(660, 0.05, 0.075);
+  }, { passive: true });
+
+  document.addEventListener('mouseover', function (ev) {
+    var el = ev.target && ev.target.closest ? ev.target.closest('.brand-btn') : null;
+    if (!el || el.__gtHover) return;
+    el.__gtHover = true;
+    setTimeout(function () { el.__gtHover = false; }, 400);
+    blip(1120, 0.018, 0.05);
+  }, { passive: true });
+
+  function mountToggle() {
+    if (document.querySelector('.gt-sound-toggle')) return;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'gt-sound-toggle';
+    btn.setAttribute('aria-label', 'Ligar/desligar sons');
+    function paint() {
+      btn.innerHTML = enabled
+        ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>'
+        : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m17 9 4 6"/><path d="m21 9-4 6"/></svg>';
+    }
+    paint();
+    btn.addEventListener('click', function () {
+      enabled = !enabled;
+      try { localStorage.setItem(KEY, enabled ? 'on' : 'off'); } catch (e) {}
+      paint();
+      if (enabled) blip(880, 0.05, 0.08);
+    });
+    document.body.appendChild(btn);
+  }
+
+  function boot() { setupReveal(); mountToggle(); }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    setTimeout(boot, 0);
+  }
+})();
+
+</script>
 </body>
 </html>
