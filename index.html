@@ -254,30 +254,32 @@
     .testimonials-grid { display: grid; gap: 1.5rem; margin-top: 3rem; }
     @media (min-width: 640px) { .testimonials-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1024px) { .testimonials-grid { grid-template-columns: repeat(4, 1fr); } }
-    .testimonial { padding: 1.5rem; }
+    .testimonial { padding: 1.5rem; display: flex; flex-direction: column; }
+    .tm-stars { display: flex; gap: 0.15rem; color: #f5c451; margin-bottom: 0.85rem; }
+    .testimonial .testimonial-author { margin-top: auto; }
     .testimonial-text { font-size: 0.875rem; line-height: 1.6; }
     .testimonial-author { border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 1.5rem; }
     .testimonial-author p:first-child { font-size: 0.875rem; font-weight: 600; }
     .testimonial-author p:last-child { font-size: 0.75rem; color: var(--muted); }
 
     /* KNOWN CLIENTS — cliente(s) conhecido(s) em destaque */
-    .known-clients { margin-top: 3rem; }
+    .known-clients { margin-top: 2.5rem; max-width: 520px; }
     .known-clients-label { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
     .known-clients-label span { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
     .known-clients-label::after { content: ""; flex: 1; height: 1px; background: var(--border); }
     .known-clients-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
-    .kc-card { position: relative; overflow: hidden; padding: 1.75rem; display: flex; flex-direction: column; gap: 1.25rem; border: 1px solid var(--border); border-radius: 18px; background: linear-gradient(155deg, rgba(125,211,252,0.06), rgba(20,20,20,0.55) 55%); }
+    .kc-card { position: relative; overflow: hidden; padding: 1.15rem 1.25rem; display: flex; flex-direction: column; gap: 0.85rem; border: 1px solid var(--border); border-radius: 14px; background: rgba(20,20,20,0.5); }
     .kc-top { display: flex; align-items: center; gap: 1rem; }
-    .kc-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(125,211,252,0.55); flex-shrink: 0; }
+    .kc-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(125,211,252,0.55); flex-shrink: 0; }
     .kc-name-row { display: flex; flex-direction: column; gap: 0.3rem; }
-    .kc-name { font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; }
+    .kc-name { font-size: 0.88rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; }
     .kc-verified { color: #e9e9e9; display: inline-flex; }
-    .kc-followers { font-size: 0.72rem; letter-spacing: 0.06em; color: var(--muted); display: inline-flex; align-items: center; gap: 0.35rem; }
+    .kc-followers { font-size: 0.65rem; letter-spacing: 0.06em; color: var(--muted); display: inline-flex; align-items: center; gap: 0.35rem; }
     .kc-followers strong { color: #e9e9e9; font-weight: 700; }
-    .kc-badge { position: absolute; top: 1.25rem; right: 1.25rem; font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: #e9e9e9; border: 1px solid rgba(255,255,255,0.28); padding: 0.3rem 0.65rem; border-radius: 999px; background: rgba(255,255,255,0.06); }
-    .kc-text { font-size: 0.925rem; line-height: 1.7; color: var(--fg); }
+    .kc-badge { position: absolute; top: 0.9rem; right: 0.9rem; font-size: 0.52rem; letter-spacing: 0.16em; text-transform: uppercase; color: #e9e9e9; border: 1px solid rgba(255,255,255,0.28); padding: 0.3rem 0.65rem; border-radius: 999px; background: rgba(255,255,255,0.06); }
+    .kc-text { font-size: 0.82rem; line-height: 1.65; color: var(--fg); }
     .kc-socials { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .kc-social-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 600; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid var(--border); color: var(--fg); text-decoration: none; transition: border-color .2s ease, transform .15s ease, background .2s ease; }
+    .kc-social-btn { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; font-weight: 600; padding: 0.4rem 0.75rem; border-radius: 10px; border: 1px solid var(--border); color: var(--fg); text-decoration: none; transition: border-color .2s ease, transform .15s ease, background .2s ease; }
     .kc-social-btn:hover { transform: translateY(-2px); border-color: #e9e9e9; background: rgba(255,255,255,0.06); }
     .kc-social-btn svg { flex-shrink: 0; }
     @media (min-width: 760px) { .kc-top { align-items: center; } }
@@ -981,144 +983,8 @@
     .ck-reject:hover { background: rgba(255,255,255,.07); }
 
 </style>
-
-<style>
-/* ===== Ajustes finos: logo, rodapé limpo e animações extras ===== */
-
-/* Logo um pouco mais à esquerda para equilibrar a navegação */
-header .nav-inner > .logo {
-  margin-left: -0.85rem;
-}
-@media (max-width: 640px) {
-  header .nav-inner > .logo { margin-left: -0.4rem; }
-}
-
-/* (logo mantida como estava — sem alterações de estilo na imagem) */
-
-
-/* Rodapé enxuto e discreto */
-footer.footer-slim {
-  border-top: 1px solid var(--border);
-  background: transparent;
-  padding-block: 1.1rem;
-}
-footer.footer-slim .footer-inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-footer.footer-slim .footer-copy {
-  font-size: 0.72rem;
-  color: var(--muted);
-  letter-spacing: 0.01em;
-}
-footer.footer-slim .footer-legal {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  font-size: 0.72rem;
-}
-footer.footer-slim .footer-legal a,
-footer.footer-slim .footer-legal button {
-  color: var(--muted);
-  background: none;
-  font-size: 0.72rem;
-  opacity: 0.85;
-  transition: opacity 0.2s ease, color 0.2s ease;
-}
-footer.footer-slim .footer-legal a:hover,
-footer.footer-slim .footer-legal button:hover {
-  opacity: 1;
-  color: var(--fg);
-}
-
-/* ===== Animações extras ===== */
-.gt-rise {
-  opacity: 0;
-  transform: translateY(26px);
-  transition:
-    opacity 0.75s cubic-bezier(0.2, 0.8, 0.2, 1),
-    transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: opacity, transform;
-}
-.gt-rise.gt-in {
-  opacity: 1;
-  transform: none;
-}
-
-.surface-card,
-.kc-card,
-.opt-card,
-.process-card {
-  transition:
-    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 0.35s ease,
-    box-shadow 0.35s ease;
-}
-.surface-card:hover,
-.kc-card:hover,
-.opt-card:hover,
-.process-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.9);
-}
-
-.brand-btn,
-.nav-links a,
-.social-link {
-  transition:
-    transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
-    opacity 0.22s ease,
-    background 0.22s ease;
-}
-.brand-btn:hover { transform: translateY(-2px) scale(1.02); }
-.brand-btn:active { transform: translateY(0) scale(0.98); }
-.social-link:hover { transform: translateY(-2px) rotate(-4deg); }
-
-.section-title .gradient-text {
-  background-size: 200% 200%;
-  animation: gt-shine 7s ease-in-out infinite;
-}
-@keyframes gt-shine {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-/* Botão de som */
-.gt-sound-toggle {
-  position: fixed;
-  left: 1.25rem;
-  bottom: 1.25rem;
-  z-index: 90;
-  width: 2.35rem;
-  height: 2.35rem;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(15, 15, 15, 0.72);
-  backdrop-filter: blur(10px);
-  color: var(--muted);
-  cursor: pointer;
-  transition: color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-}
-.gt-sound-toggle:hover {
-  color: var(--fg);
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .gt-rise { opacity: 1 !important; transform: none !important; }
-  .section-title .gradient-text { animation: none; }
-}
-
-</style>
 </head>
 <body>
-
 
   <div class="bg-orbs" aria-hidden="true">
     <div class="bg-orb bg-orb--1"></div>
@@ -1166,9 +1032,14 @@ footer.footer-slim .footer-legal button:hover {
       </a>
       <nav class="nav-links">
         <a href="#servicos" data-i18n="nav.services">Serviços</a>
-        <a href="#processo" data-i18n="nav.process">Processo</a>
-        <a href="#depoimentos" data-i18n="nav.results">Feedbacks</a>
-        <a href="sobre.html" data-i18n="nav.about">Sobre mim</a>
+        <a href="#processo" data-i18n="nav.process">Como funciona</a>
+        <a href="#passos">Passos</a>
+        <a href="#valores">Valores</a>
+        <a href="#dados" data-i18n="nav.data">Dados</a>
+        <a href="#depoimentos" data-i18n="nav.results">Resultados</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+        <a href="#" onclick="openTicket();return false;" data-i18n="nav.support">Suporte</a>
+        <a href="sobre.html" data-i18n="nav.about">Sobre Mim</a>
       </nav>
       <div class="nav-right">
         <div class="lang-switch">
@@ -1178,34 +1049,35 @@ footer.footer-slim .footer-legal button:hover {
         </div>
         <button class="brand-btn ripple-fx" onclick="openTicket('orcamento')">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-          <span data-i18n="nav.cta">Orçamento</span><span aria-hidden="true">&#8599;</span>
+          <span data-i18n="nav.cta">Agendar agora</span>
         </button>
-        <button id="acctBtn" class="acc-btn ripple-fx" onclick="GT.openAccountArea()">
+        <button id="acctBtn" class="acc-btn ripple-fx" onclick="GT.openAccountArea()" aria-label="Área do administrador">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <span id="acctBtnLabel" data-i18n="acct.login">Entrar</span>
+          <span id="acctBtnLabel">Entrar</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ================= LOGIN MODAL ================= -->
+  <!-- ================= LOGIN DO ADMINISTRADOR ================= -->
   <div id="loginOverlay" class="gt-overlay hidden" onclick="if(event.target===this) GT.closeLogin()">
     <div class="surface-card gt-modal">
-      <button type="button" class="gt-modal-close ripple-fx" onclick="GT.closeLogin()">✕</button>
-      <p class="gt-title" data-i18n="acct.title">Entrar na conta</p>
-      <p class="gt-sub" data-i18n="acct.sub">Acesso para administrador do site e criadores de conteúdo parceiros.</p>
+      <button type="button" class="gt-modal-close ripple-fx" onclick="GT.closeLogin()">&#10005;</button>
+      <p class="gt-title">Entrar na conta</p>
+      <p class="gt-sub">Acesso exclusivo do administrador do site.</p>
       <div class="gt-field">
-        <label data-i18n="acct.email">E-mail</label>
+        <label>E-mail</label>
         <input type="email" id="loginEmail" autocomplete="username" placeholder="seuemail@exemplo.com" />
       </div>
       <div class="gt-field">
-        <label data-i18n="acct.password">Senha</label>
-        <input type="password" id="loginPassword" autocomplete="current-password" placeholder="••••••••" />
+        <label>Senha</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
       </div>
-      <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" onclick="GT.doLogin()" data-i18n="acct.submit">Entrar</button>
+      <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" onclick="GT.doLogin()">Entrar</button>
       <p id="loginError" class="gt-error"></p>
     </div>
   </div>
+
 
   <!-- ================= CHAMADO DE SUPORTE (TICKET) ================= -->
   <div id="ticketOverlay" class="gt-overlay hidden" onclick="if(event.target===this) closeTicket()">
@@ -1237,10 +1109,6 @@ footer.footer-slim .footer-legal button:hover {
           <label data-i18n="ticket.message">Descreva o que você precisa</label>
           <textarea id="ticketMensagem" rows="4" data-i18n-ph="ticket.messagePh" placeholder="Ex.: config do PC, o que quer melhorar, ou o problema que tá acontecendo..."></textarea>
         </div>
-        <div class="gt-field">
-          <label data-i18n="ticket.coupon">Cupom de desconto (opcional)</label>
-          <input type="text" id="ticketCupom" data-i18n-ph="ticket.couponPh" placeholder="Ex.: FTNLUCCA" />
-        </div>
         <button type="button" class="brand-btn ripple-fx" style="width:100%;justify-content:center" id="ticketSubmitBtn" onclick="submitTicket()" data-i18n="ticket.submit">Abrir chamado</button>
         <p id="ticketError" class="gt-error"></p>
         <button type="button" class="alt-contact-btn ripple-fx" onclick="openNetworks()">
@@ -1263,14 +1131,7 @@ footer.footer-slim .footer-legal button:hover {
       <p class="gt-title" data-i18n="net.title">Falar em outras redes</p>
       <p class="gt-sub" data-i18n="net.sub">Prefere conversar direto? Escolha um canal oficial abaixo — atendimento pelo Discord ou WhatsApp Business.</p>
       <div class="net-list">
-        <a class="net-card net-card--discord ripple-fx" href="https://discord.gg/8PUFNEDxNU" target="_blank" rel="noopener noreferrer">
-          <span class="net-icon net-icon--discord"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.319 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127c-.598.35-1.22.645-1.873.891a.077.077 0 0 0-.041.107c.36.699.772 1.364 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg></span>
-          <span>
-            <span class="net-name" data-i18n="net.d1name">Discord — Embaixadores FTNLUCCA</span>
-            <span class="net-desc" data-i18n="net.d1desc">Comunidade oficial dos embaixadores</span>
-          </span>
-          <svg class="net-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
-        </a>
+        
         <a class="net-card net-card--discord ripple-fx" href="https://discord.gg/UzRMyTgwa5" target="_blank" rel="noopener noreferrer">
           <span class="net-icon net-icon--discord"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.319 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127c-.598.35-1.22.645-1.873.891a.077.077 0 0 0-.041.107c.36.699.772 1.364 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg></span>
           <span>
@@ -1325,6 +1186,8 @@ footer.footer-slim .footer-legal button:hover {
     <span>Sua conversa</span>
   </button>
 
+
+
   <!-- ================= CHAT AO VIVO (visão do administrador) ================= -->
   <div id="adminChatOverlay" class="chat-overlay hidden" style="z-index:220" onclick="if(event.target===this) GT.closeAdminChat()">
     <div class="surface-card chat-modal" role="dialog" aria-modal="true" aria-label="Chat com cliente">
@@ -1333,7 +1196,7 @@ footer.footer-slim .footer-legal button:hover {
           <div class="chat-avatar"><img src="/gustavotweaks-logo.png" alt="GustavoTweaks" /><span class="chat-status"></span></div>
           <div>
             <p class="chat-name" id="adminChatName">Cliente</p>
-            <p class="chat-sub">Chamado <strong id="adminChatCode">#000000</strong> · conversa privada</p>
+            <p class="chat-sub">Chamado <strong id="adminChatCode">#000000</strong> &middot; conversa privada</p>
           </div>
         </div>
         <button class="chat-close ripple-fx" onclick="GT.closeAdminChat()" aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
@@ -1348,15 +1211,15 @@ footer.footer-slim .footer-legal button:hover {
     </div>
   </div>
 
-  <!-- ================= DASHBOARD (ADMIN / CRIADOR) ================= -->
+  <!-- ================= PAINEL DO ADMINISTRADOR ================= -->
   <div id="dashOverlay" class="gt-dash-overlay hidden">
     <div class="gt-dash-header">
       <div class="gt-dash-header-inner">
         <div class="logo">
           <img src="/gustavotweaks-logo.png" alt="GustavoTweaks" />
           <div class="logo-text">
-            <p id="dashTitle">Dashboard</p>
-            <p id="dashUserEmail">—</p>
+            <p id="dashTitle">Painel do administrador</p>
+            <p id="dashUserEmail">&mdash;</p>
           </div>
         </div>
         <div style="display:flex;gap:0.6rem">
@@ -1366,13 +1229,13 @@ footer.footer-slim .footer-legal button:hover {
       </div>
     </div>
     <div class="gt-dash-body" id="dashBody">
-      <p class="gt-empty">Carregando…</p>
+      <p class="gt-empty">Carregando&hellip;</p>
     </div>
   </div>
 
   <section class="hero">
     <div class="abstract-lines"></div>
-    <div class="hero-watermark"><img src="/gustavotweaks-logo.png" alt="" /></div>
+    <div class="hero-watermark"><img src="gustavotweaks-logo.png" alt="" /></div>
     <div class="container-x hero-grid">
       <div>
         <div class="badge"><span class="dot"></span><span style="color:var(--muted)" data-i18n="hero.badge">Atendendo agora</span></div>
@@ -1707,10 +1570,9 @@ footer.footer-slim .footer-legal button:hover {
   <section id="depoimentos" class="testimonials">
     <div class="container-x">
       <p class="section-label" data-i18n="testimonials.label">Resultados reais</p>
-      <h2 class="section-title" data-i18n="testimonials.title">O que dizem sobre o serviço</h2>
+      <h2 class="section-title" data-i18n="testimonials.title">Aprovado por gigantes</h2>
 
       <div class="known-clients">
-        <div class="known-clients-label"><span data-i18n="knownClients.label">Aprovado por gigantes</span></div>
         <div class="known-clients-grid">
           <figure class="kc-card">
             <span class="kc-badge" data-i18n="knownClients.badge">Cliente conhecido</span>
@@ -1730,67 +1592,75 @@ footer.footer-slim .footer-legal button:hover {
         </div>
       </div>
 
-      <div class="testimonial-carousel">
-        <p class="tc-label" data-i18n="testimonials.label2">Mais depoimentos</p>
-        <div class="tc-viewport">
-          <div class="tc-track" id="tcTrack">
-            <div class="tc-slide"><figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial1.text">"Fortnite competitivo travava. Passou pra 240+ FPS estáveis e o input ficou instantâneo."</p><figcaption class="testimonial-author"><p>Arthur</p><p>i3-12400F + RTX 3050</p></figcaption></figure></div>
-            <div class="tc-slide"><figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial2.text">"Salto absurdo de FPS e o PC parou de esquentar. Trabalho impecável, valeu cada real."</p><figcaption class="testimonial-author"><p>Renan</p><p>Ryzen 5 5600 + GTX 1660S</p></figcaption></figure></div>
-            <div class="tc-slide"><figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial3.text">"Achei que meu PC não dava mais. Depois da otimização, virou outra máquina no Valorant."</p><figcaption class="testimonial-author"><p>Pietro</p><p>Ryzen 7 5700X + RX 6600</p></figcaption></figure></div>
-            <div class="tc-slide"><figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial4.text">"Suporte impecável, tudo explicado no processo. Já indiquei pra vários amigos do time."</p><figcaption class="testimonial-author"><p>Gabriel</p><p>i5-11400 + RTX 3060</p></figcaption></figure></div>
-          
-            <div class="tc-slide"><figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial5.text">"Warzone rodava a 90 FPS com engasgo. Depois do tweak, 160+ estáveis e zero stutter nas ranked."</p><figcaption class="testimonial-author"><p>Matheus</p><p>Ryzen 5 5600X + RTX 3060 Ti</p></figcaption></figure></div>
-            <div class="tc-slide"><figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial6.text">"CS2 ficou outro jogo: input direto, mouse leve e temperatura muito mais baixa."</p><figcaption class="testimonial-author"><p>Luana</p><p>i5-12400F + RTX 4060</p></figcaption></figure></div>
-            <div class="tc-slide"><figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial7.text">"Notebook gamer que travava em live agora grava e joga junto sem perder frame."</p><figcaption class="testimonial-author"><p>Diego</p><p>i7-11800H + RTX 3050 Ti</p></figcaption></figure></div>
-            <div class="tc-slide"><figure class="surface-card testimonial"><p class="testimonial-text" data-i18n="testimonial8.text">"Serviço rápido, explicou tudo por chamada e o resultado veio no mesmo dia. Recomendo demais."</p><figcaption class="testimonial-author"><p>Caio</p><p>Ryzen 7 5800X + RTX 3070</p></figcaption></figure></div>
-          </div>
-        </div>
-        <div class="tc-dots" id="tcDots"></div>
+      <div class="testimonials-grid">
+          <figure class="testimonial surface-card">
+            <div class="tm-stars" aria-label="5 de 5 estrelas"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></div>
+            <p class="testimonial-text" data-i18n="testimonial1.text">"Fortnite competitivo travava. Passou pra 240+ FPS estáveis e o input ficou instantâneo."</p>
+            <div class="testimonial-author">
+              <p>Rafael M.</p>
+              <p>Cliente · Fortnite</p>
+            </div>
+          </figure>
+          <figure class="testimonial surface-card">
+            <div class="tm-stars" aria-label="5 de 5 estrelas"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></div>
+            <p class="testimonial-text" data-i18n="testimonial2.text">"Salto absurdo de FPS e o PC parou de esquentar. Trabalho impecável, valeu cada real."</p>
+            <div class="testimonial-author">
+              <p>Bruno C.</p>
+              <p>Cliente · Setup gamer</p>
+            </div>
+          </figure>
+          <figure class="testimonial surface-card">
+            <div class="tm-stars" aria-label="5 de 5 estrelas"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></div>
+            <p class="testimonial-text" data-i18n="testimonial3.text">"Achei que meu PC não dava mais. Depois da otimização, virou outra máquina no Valorant."</p>
+            <div class="testimonial-author">
+              <p>Lucas P.</p>
+              <p>Cliente · Valorant</p>
+            </div>
+          </figure>
+          <figure class="testimonial surface-card">
+            <div class="tm-stars" aria-label="5 de 5 estrelas"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></div>
+            <p class="testimonial-text" data-i18n="testimonial4.text">"Suporte impecável, tudo explicado no processo. Já indiquei pra vários amigos do time."</p>
+            <div class="testimonial-author">
+              <p>Diego A.</p>
+              <p>Cliente · Time amador</p>
+            </div>
+          </figure>
+          <figure class="testimonial surface-card">
+            <div class="tm-stars" aria-label="5 de 5 estrelas"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></div>
+            <p class="testimonial-text" data-i18n="testimonial5.text">"Fazia live e o OBS derrubava o FPS. Depois do ajuste, gravo e jogo ao mesmo tempo sem engasgo."</p>
+            <div class="testimonial-author">
+              <p>Marina S.</p>
+              <p>Cliente · Streamer</p>
+            </div>
+          </figure>
+          <figure class="testimonial surface-card">
+            <div class="tm-stars" aria-label="5 de 5 estrelas"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></div>
+            <p class="testimonial-text" data-i18n="testimonial6.text">"Atendimento profissional do início ao fim, prazo cumprido e resultado exatamente como prometido."</p>
+            <div class="testimonial-author">
+              <p>Thiago R.</p>
+              <p>Cliente · CS2</p>
+            </div>
+          </figure>
+          <figure class="testimonial surface-card">
+            <div class="tm-stars" aria-label="5 de 5 estrelas"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></div>
+            <p class="testimonial-text" data-i18n="testimonial7.text">"Temperatura caiu 12°C e o PC ficou silencioso. Explicou cada ajuste antes de aplicar."</p>
+            <div class="testimonial-author">
+              <p>Felipe D.</p>
+              <p>Cliente · Setup de trabalho</p>
+            </div>
+          </figure>
+          <figure class="testimonial surface-card">
+            <div class="tm-stars" aria-label="5 de 5 estrelas"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></div>
+            <p class="testimonial-text" data-i18n="testimonial8.text">"Serviço feito no horário combinado e com acompanhamento depois. Confiança total."</p>
+            <div class="testimonial-author">
+              <p>André L.</p>
+              <p>Cliente · Recorrente</p>
+            </div>
+          </figure>
       </div>
     </div>
   </section>
 
-  <section id="parceiros">
-    <div class="container-x">
-      <p class="section-label" data-i18n="partners.label">Colaborações</p>
-      <h2 class="section-title"><span data-i18n="partners.title1">Nossos</span><br><span class="gradient-text" data-i18n="partners.title2">parceiros</span></h2>
-      <p class="section-desc" data-i18n="partners.desc">Criadores e organizações que confiam no trabalho da GustavoTweaks e recomendam a otimização pra quem joga sério.</p>
-
-      <div class="partners-grid">
-        <figure class="surface-card partner-card partner-card--lucca">
-          <span class="partner-cat" data-i18n="partners.lucca.cat">Criador de Conteúdo</span>
-          <div class="partner-top">
-            <img class="partner-avatar partner-avatar--round" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACgAKADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD5o1mWyvrlZbS9la0b78ch2R7gRz8xwAeOCOozWRJNJeSNaxT2lvEmdpaQKrYwME/j+nHTNOsrmO8tru31D5pGUMsyYJ3DuR0PbnryetZVxb+Qkb71bzOcqwI+nrn2ODX0mOxrq/vorSWrtp1tbq0uu/U83D0FD3G9Vt/n0FY+Q8kTpuZW4PGdw4/EV6f4R+MuuxaLdeEfE11LfeGL+1kt7tEt45LhR5RSN0dsElGCYBYDAxkV5Uh6/Ju+X349+KHDr8jq69Dg/TIP6/rXlUsZVov3Hp239P8Ah9zslShP4lqd3o/gK28T2V7ceGdeS/urO3a7nsZLR45xCpAcjBZDtzuI3fd55IZV4i/s5rO48mZdrCut+EfjrVvh14vTXtJgtpbtFaLF1D5iBWwDwcYJGVzwcMRkZrqP2iJ7LxBr1r4x0ywtNOsNat45FgtMGKOZY0EyHCgqwc5IxzuDZwwrveFo4nCOrTjaUd9fPaz8tdPO/S/P7WdOsot3TPIgP0pwjrp/A/hq68Sa1HpVvshW4YBpJCoCqDkkkkAD1+nfofSbT4WQeW0KS3cPlbt92LVZWlAaRCUWaWBQv7skL8zHPopz5M406NvaPf7zvpwnVTcFseIeQ/8AdphWvTvE8fg+w22Wkpaapcf6pzd3Zt54n5G5vLYwY6cK7YI5OMiud/s2z1SSb7O8OlyBTIkN3OoSUZAPlSABW56D06E1rRp0sQ+Wk9fPS/oRW5qC5p6ry1sclipQntuwoJ7AfX86uajYT2VzLDLAyNGxDZB9eDz+lV5BkF/kXOcnoCT2AHaplQlTk1JaomNRSScXoQ7vu/KvHeg4/wD1fWnCPcTtxwCeWA6UOvK4+bKj8/8AOaysyyIinRo7nai7qTFej/AzwTP4v8aWkUr+TaQs093JzkQoCzkHBGcAgZ4yea2weFliaqgvn5Lq/kZV6yowcn/TKng34c3uuWUmoXd1aaTZKuYp9QmFvHcHOCsbvhWIwc88d8Uzxd/wjfh+9n0zSUTVJoozF/aAmJhLFcF4lGCRknaxPOAcdqk+KPimfWfEdzdxTzLE7EQwF1ZbaHkJEpXsq4UcDpmuGkYttDk/06nmvZxlahgVLD0Ie8t5PX7v80cdKnOu1Um9OxNbvujkRn27vT2BNVFG6ngbP4sfKejfUYpHxn5dv4V8/OTlFJ9D0ErMsSs+FuBB5O7IynCnAHQf5+lLZSwRSebKjSN2XsfrUtwt1PJ+9xGoyVUnjJPIAHU80apaJbRwMH3M6ZccD5snoPTGOfXNdThUi3UitF3X6epkpRaUX17D4tSuVlZLKJIFk+XYBkc/WmaqAkir5vmScNI3H3iAetSWRMvmzqqrM/G8gbBnGeKs2UWk2v77UJ/tbE58uJzyPqO/4iuuEKlenyymrPq3ZJenn5Iyco05XS18tW/68zJto3eXYiu2eoQZOM17v4Y8MQ+LPg59kt4oodU0S4kuX8yQKGtpDGHkYHkFD5eT0CDnkc+Tz63v/c6fZwWsPXhAHPvxx6+tep/C27n03wf4j16ZvlSOC1bIVXlWWQF4o2JA3ssZHflgcHGD62B+r4GlWqQlz2Xay7W763t+JyV1WxM6cWuW7+du/bTcbpmsaf4S06wTRv7WstPvJlW81Wa1AmumUDIt4wVdY+Wwc5wOckmMbviVfCPi/wAIaTFqc8umJCu75Xt7rU1iUkZaFSvlo2AxaNVAxgq3WvDtS1W91S8nsmluLmS4uGEKhgQWeQH5dw3YOFGM5PGSelfQPwg+C+tPp1tNe62+k/N5hgsreORtxA5MjhjnAGcccY9TXw2IxKjN1K796X9fgfVYfDzrpQox92J8/eMo9GXUok0aCaOwMaiKeWMrLcAceYU3EDJBwAFHT61Bqeg3tnGw8i42LIU3TwtCSSAQArAHJIbGCScdBX3V4a+CHgjQbn+0E0t72/6vdahM0zE9zhuM8moPG3hPwdrMltY6tFo0zQfLDAZkRxnB2gAg4OB8vQ+lefUzN0mrQbX4ndTyeNZO80n+B8V+Gbiy1aODQdRSbzCzJYzpIoCSMCERwwwELkZORjJNZWp2E9rI0UsTxMrHcjgggg4IP0r0T4teCLPw14wnfR1e0RI4prS1KFvOYOFcKxyAUJUkMO9YPjQ/2jerqHleX9tjS6aPIIVpEDMBj/aJx6AivucuqRzPAOo9ZR2fltZvy+8+RxlKWAxjovZ3v6/8Hc5K3sp545HSF2VFGSOgycDP54pDZzp99Pl3EcHuO1eraH4gm+GXgOdbaLTm1/xJGkrPNAlyY7Ag/u3WRSgExIYrySqLuAyM8fbfEPxJaxtsntFZ1CM/2GDdJEOkDjZh4eR+6YFPlUAYUAFXB4XD2jVlaVrv/g/1+g4Vak23FaG18KfhvJ4jkbWNT8228OWDCXUb5kIjihBXIB53u2dqoOSzL2zVfxb48ulsrvw94e+z6doEs29bWC2jRmUEFBK+C8jAKmSWOSM+ldd8NfiX4q1uTWPC1xrMs39vafLp1tCxEcck7FfLAQYRHcgp5h7sAx7jxO7XyriRPvfN1IwfyrpxVanhcNF4Rbvfr/V77dLdb3xpQnUqv2v3BIW/j+9w2453HgcfSoGKVJC371dy7sMOMZ/Soz1/w7V83J3R6KVgfZ/DTRS/+PUYrN6jNuzhjgt/7QuN+5l/EE8ZHrn9KyJ5Xlk3O1Xnjub+RV+RVXhcnrUj2umWsbebeedMOiIDj8//AK9erVpSqxSh7sF1btdnJGSg7y1b7dChao80nlL/ABcew61fTQ73ylllVI1b1O4jp1C5x174qOPUpIo/Kt44VXpuKDJ9z2qO4mnnl2XDfNu+6cKAenToKimsLGHvXk/uX+f5FydVvSyX3s7r4XeHNF8Q6tHp+ras9hbW0M91LPHC0pZYlMjAKOA20PgkhTgZIr0ax8VeH9U0bUvBuj6dNFaWWk3l3p0twQ9xLeRnzDINq4RjAkgAAO3GNzkivO/hlA9rba5q1w0v2ay02aJVRCVmknQwKhb7owZN/OSfLOBxkJ8KRe2vxB0WW3a3SRLoFxM5CeWAfMDsAcKybgcZ4J4PSvpbJYNQ5UlJO77W2f66301WtzghG+IUrttP8zX/AGetEjfWpvENxbpdy2bGCxti5Hm3BXI5AIA5Hzc4BZscCvou7u/H2jWX9ovqPh7yGb/jxgzE6k5IUFySxwR9T0Arg/g14J/4l2v6YmqPBc2erSpbzBlkYBoYir7hlWBDkgj1/CvRPDHwY0aw1G31W+nuNc1WOF4lub0+aArZBAX7gGGI+7nnrX5TjXGeIld+ml/Sx+jYBOlhoJLq73dtet9Hqb+na/N4j+HUmswyzRyrndE67W3AHg575Fefw69ougyNFe/DTWdS1KbeV1GPT1lQKCQxDdVBIO3aDuGCMggnstC1/wAP6N/bWjanqSR3sSmf7LC4lbaSdpI6hmwT6nIrq/BB0/XNFXUbJvmiYo2+BomDAA4MbgMhwwyCK82lFud2r3Xf+uh6FeShBpO2vb+up4v8R/Cv/CX/AA+udQt7C+gu7JhfWMNzuRwyjcYwGwcMu4DPQn2wOFuofDnh7wHofizX7C013Vrmzt2isvPaO3gDpI0by+XhmZhGf3YYYG4HopP1PrjeVt+VPoO+OcGvn79pjSIdD+EGh2kSWjNJq3mPJDHtyPKl2A9TkD5c5/g9OK+u4TzPE4SoqMPhk3f7rr8bf0z5viHL8PiovET0klpb16+Vr/h2PCPjFrd14h8WLrE3krDc2sUtpHCCkUEW0ARRrn5EQhkC+i571xH97jcx/QVv+IpEbQdFiTf8kcu5+NrZlJ44BB5IIyegPGSKwCjr/s/56ivZzNuWJlLvb8UfNYSypJdrr7mdf8H9VstG+Imhajq0UsllDeRFwF3EKHGWUdyCcj3HUda7n4jfBjVxJc694VX+1tAeNbqFkmie5ghYrgTxK5ZXQttbjGVJ4GceW+F9TtdH1Jb+4sIb9o+UjmY7SwBwSOjAHBwcg4wQRkH1f4Qa/rX23xZq32ia9WTQ75mkwEkZpNqHlc+W5354BHO3odw9bK40K+G9hV1d27a6fl8t0uq2OPFupTq88NP6/rt5HjEtrNE8jOn+rxuwNwBzgA9qbJDN5H2hotsRIAbGATz0/I1Zlmee9kuLh9u5ju4J3YOSAPwHp1qjM29+WdlHC7uoFfO1o04t8u3Q9GDk7X3I8frSGlpBXIak9y0vmFHP3Plx06cdKksbRrqQ4ZFUDLMx/QD1rd8YaPPB4i2QwPM17+9jSNP4iTuGPqCfoa2fD3gyGWy87U5nZ5Y+IYTt8snIyT/Eent9a+ioZDiq+MnQUb8rd9bL7/u2u9TzKmZUadCNVu1/mcajw2+3yfmkGdz5yCCCCMemP51HDPuuGmuF85j6nAqxrdvbWuqyW9pLugRtgfIJOO5xxnrVeKRE+5F83q5yPyrzZKUKns5NLlfqr7fP1Z2RalHmS3PXfC9hdeJfhTe29i8NzcjUkmTTY3AlCRxMGdF+9Ju3AFUBI8rOOc1yHhaW90bXrLU4lia5tpkmRGXepKkEBh0IOORnkGs7w/qep2GrW17bs0c9vMk0TeXkKykFTjHOCBivYvixqfg/xB4PtPFmh+Ff+Eev5LprS4htJQbUBY0YOE2jazbmAAIH7tjgnJr7PDyp42Eakk7xWu3TuvPW1lp13uePUcqEmovd/wBf8E7zQLmHQbm21vR1uI9A1q1jeJHCkQOmd8ZbqzLhVyewHcGvdfC+t2sunLKjp93t64zXxV4K+I2r6RosHh6aG0vdLjuPtKQyIdwyfnVGBGN3PY+uOoPt/h7xVBoOpQWkzbtJvYY57eaToYZEDIxHQHaw3Dsa/PM7yCvhoPF4fWCbVuqXS/32Pvcvz3D42aw9fScknd2ScutvVK/39jp7bxF4CtdeluPD2gv4h1GOSR3uLS0e6aB2fLAS4YKck5UEbR24xXR6T4q1eW9W3h8G6pBBu+eQzQFEB5OR5m7v0wai0rTdI1vdKs/2bP3fsjhPlPIII5HU/nWxO2haDpLf8THbHGvzSTzcgd8mvk+a8LxX4n0lT2PLy8rcu+v/AAxR8SXO+SNH+uOnXp9DzXyl+0H8Trrxf5egpFDDpuk3UqRGNy3nMCyK59PlBwP9o816l4h8e/2pe3f9nI62kNvPP5nIOIoWkDewyo/zmvlPU3/01on+VOmOvbr619nwzhFRwc8TUXvuVl5aa/emt+h8dxBi3OvDD037qWvnr+lhmryPFJb2+11VIVLI4/iYAkn9PyFU0R/Lb7+5vu47+2K0pU+2ai0u1m3qDgjZhRgDAHGABj8OlSXkCRaTG6beefw549K9yeGnVlOpfRXt6bf5Hz0aqhGMerKfh7R73WdRg06xtftE87EJggdASSSSAAACSSQAASTivQ/Fl1p/hD4bR+E7O+tLvVNQmW61F7WTesMaj93AZFG2XkhzsYqpQZywBWv4AZNL+HXinXIrryb0xxadEnO4iWQO+PlIwY4pAeRxkHOQD5xdSST3LGVtrFvmzxyTzn9Kvmjl+GTh8c19y/r8gs69TXaP5jZW37du7bGvOfU8n+f6VJqEBil5ieNGXMb4OJR/eBPY1X2OQ39368HHp69adcSSPsRpCyooCjdkAY6V4TkuV3Wuh22d1Yriu78EfCP4jeMNWttP0fwlqi+eAy3N1bPDbouM7mlYBQOOO57A1xtoiPuZ97bcfKnGR3y3ReAex+lfb/7IPjjwL4f0W08F/bLGHXr+Zma0sg125VYyxaW4yUf7krbYwFQNjGSS3MWeA6nPHFbSXz71WGNm+SPL7QMkDp6D24rzvxB4rvdQj+z2/wDolt/dRsu/uzf0H6103w91AanZvb3svmXMEhbLLuZkbJ5JPIyT9MiuQ8V6UdJ1aa0WJvLdvMhPJ/dnoB9Ohz6V+iZ/jsTiMBDFYaVqc9JW3v2f4rt958vleGpUsTKhVV5R2/r8TIYfu2Z/vFu/XPerNnb+bJHv+636/wCc1Dbxu/6n/wCvXbeFfDkN7bTatrF9DpOjwYSa6lBYvJtz5UadZJD12jAA5JXIz8ngMI6803t5/qe9XreziyhY2r3/AJv7r7jDZsXAKjjB9sDrXcatBu+EthKkWxpNSmjuxs+aV4kQwkHqQqTuO3JY4OQayrTxV4S07zrS00a+uldiFknmQ4HGDtjIyeAcbwB6mtBfHuoW+nLZ6ZFpcmlxs0uy0ssXMDgYaXZOzktwoJyQAB0r7OjUwdKHKp80mnzWt59N3b0dutj56c8RKb9xpLa/Xvt+tvK5B8O/AfiTxlerY6Npc0m9vnunQiGADqzyAEIowSe5xwCeK7jxfpnm6Vo+k2+sxT6tpViLK7EYcR7lZiikOATiNoxuxyQcV5xB8XPiJo+ox3EPiqa72SLMkgOUbIyVK8DBB2sp/mAa+ivhp4/+H3xcjht9WtdP0fxOq7WhlVQZzgkmJ+Cy8E7Scjk8fePzma5iq+HdDDK0rLffrpfZ+XTz6r2Mup+yxEauIXuX6a+j20t9/wCT8UtL/wAVaDItv/pdsv8ACYJ2C/h6VqBNQ1a2a71G6mbZzmaRpGP58Cve9U+E90nmJDPD5H/LJ5gTj0BIycfUdu/Wq3h74dQ2dys18yXLI37qGHLR5z1JwCfavy7EVKsZ2nDlkfplCFGpC9OpzROJ8P8AhCbTfht4l1y7V1ubnRb0W0fO4J5D5Yj1Pb2PvXzde6f9qk81H/eDduRxtJA7j1r7r1JrL/TUvokbTolaxlBztPmIQ+QCCRgjv+Irwj4rfCmfSc6z4WRbu2uVLLAnNxa8lWRkPzNtO4bgDwMnGa/SeDqVHFYGVKq/ecm7fJbeemie58DxTiXh8ZTilZctk/nr+av6o8W0q1S4j/gWWLci7jwMDOcVm6o3m/ukT/V5TJwM4Jycdu9dTokfm7ofs+652sm/I24IPJH4ir3hXwja63c3t3qeoppem2EaPdXUkTyD5nCgKFyWY5JA9FY5GK+ur5ZOeGhGn10enp+K8vkfPwxSjVk5dCDwHDt+HXjJLhd0EtrAN/BIl+0RlMAjODtYE54yBg7hXnZi3yN/rZG3fwLliOecfh69+9eqePPE+nxaC3h7w3avZaAszPxI++86BGnGcEhVyFAABJI55ry0iS48tUbdJ0x06ZJI9+Mn69OtfPZxQhS9nRWrS/P+tD0cHUc1KeyZFNb8r5Tbs9MjB/HGQO3fvVI1uaeXg2tuSSTbuQ437eCAOTjPTjBzgCsq5jeO5ZHGO/bgGvAxGH5IRkup3U5ttogzX01/wTy8N3N/8V9R8QtB/oWmaa8fnEcCaV1AUHpnYJM+x968w/Z58IeGPGXxF03SfE1/cNDNMETTLS1lkuLw4yQGUBY1AyzOWGApPvX6XeCvDWheFdAttJ8PaJaaPZRqMW8Cgc45LH+NvViST6muE2Pye8OXtzptxJe28oj/AHbRsT7jIH5gH8KTU9TutTuluLlvMk2hM9AegzjpnjnHpXU/E7wxZeHjaf2JeLqmgzRh4dRRGUXEvIfKtho9rBlCnnC5/irhUO3a4bb81eziJV8LFYWUnyrW3S762f8Alfc46UadaTrJa7XNLTo3lvYItjszMAqAEsSTgADqT6VvfEtpLLVW0GK58y00/FoR1XzY/wDWEf8AAyxPrnNaHwZtIbr4k6Hv2bVvop29P3ZEhBP4EVyfiGR7nXru4/5+JDMM993J/ma75XpZbKS3lJL5Wf8Al+Jzxani0r/Cr29Wrfky3ocaXm1EiRbuD3wsq9wc5AJ7HHfkEdNh9HjudSj/AHr2jSKVt5wNpSZR8gcDJBDAI3oG3ZOMVzlvL5G2W33rPH/B3I7j/P8AhWr/AGwl1ZMmx9r4BAIG/aDjns65GP7wG05+WvFjLl9T0GrmBqaTRXDecm1zkOuAAG7gY4xzkY454qHBTbcRNtww+7nKsOc/pWvfO97ZKLidJW25R2c/umQEFAcYCsg3AeuPxryWX2OSRCm/bgK3bcOD9eQwI9PwrFxlKTZV0kev/DH9pHxp4TjistT/AOKjsEUbY7qQrOowBhZecjr94E89a940H9o74aatbLNcXV34auXYAC+sWkiYnHIeHcMZP8RGMHIFfDQj/ers/d7uU55U9gf0/PNWQr+X5yfKrth04wkg56dPXH/1qtTctJpP1VyORR1g2vR2PuLUfif8L7WznlvvGmh3UfmeckdpDJcOX3A79o3EEfTjrxivmv4tfFxPEviyK40O0mt9Hs4fIt0nfE0uXLPIzA7lctgjBONoPJPHmNzJ5Vu0SfLvX9Oc1nyArtH+yP15/rW9PG1MPpQSh6KxjPCxrvmrNyfS7ue2+B/iDZXt61p4x05dYnZR5NyhWCecEYAZx8pfpguGyeMjqey1LxP4C8R6CmjaNeJoenwMPtmnarFtmediyiQzIOo3gDdhVC8kYNfNNo8LfLcs6qFIRk6qT0J9R7e9Wp0nnvVad2kle3MkrFuSqoSQTjk4HX+vNfQ4biWtGnHnXNZ9/Ls7r0dtVfVHj4jIqVSpKSk437eX9fJ+R2nj/wAPXuiXM1lN5u5WOHC8spA2luvBzwfQ/n54/wAkrY2sBxkDINelfDvWH1fRbnwjqtz5jGHOl74wxUoWeWINjdhlY4GcblwAM5ri9a0t7fXmsYSy/Mdm85wAepOPQfp3rPN4Rx1GnjKC0bs11T/4PQ6sBKVCcsPVeqV7913M2Rdkf8fz/Mc8cHpn/PpUDM/3N/y9fb/PAq9KjrHIjtu2KA3J2kAlQffGVx/Kqt226Q/OjfMeiBfbt9K+drw5T1YSuWdJ1vWdGFwuk6pfad9oULN9lnaIyKM4VipBI56dK/Vj4U6GfC/w20LRpp/OuLSxjF3NuJ8y4I3TOSeSWkLknrk81+V3g2zub3xPYRWlvaXM3nKyQXWDFMwIIjIyN244XbnknFfpR8fPE3/CA/s/a/fQyN9vg01LWLYwLJLORCr9gcMxb/gJriND84vGkH2DxFe2Ns7/AGZJPlTJx2OCPbP6UreFtRXww3iF1SK2BACuTukycZUY6f8A167nUNJstX1G28WXe2PTZLWOW4TIPmSggbPzA/WqHxN1WeLTbLTNu1rmFbl4UyBEuMIv4ANn86+8xeTUYKviq793XkXrs/Tt8z5fD5nVm6NCkve05m/Ldevn6dyp8FY538e6PMivtiuBgegOR/7Oa5PX7WS1vZ7f5/8ARpmjz/skkgfnn869R/Zk0+G9+Itl9o/gs7qZeAVLJbyMoz2OQD+Fcj8R7J7fWrtf4TIc+h5PWuWthr5Srd0/v5v8i6WIcc3nHo4r8HL/ADOWtbjdt3/Ky8K38gT1FWXs3+0K9vKirJwyPkDeOSrY49SDx+FZgR/vp+IrV0+8R5V81/4QN7thc5wQxHP0bscdq+WWujPoiNbb7Lqqw6gjwwxyfvkfJK5HK8eowAR6ivbfEvwV8SaXFc3PiHUfDek2U/l3CapqWoLFDNLLEryJCqBpWCvuULsGQuR1rxbVpPKuU86LdJBkDzFJ3rngOOhIyQSOvHXrWVLPPP5bXE8snlqI03uTtQdFGegHPHvTVTk0QOPMdprPh7RbeSe30nVrvWmRULSf2f8AZYCpzgoXcyN3+8idCfTOfbWbxfa4pl+/HhhgH5gCQw98Bh9WFT6LqyJZfaJmTdFCsb/8BJCAH6EVEmrb9ahdPlV+Dn2IP8wPzrW8LJkalG90l4LLe7bpC3zMD8m3K7dvfv8A5xzRuLOT7bs2/wAQHTpjg/yrqYbiBJPsjrujh2MoOThVJY8+vygfjVt47JbmB/kkZvvAYOTggk5/znitIUITeui6kTqSjtuZum6GNOtrDULjypLm5ZtsD8+SnA3uPU54HpgntnPkh26Mz/eZbhot5GTIxVcj3HD1p6zeJFbSbH3M2Sx75PX6D/CsW2nR71bS4eXaJGCpGN53MxyQO55wB3zWuLrU3anSVor89Lt/d8iaFOavKo7t/wBWLWiSzabqtlfWLbbmwZJ1kIyFkBygHY88ntxXWyxWt54ru9YSJ/sV1G5ihHJj3OQyDOMhWR1B7jB4zXGTubKNvPif/WGVAjHrnALN6DGPft2Nd9pELv4DsLiGXzLjT4zHcR7R+7EkssqsT1O7DKR28v3Ar3eFp81f2Ml7q975rY4M2jyw51u9PkcP4lsobCWVElidZJAVwNpx8wyB1x14z9c1gmRcfdViGyCRk49D2xwPzrodaufKuZBFv+RSVwfmRegyRyOv4A98g1zLj/I7e1eTnShHES9ntrp2O3BczprmPRf2ejp7fFLR01G6+xWkV0t9eP8AwNBag3LI3X5cwqxzjIU8ggV3/wC058co/iN4Yg8P6YtxHE+sT3lwHRo2EceY7dCMY+6WYjJwwyeThfCNH1O6037a1oieZc2sls0mMtEj4DlT2LJuQn+67DvVVZXVlddmcY+4MYxjkV4Wjlqdh3dt4e8QRWVvpmrapY2VlHJvWGW5UHOST2Oe9ZfxOunuvF87zPbsojjESwSCRI1CjAzx7k/WrTar4Ltf9Vo19eyHnfc3G0sc9SFz/KuUu5I5b1pUi8mJ2+VAdxUccfrX1eaYjDwwqoUZJ3a+05WSvZaxStr0PDwFGrKv7apG1k/spatq/Vvp1PWv2ai8fxBglV9rQ2d7Jt6ZzaTDH4cVl/FqVLjxPIkUW6SaTCQgZdiTgAAde2PWtr9l20vbrx5JFZRJ9pTSbqWHf90Haqkn1wrMQP72M4HNeseHfEfw78Da0sWg2suveIZmaO5+ykSyFiCCZJ2wiKGwSqngnO2uz6zCGWOM2lotX0s2/wBbI8+VGU85jyRcpcuiS89dfuPn/RPhD8TdZxLpng7VNvZp4xbn8BKVzW7dfAD4t+U0v/CG3bNt+bE1rz9QJSTx7V9a6H4v1e8tllez06ylb/lmHecD0+b5M/8AfNdFH4h1dIlfdbN/vQtj6fer4KpnGXqT5ZN/LQ+8hkOZ8qc4JeTep+eeveHfEOhyLpXifS77TJQr+QLy2kjJC8kKWA3L0+7nt2xXKqpd9u5V+pwK/RPxx4m0LVtBu9D8TWFp5E8J2SMA6xuASjlWBK7WCncCcdeAM1j2/gfwxeRxvfaNpdy23O6S1RuvPGRx/wDWrjxWb0IxjKj7yd/K1vU6sLkeIm5Rr+41bzvf0PghXxFJF9Cv1B/+uakgk/eLM/8ACyj/ABr9HNM8H+H4rbyk023VemEhXB9gMYrkPF3wP8BazuZ/DtpBJuLb7VTA2T1OUwCee9YxzhrWVN28nf8AyNJ5Ir2hUV/NW/zPiKe+/wBJkm2f6yEL1I7AH6d6htryRjc3UzfP5exP8BX0H4p/Zmj+/omvXMGM/u7uESD1ADLtx+RrzTXfgp8QdLPlJp1tqEfJL2lwp5+j7WP5V2085w1TTnt66fmcVXJcXT15L+mv5HBi73xr5v3WYZ+nerGnL5Utzqd3H91d0aEH52fOCPbryOQcGup8I/CvxTreu/2fqGnXekW8WPOnuIdvB7ICRvP0OB3PTO/8Mfgtr3i/WtRtEuIbTStPvJLd72WEsZCrFSY48gkfLzkgduSCK7KE/rFTkpu7OSvRnh6XtKsWltr/AJbnnQuPNkW4u5P3aZkZCR+9ccAD2HAHpjAr0X4HXaf29Lpkuy7/ALVjWIW2CVkAlEkrcYZSqI233PQg8/QOjfBD4L6DZLb6yz61OjbnM85Dg4IAKw7SByeOn1NF34E+D1ncR32g2tzot+kitDcWz3O0MpyA6tlGU853DkE16+W4yjgsXH2lRJ9r6/n0POxWFrYrDScKUnHuoto+S9TvdMXUZN6MqurxyrbjIwQQD83XnH5Hisw6S72/nW8qSWjrnzsFVVhgEPnoRz69fSt74u+HU8NeOdR0xMNAkm+3kSTeJIWAaNwecgqVIzz/ADrlPt14lj9hW6lW3dtzxhztJ7ZFdeY4mEsRP28dNbW032+TW/4GOGg3SjKi97b9v8/6YX9ulo8aLPDOxUuxifcoz0GcDnj36iqWakK/u9+7pxt5yPembe/8NeBUfNK8VZHoRulq7jm+XcPw/WlLfd+fp0HpT5OjM/zMW9xjOTmjytwV1+VehPYGpQX7nV/D3X49GudQhluru0i1Sxexkubfl4VZ0ctjq4OzawBBKs2OeD2/ww0u6sbnWru3exltobeO6Sa1cvHsLKrkjAZD86fKyqeDxwa8liaHy1SKL94Gy0pP5YHb/P0r2L4W3Nl4UisJteuHWLxDI1o8GANtowaIzMdwO3e+RxjMLHPC17NLBf2nhp0ZStZNp9L9vmZUsb9QxEK6jfXXvbr926PbPBmrfaLZfn+7xn8q9B067SWJYXavBfBl/Np2rT6dd/u5LWR4ZV/2lJBA/I16xZh7qPfaPu+UHjnAIzX5K6UqdVxP15yjWpKTH+NfC8Osx7Hfpyrg8ofUGobRNa0uLYjQ3O1fl3gjGPXHBqlf6vqFrJs+dsVVPiR5Y2R0f9ad3HSOwlBP4ifVPiJ4x0GRZZfD0N7aJnc9s+4xj1x978ga1vC3xRtfEEaypLDuf+5IDiuWutUgl/1zvXE+JvCenXskmoaPdPpOonLCWH7sjejr0OcDnr71rTruXuz08/6/ryMKuFivegk/L/J/5/efQI8QWrf67Z/n+dO87SLqPfvTd+FfKmn/ABF8QeGtR/szxNB5sa/dkHKsOxBr0PRvFml6tbebY3/kSf8APNz3rSrhqsVdq67nPSrUJtqLcZLoevXdjZPG2x0bdz2x+P8AntWFe6bp7fPcRQ8fdOB+h6jtXCTeINTs9yTNuVf4k5/WqU/i1/l39/4T/WsFhk3dI61iORWcrnR6vpOkSxtFE80H/XF2j79iMGsKedLONbT7Q8+5sLv5P09//r1Xh1lLqT7+3/gXWobvY1z5yJ5jIpkwMgttGTj0PBr1MtwcqmJpw7tHFmGNhSw86nZM8g+OOpwXWtWmnJE+6yjcvI4VSfMbzAi45KLuOM8gs/bFecO+6Vm+99R+GcflXY/EFn1bxP5yPF5rxpv+YIoOSMkngDGMnOK47dw3yZYsDuPYYORj8R+Vff5rN1MQ5vRP+v1Py/CRUKah20HRGFQxdW3bPlxyN2R19uv44quTU8sciJG7Jt3rlcjqPWvTfhrZ/Da18O2E3i6LT9S1K/upbiSOS4lVbSxgQl0PlTRlZ5SGEYIbkJxh68qba0Z1LucBpti00cjPbtIFbb5hJEMeASS7AYPHIAOTj8C7Vhst1QzRfJjYqgbmQ5IY44HAHHXmrNv4Y1G6trq7SL7Jb28ef9McRsxwDgA4z354HHWqb2djFbQTS6mk7NMyPDAjblUAHO5gByTjv689K73RnCnZwtfq3a+vyv8Aj9xxxq051LqV7dEr2/O2n9XK8Nxs2pt2qG3H1J9T+ddr48V73SfD2spKjWk2npZpEqhWie3VVkBA4IZ2Mm7qfMOelcTcReXJsV0kULuyp6Z5wT6/5FdT4G8QQ28Umia2kt3oVywNxAj4aJsgieLOVWUbQM4+ZSVPByOzLq3M5Yeo7c1vvWxVaOnPE9Et9We//snXoU8z7fCkeoPgZW8RSrqQOAWCiX3Evsa9C0HxfNo263md1jdQNxPT2/WvnN7/AFDw1r2raTA5kga4lingPRjG7KrD+66kHaffHIJBqal4t1e6kZXuG2jj5W/rXymZ5Pz13Ui7Xb+8+tyziCNLDqnNXaS+4+oL3xnZXH/LVP0rmdR8U7d32d0b8P8AOa+eBr173d2+rUv/AAkWof3/ANTXnLJ7dTsnxHGWyse13PizUP8An3eqf/CRau330ihX1kcKK8cfXdTb/l4dfpmoJL26n+W4uJWU+9dNPK49bHFUz2T2uem+Ltb0i6t1TUNUt55U4VI0L8HqM1wTaylncb9J+0RY+6S+B+XpWU3k5bbv/wBkHr9DUTD/AGdtdtPBwpKy1PNr5jUrPmtb8zvtI+JWoxfJdtuWtGTxxBdR73iRvfuPWvLK0vD5kXXbFov9YtwjJzjkMCOfwohgKVSaSWrBZriIQ1d7HZR+Nntbn9z+8i6+49eK7HS/En2rwpd6xFO6LDcR20sicCFHjlZie/Pl7R7nHJIx5/4t8Qa1BqN/py67qnkR3UiLD9tk2BVcgcbsZ4H5VtaFdyeIPhrq2jveTXuow3kV/HBIRtWNYpUkk3Hljlo8jsACM/Nj6TLsto4bEyjF3lFO3TX79zzMZmNbEUNdIuxwV/f3N1cyTSyytIZC3L5wM5x9Kqk7kVdo3LnLbutOkEkEuHX5h1Vx/MU5p0e3jiaLlFYBgeTk5Gfbr+debVqSlJub1CKUUlFaFjSbQX94qTSukPCyTdfKzhVY/wCzkgfp6VQijeWRUT5mPp1rTt5rzRdZzp93FPLjYrwfOkqsMFcEc9cYx1pkC/ZtVhuF82G3Eync6nIAIyD6kZ6ehHrSlTTil1Td/wAOv3/0zNTldtbNaf193+Xf/9k=" alt="FTN Lucca" loading="lazy">
-            <div>
-              <p class="partner-name">FTN Lucca</p>
-              <p class="partner-role" data-i18n="partners.lucca.role">Prodígio de Fortnite &amp; Criador de Conteúdo Digital</p>
-            </div>
-          </div>
-          <p class="partner-desc" data-i18n="partners.lucca.desc">Jovem talento do competitivo de Fortnite, reconhecido pela mecânica refinada e pelo conteúdo que compartilha com a comunidade nas lives e nas redes sociais. Um dos criadores que já usa a otimização da GustavoTweaks pra manter o desempenho no mais alto nível.</p>
-          <div class="partner-socials">
-            <a class="partner-social-btn ripple-fx" href="https://www.instagram.com/ftnlucca/" target="_blank" rel="noopener noreferrer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> Instagram</a>
-            <a class="partner-social-btn ripple-fx" href="https://www.tiktok.com/@ftnlucca" target="_blank" rel="noopener noreferrer"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 3c.4 2.2 1.9 3.9 4.4 4.1v3.1c-1.5.1-2.9-.4-4.4-1.3v6.6c0 3.4-2.8 6.1-6.2 6.1s-6.2-2.7-6.2-6.1 2.8-6.1 6.2-6.1c.4 0 .8 0 1.2.1v3.2c-.4-.1-.8-.2-1.2-.2-1.6 0-2.9 1.3-2.9 2.9s1.3 2.9 2.9 2.9 3-1.2 3-2.9V3Z"/></svg> TikTok</a>
-          </div>
-        </figure>
-
-        <figure class="surface-card partner-card partner-card--trevo">
-          <span class="partner-cat" data-i18n="partners.trevo.cat">Organização de Esports</span>
-          <div class="partner-top">
-            <img class="partner-avatar" src="data:image/jpeg;base64,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" alt="Trevo Esports" loading="lazy">
-            <div>
-              <p class="partner-name">Trevo Esports</p>
-              <p class="partner-role" data-i18n="partners.trevo.role">Organização Profissional de Esports</p>
-            </div>
-          </div>
-          <p class="partner-desc" data-i18n="partners.trevo.desc">Organização profissional de esports com elenco competitivo e presença ativa na cena, reunindo jogadores e criadores em busca de alta performance. Parceira da GustavoTweaks na otimização dos PCs do time.</p>
-          <div class="partner-socials">
-            <a class="partner-social-btn ripple-fx" href="https://www.instagram.com/trevoesportsbrasil" target="_blank" rel="noopener noreferrer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> Instagram</a>
-            <a class="partner-social-btn ripple-fx" href="https://www.tiktok.com/@trevoesportss?_r=1&_t=ZS-98T87a1Dux2" target="_blank" rel="noopener noreferrer"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 3c.4 2.2 1.9 3.9 4.4 4.1v3.1c-1.5.1-2.9-.4-4.4-1.3v6.6c0 3.4-2.8 6.1-6.2 6.1s-6.2-2.7-6.2-6.1 2.8-6.1 6.2-6.1c.4 0 .8 0 1.2.1v3.2c-.4-.1-.8-.2-1.2-.2-1.6 0-2.9 1.3-2.9 2.9s1.3 2.9 2.9 2.9 3-1.2 3-2.9V3Z"/></svg> TikTok</a>
-          </div>
-        </figure>
-      </div>
-    </div>
-  </section>
 
   <section id="faq">
     <div class="container-x faq-grid">
@@ -1850,13 +1720,18 @@ footer.footer-slim .footer-legal button:hover {
     </div>
   </div>
 
-  <footer class="footer-slim">
+  <footer>
     <div class="container-x footer-inner">
-      <span class="footer-copy">© 2026 GustavoTweaks · Pro Optimization</span>
+      <div class="footer-brand">
+        <img src="/gustavotweaks-logo.png" alt="GustavoTweaks" />
+        <span>© 2026 GustavoTweaks · Pro Optimization</span>
+      </div>
+      <span style="font-size:0.75rem" data-i18n="footer.tagline">Feito por gamer, pra gamer.</span>
       <div class="footer-legal">
         <a href="#" onclick="openTicket();return false;" data-i18n="footer.support">Já é cliente? Abrir chamado de suporte</a>
         <button type="button" onclick="GTLegal.openTos()" data-i18n="footer.tos">Termos de Uso</button>
         <button type="button" onclick="GTLegal.openCookies()" data-i18n="footer.cookies">Política de Cookies</button>
+        <a href="mailto:gustavotweaks@gmail.com">gustavotweaks@gmail.com</a>
       </div>
     </div>
   </footer>
@@ -1904,177 +1779,7 @@ footer.footer-slim .footer-legal button:hover {
     </div>
   </div>
 
-  
-
-
-
-<div id="gt-tip" role="tooltip"></div>
-
-<div id="cursor-halo"></div>
-<svg id="cursor-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 2.5 19 12.2l-6.4.7 3.4 7.1-2.6 1.2-3.4-7.2L5 18.6z" fill="#0b0b0b" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"/></svg>
-
-
-<!-- =========================================================
-     GT · CONTAS, CUPONS E DASHBOARDS (Firebase)
-     Substitua firebaseConfig pelos dados do SEU projeto Firebase.
-     Veja o arquivo firestore.rules e o guia de configuração enviados junto.
-========================================================= -->
-
-
-
-
-  <!-- ================= WHATSAPP OFICIAL (canto inferior direito) ================= -->
-  <div class="social-dock" aria-label="WhatsApp oficial GustavoTweaks">
-    <a class="sd-whatsapp" href="https://api.whatsapp.com/send/?phone=5511957460235&text=%2ANovo+pedido+de+or%C3%A7amento+%E2%80%94+GustavoTweaks%2A&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" data-tip="Falar no WhatsApp" aria-label="WhatsApp oficial">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Zm-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Zm8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-    </a>
-  </div>
-
-  
-  
-  <!-- ================= TERMOS DE SERVIÇO ================= -->
-  <div id="tosPage" class="legal-page hidden" role="dialog" aria-modal="true">
-    <div class="legal-wrap">
-      <button type="button" class="legal-back" onclick="GTLegal.close()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span data-i18n="legal.back"></span></button>
-      <div class="legal-head">
-        <span class="legal-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5M9 13h6M9 17h4"/></svg></span>
-        <div><h2 data-i18n="tos.title"></h2><p data-i18n="tos.sub"></p></div>
-      </div>
-      <div class="legal-list">
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c1.t"></h3>
-            <p data-i18n="tos.c1.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 5.5L20.5 9l-4.2 4 1 6-5.3-2.8L6.7 19l1-6-4.2-4 6-.5z"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c2.t"></h3>
-            <p data-i18n="tos.c2.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c3.t"></h3>
-            <p data-i18n="tos.c3.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c4.t"></h3>
-            <p data-i18n="tos.c4.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 10a2 2 0 1 1 0 4 1.6 1.6 0 0 0-1.6 1z"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c5.t"></h3>
-            <p data-i18n="tos.c5.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4c3 0 6 3 6 6-2.5 4.5-6 7-10 8l-4-4c1-4 3.5-7.5 8-10z"/><circle cx="14.5" cy="9.5" r="1.5"/><path d="M6 14c-1.5 1-2 4-2 4s3-.5 4-2"/></svg></span>
-          <div>
-            <h3 data-i18n="tos.c6.t"></h3>
-            <p data-i18n="tos.c6.d"></p>
-          </div>
-        </div>
-      </div>
-      <p class="legal-foot" data-i18n="tos.foot"></p>
-    </div>
-  </div>
-
-  <!-- ================= POLÍTICA DE COOKIES ================= -->
-  <div id="cookiePage" class="legal-page hidden" role="dialog" aria-modal="true">
-    <div class="legal-wrap">
-      <button type="button" class="legal-back" onclick="GTLegal.close()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span data-i18n="legal.back"></span></button>
-      <div class="legal-head">
-        <span class="legal-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4 4 0 0 1-5-5 3.5 3.5 0 0 1-4-4z"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="14" r="1"/><circle cx="10" cy="15" r="1"/></svg></span>
-        <div><h2 data-i18n="ck.title"></h2><p data-i18n="ck.sub"></p></div>
-      </div>
-      <div class="legal-list">
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c1.t"></h3>
-            <p data-i18n="ck.c1.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c2.t"></h3>
-            <p data-i18n="ck.c2.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c3.t"></h3>
-            <p data-i18n="ck.c3.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 10a2 2 0 1 1 0 4 1.6 1.6 0 0 0-1.6 1z"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c4.t"></h3>
-            <p data-i18n="ck.c4.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.5"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c5.t"></h3>
-            <p data-i18n="ck.c5.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c6.t"></h3>
-            <p data-i18n="ck.c6.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="6"/><circle cx="8" cy="12" r="3"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c7.t"></h3>
-            <p data-i18n="ck.c7.d"></p>
-          </div>
-        </div>
-        <div class="legal-card">
-          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-          <div>
-            <h3 data-i18n="ck.c8.t"></h3>
-            <p data-i18n="ck.c8.d"></p>
-          </div>
-        </div>
-      </div>
-      <div class="legal-note">
-        <p data-i18n="ck.noteText"></p>
-        <button type="button" class="brand-btn ripple-fx" onclick="GTCookies.accept(true)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4 4 0 0 1-5-5 3.5 3.5 0 0 1-4-4z"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="14" r="1"/><circle cx="10" cy="15" r="1"/></svg><span data-i18n="ck.noteBtn"></span></button>
-      </div>
-      <p class="legal-foot" data-i18n="ck.foot"></p>
-    </div>
-  </div>
-
-  <!-- ================= COOKIE BANNER ================= -->
-  <div id="cookieBar" class="cookie-bar hidden" role="region" aria-label="Cookies">
-    <p><span data-i18n="ckbar.text"></span> <a onclick="GTLegal.openCookies()" data-i18n="ckbar.link"></a></p>
-    <div class="cookie-actions">
-      <button type="button" class="ck-reject" onclick="GTCookies.reject()" data-i18n="ckbar.reject"></button>
-      <button type="button" class="ck-accept" onclick="GTCookies.accept()" data-i18n="ckbar.accept"></button>
-    </div>
-  </div>
-
-  
-
-
-<script>
+  <script>
     /* =========================================================
        I18N — traduções do site (PT / EN)
     ========================================================= */
@@ -2082,7 +1787,7 @@ footer.footer-slim .footer-legal button:hover {
       pt: {
         'meta.title': 'GustavoTweaks — Otimização profissional de PC gamer',
         'meta.desc': 'Menos delay, mais frame. Otimização sob medida, ajustes de BIOS, overclock seguro e redução de input lag. Configuração personalizada, sem gambiarra.',
-        'nav.services': 'Serviços', 'nav.process': 'Processo', 'nav.data': 'Dados', 'nav.results': 'Feedbacks', 'nav.faq': 'FAQ', 'nav.support': 'Suporte', 'nav.about': 'Sobre mim', 'nav.cta': 'Orçamento',
+        'nav.services': 'Serviços', 'nav.process': 'Como funciona', 'nav.data': 'Dados', 'nav.results': 'Resultados', 'nav.faq': 'FAQ', 'nav.support': 'Suporte', 'nav.about': 'Sobre Mim', 'nav.cta': 'Agendar agora',
         'hero.badge': 'Atendendo agora',
         'hero.title1': 'Otimização profissional', 'hero.title2': 'de PC ao extremo.',
         'hero.desc': 'Otimização completa por R$ 95. Ajustes de BIOS, redução de input lag e estabilidade total, sob medida pra sua máquina e o seu jogo.',
@@ -2115,14 +1820,13 @@ footer.footer-slim .footer-legal button:hover {
         'fps.m4.label': 'Estabilidade', 'fps.m4.desc': 'Zero quedas bruscas (frame drops).',
         'fps.note': '*Nota: As métricas apresentadas representam médias obtidas em testes internos. Os ganhos reais são variáveis e dependem diretamente das especificações de hardware, refrigeração e condições físicas de cada computador.',
         'fps.base': 'Base', 'fps.optimized': 'Otimizado', 'fps.status': 'Status', 'fps.verified': 'Verificado', 'fps.lagReduction': 'Redução lag',
-        'testimonials.label': 'Resultados reais', 'testimonials.title': 'O que dizem sobre o serviço', 'testimonials.label2': 'Mais depoimentos',
+        'testimonials.label': 'Resultados reais', 'testimonials.title': 'Aprovado por gigantes', 'testimonials.label2': 'Mais depoimentos',
         'knownClients.label': 'Clientes conhecidos', 'knownClients.badge': 'Cliente conhecido', 'knownClients.followers': 'Seguidores',
         'knownClients.ftnlucca.text': '"Eu e meu pai fazemos lives de Fortnite, então precisamos de um PC com o máximo de desempenho e estabilidade. Depois da otimização do Gustavo Tweaks, ganhei mais FPS e a experiência melhorou muito. Isso tem me ajudado bastante nas lives e nas partidas. Recomendo demais!"',
         'testimonial1.text': '"Fortnite competitivo travava. Passou pra 240+ FPS estáveis e o input ficou instantâneo."',
         'testimonial2.text': '"Salto absurdo de FPS e o PC parou de esquentar. Trabalho impecável, valeu cada real."',
         'testimonial3.text': '"Achei que meu PC não dava mais. Depois da otimização, virou outra máquina no Valorant."',
-        'testimonial4.text': '"Suporte impecável, tudo explicado no processo. Já indiquei pra vários amigos do time."',
-        'testimonial5.text': '"Warzone rodava a 90 FPS com engasgo. Depois do tweak, 160+ estáveis e zero stutter nas ranked."', 'testimonial6.text': '"CS2 ficou outro jogo: input direto, mouse leve e temperatura muito mais baixa."', 'testimonial7.text': '"Notebook gamer que travava em live agora grava e joga junto sem perder frame."', 'testimonial8.text': '"Serviço rápido, explicou tudo por chamada e o resultado veio no mesmo dia. Recomendo demais."',
+        'testimonial5.text': '"Fazia live e o OBS derrubava o FPS. Depois do ajuste, gravo e jogo ao mesmo tempo sem engasgo."', 'testimonial6.text': '"Atendimento profissional do início ao fim, prazo cumprido e resultado exatamente como prometido."', 'testimonial7.text': '"Temperatura caiu 12°C e o PC ficou silencioso. Explicou cada ajuste antes de aplicar."', 'testimonial8.text': '"Serviço feito no horário combinado e com acompanhamento depois. Confiança total."', 'testimonial4.text': '"Suporte impecável, tudo explicado no processo. Já indiquei pra vários amigos do time."',
         'nav.partners': 'Parceiros',
         'partners.label': 'Colaborações', 'partners.title1': 'Nossos', 'partners.title2': 'parceiros',
         'partners.desc': 'Criadores e organizações que confiam no trabalho da GustavoTweaks e recomendam a otimização pra quem joga sério.',
@@ -2185,13 +1889,12 @@ footer.footer-slim .footer-legal button:hover {
         'footer.tagline': 'Feito por gamer, pra gamer.', 'footer.support': 'Já é cliente? Abrir chamado de suporte', 'floating.cta': 'Agendar',
         'chat.name': 'Atendimento GustavoTweaks', 'chat.sub': 'Online — resposta em minutos', 'chat.waButton': 'Falar agora no WhatsApp', 'chat.waOptionLabel': 'Opção 2 (opcional):',
         'opt.tag1': 'Deep Tuning', 'opt.tag2': 'Resposta rápida', 'opt.tag3': 'Para o seu conforto', 'opt.tag4': 'Autonomia',
-        'acct.login': 'Entrar', 'acct.myAccount': 'Minha conta', 'acct.title': 'Entrar na conta', 'acct.sub': 'Acesso para administrador do site e criadores de conteúdo parceiros.', 'acct.email': 'E-mail', 'acct.password': 'Senha', 'acct.submit': 'Entrar',
         'ticket.title': 'Peça seu orçamento', 'ticket.sub': 'Me conta o que você precisa por aqui — o pedido vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.',
         'ticket.titleSupport': 'Abrir chamado de suporte', 'ticket.subSupport': 'Me conta qual é o problema por aqui — o chamado vai direto pra mim e eu te respondo assim que possível. Sem precisar sair pro WhatsApp.',
         'ticket.name': 'Seu nome', 'ticket.namePh': 'Ex.: João Silva', 'ticket.contact': 'Contato (e-mail ou WhatsApp)', 'ticket.contactPh': 'Ex.: joao@email.com ou (11) 91234-5678',
         'ticket.category': 'Categoria', 'ticket.cat1': 'Orçamento / Novo serviço', 'ticket.cat2': 'Suporte técnico', 'ticket.cat3': 'Dúvida sobre serviço', 'ticket.cat4': 'Cobrança / Pagamento', 'ticket.cat5': 'Outro',
         'ticket.message': 'Descreva o que você precisa', 'ticket.messagePh': 'Ex.: config do PC, o que quer melhorar, ou o problema que tá acontecendo...',
-        'ticket.coupon': 'Cupom de desconto (opcional)', 'ticket.couponPh': 'Ex.: FTNLUCCA', 'ticket.submit': 'Abrir chamado', 'ticket.sending': 'Enviando…',
+        'ticket.submit': 'Abrir chamado', 'ticket.sending': 'Enviando…',
         'ticket.altBtn': 'Entrar em contato em outras redes (opcional)', 'ticket.altHint': 'Opção 2 · Discord e WhatsApp', 'ticket.waInline': 'falar agora no WhatsApp',
         'net.title': 'Falar em outras redes', 'net.sub': 'Prefere conversar direto? Escolha um canal oficial abaixo — atendimento pelo Discord ou WhatsApp Business.',
         'net.d1name': 'Discord — Embaixadores FTNLUCCA', 'net.d1desc': 'Comunidade oficial dos embaixadores', 'net.d2name': 'Discord — GustavoTweaks (oficial)', 'net.d2desc': 'Servidor oficial do GustavoTweaks', 'net.wadesc': 'Atendimento direto comigo', 'net.hint': 'Resposta normalmente em poucos minutos'
@@ -2199,7 +1902,7 @@ footer.footer-slim .footer-legal button:hover {
       en: {
         'meta.title': 'GustavoTweaks — Professional gaming PC optimization',
         'meta.desc': 'Less delay, more frames. Tailored optimization, BIOS tuning, safe overclocking and input lag reduction. Custom setup, no shortcuts.',
-        'nav.services': 'Services', 'nav.process': 'How it works', 'nav.data': 'Data', 'nav.results': 'Feedbacks', 'nav.faq': 'FAQ', 'nav.support': 'Support', 'nav.about': 'About me', 'nav.cta': 'Quote',
+        'nav.services': 'Services', 'nav.process': 'How it works', 'nav.data': 'Data', 'nav.results': 'Results', 'nav.faq': 'FAQ', 'nav.support': 'Support', 'nav.about': 'About Me', 'nav.cta': 'Schedule now',
         'hero.badge': 'Online now',
         'hero.title1': 'Professional PC optimization', 'hero.title2': 'taken to the extreme.',
         'hero.desc': 'BIOS tuning, safe overclocking, input lag reduction and total stability. 100% personalized service, tailored to your machine and your game.',
@@ -2232,14 +1935,13 @@ footer.footer-slim .footer-legal button:hover {
         'fps.m4.label': 'Stability', 'fps.m4.desc': 'Zero sudden frame drops.',
         'fps.note': '*Note: The metrics shown represent averages from internal testing. Real gains vary and depend directly on each computer\'s hardware specs, cooling and physical condition.',
         'fps.base': 'Base', 'fps.optimized': 'Optimized', 'fps.status': 'Status', 'fps.verified': 'Verified', 'fps.lagReduction': 'Lag reduction',
-        'testimonials.label': 'Real results', 'testimonials.title': 'What clients say about the service', 'testimonials.label2': 'More testimonials',
+        'testimonials.label': 'Real results', 'testimonials.title': 'Approved by giants', 'testimonials.label2': 'More testimonials',
         'knownClients.label': 'Known clients', 'knownClients.badge': 'Known client', 'knownClients.followers': 'Followers',
         'knownClients.ftnlucca.text': '"My dad and I stream Fortnite, so we need a PC with maximum performance and stability. After the Gustavo Tweaks optimization, I gained more FPS and the experience improved a lot. It has really helped me in streams and matches. I highly recommend it!"',
         'testimonial1.text': '"Competitive Fortnite used to stutter. Now it\'s a stable 240+ FPS and input feels instant."',
         'testimonial2.text': '"Massive FPS jump and the PC stopped overheating. Flawless work, worth every cent."',
         'testimonial3.text': '"I thought my PC was done for. After the optimization it felt like a different machine in Valorant."',
-        'testimonial4.text': '"Flawless support, everything explained along the way. Already recommended it to my whole team."',
-        'testimonial5.text': '"Warzone ran at 90 FPS with hitches. After the tweak, a stable 160+ and zero stutter in ranked."', 'testimonial6.text': '"CS2 feels like a new game: instant input, light mouse and way lower temps."', 'testimonial7.text': '"My gaming laptop used to freeze on stream, now it records and plays without dropping frames."', 'testimonial8.text': '"Fast service, explained everything on a call and delivered the same day. Highly recommend."',
+        'testimonial5.text': '"Streaming used to tank my FPS in OBS. After the tuning I record and play at the same time with no stutter."', 'testimonial6.text': '"Professional service from start to finish, delivered on time and exactly as promised."', 'testimonial7.text': '"Temps dropped 12°C and the PC went quiet. Every tweak was explained before being applied."', 'testimonial8.text': '"Done at the agreed time and with follow-up afterwards. Full trust."', 'testimonial4.text': '"Flawless support, everything explained along the way. Already recommended it to my whole team."',
         'nav.partners': 'Partners',
         'partners.label': 'Collaborations', 'partners.title1': 'Our', 'partners.title2': 'partners',
         'partners.desc': 'Creators and organizations that trust GustavoTweaks and recommend the optimization to serious gamers.',
@@ -2302,13 +2004,12 @@ footer.footer-slim .footer-legal button:hover {
         'footer.tagline': 'Built by a gamer, for gamers.', 'footer.support': 'Already a client? Open a support ticket', 'floating.cta': 'Schedule',
         'chat.name': 'GustavoTweaks Support', 'chat.sub': 'Online — reply within minutes', 'chat.waButton': 'Talk on WhatsApp now', 'chat.waOptionLabel': 'Option 2 (optional):',
         'opt.tag1': 'Deep Tuning', 'opt.tag2': 'Fast response', 'opt.tag3': 'For your comfort', 'opt.tag4': 'Autonomy',
-        'acct.login': 'Sign in', 'acct.myAccount': 'My account', 'acct.title': 'Sign in to your account', 'acct.sub': 'Access for the site administrator and partner content creators.', 'acct.email': 'E-mail', 'acct.password': 'Password', 'acct.submit': 'Sign in',
         'ticket.title': 'Request your quote', 'ticket.sub': "Tell me what you need here — your request comes straight to me and I'll reply as soon as possible. No need to leave for WhatsApp.",
         'ticket.titleSupport': 'Open a support ticket', 'ticket.subSupport': "Tell me what's going on here — your ticket comes straight to me and I'll reply as soon as possible. No need to leave for WhatsApp.",
         'ticket.name': 'Your name', 'ticket.namePh': 'e.g. John Smith', 'ticket.contact': 'Contact (e-mail or WhatsApp)', 'ticket.contactPh': 'e.g. john@email.com or +1 555 123 4567',
         'ticket.category': 'Category', 'ticket.cat1': 'Quote / New service', 'ticket.cat2': 'Technical support', 'ticket.cat3': 'Question about the service', 'ticket.cat4': 'Billing / Payment', 'ticket.cat5': 'Other',
         'ticket.message': 'Describe what you need', 'ticket.messagePh': 'e.g. your PC specs, what you want to improve, or the issue you are facing...',
-        'ticket.coupon': 'Discount coupon (optional)', 'ticket.couponPh': 'e.g. FTNLUCCA', 'ticket.submit': 'Open ticket', 'ticket.sending': 'Sending…',
+        'ticket.submit': 'Open ticket', 'ticket.sending': 'Sending…',
         'ticket.altBtn': 'Contact me on other networks (optional)', 'ticket.altHint': 'Option 2 · Discord and WhatsApp', 'ticket.waInline': 'talk on WhatsApp now',
         'net.title': 'Talk on other networks', 'net.sub': 'Prefer to talk directly? Pick an official channel below — support via Discord or WhatsApp Business.',
         'net.d1name': 'Discord — FTNLUCCA Ambassadors', 'net.d1desc': 'Official ambassadors community', 'net.d2name': 'Discord — GustavoTweaks (official)', 'net.d2desc': 'Official GustavoTweaks server', 'net.wadesc': 'Direct support with me', 'net.hint': 'Usually answered within a few minutes'
@@ -2316,7 +2017,7 @@ footer.footer-slim .footer-legal button:hover {
       es: {
         'meta.title': 'GustavoTweaks — Optimización profesional de PC gamer',
         'meta.desc': 'Menos delay, más FPS. Optimización a medida, ajustes de BIOS, overclock seguro y reducción de input lag. Configuración personalizada, sin atajos.',
-        'nav.services': 'Servicios', 'nav.process': 'Cómo funciona', 'nav.data': 'Datos', 'nav.results': 'Feedbacks', 'nav.faq': 'FAQ', 'nav.support': 'Soporte', 'nav.about': 'Sobre mí', 'nav.cta': 'Presupuesto',
+        'nav.services': 'Servicios', 'nav.process': 'Cómo funciona', 'nav.data': 'Datos', 'nav.results': 'Resultados', 'nav.faq': 'FAQ', 'nav.support': 'Soporte', 'nav.about': 'Sobre mí', 'nav.cta': 'Agendar ahora',
         'hero.badge': 'Atendiendo ahora',
         'hero.title1': 'Optimización profesional', 'hero.title2': 'de PC al extremo.',
         'hero.desc': 'Ajustes de BIOS, overclock seguro, reducción de input lag y estabilidad total. Servicio 100% personalizado, a la medida de tu máquina y tu juego.',
@@ -2349,14 +2050,13 @@ footer.footer-slim .footer-legal button:hover {
         'fps.m4.label': 'Estabilidad', 'fps.m4.desc': 'Cero caídas bruscas de frames.',
         'fps.note': '*Nota: Las métricas mostradas representan medias obtenidas en pruebas internas. Las ganancias reales varían y dependen directamente de las especificaciones de hardware, la refrigeración y el estado físico de cada ordenador.',
         'fps.base': 'Base', 'fps.optimized': 'Optimizado', 'fps.status': 'Estado', 'fps.verified': 'Verificado', 'fps.lagReduction': 'Reducción de lag',
-        'testimonials.label': 'Resultados reales', 'testimonials.title': 'Lo que dicen del servicio', 'testimonials.label2': 'Más testimonios',
+        'testimonials.label': 'Resultados reales', 'testimonials.title': 'Aprobado por gigantes', 'testimonials.label2': 'Más testimonios',
         'knownClients.label': 'Clientes conocidos', 'knownClients.badge': 'Cliente conocido', 'knownClients.followers': 'Seguidores',
         'knownClients.ftnlucca.text': '"Mi padre y yo hacemos directos de Fortnite, así que necesitamos un PC con el máximo rendimiento y estabilidad. Después de la optimización de Gustavo Tweaks gané más FPS y la experiencia mejoró muchísimo. Me ha ayudado mucho en los directos y en las partidas. ¡Lo recomiendo totalmente!"',
         'testimonial1.text': '"El Fortnite competitivo se trababa. Pasó a 240+ FPS estables y el input quedó instantáneo."',
         'testimonial2.text': '"Salto brutal de FPS y el PC dejó de calentarse. Trabajo impecable, valió cada peso."',
         'testimonial3.text': '"Pensé que mi PC ya no daba más. Después de la optimización parecía otra máquina en Valorant."',
-        'testimonial4.text': '"Soporte impecable, todo explicado durante el proceso. Ya se lo recomendé a todo mi equipo."',
-        'testimonial5.text': '"Warzone iba a 90 FPS con tirones. Tras el tweak, 160+ estables y cero stutter en ranked."', 'testimonial6.text': '"CS2 es otro juego: input directo, mouse ligero y temperaturas mucho más bajas."', 'testimonial7.text': '"El portátil gamer se trababa en directo, ahora graba y juega sin perder frames."', 'testimonial8.text': '"Servicio rápido, me explicó todo por llamada y el resultado llegó el mismo día. Muy recomendado."',
+        'testimonial5.text': '"Al hacer directos, el OBS me bajaba los FPS. Tras el ajuste grabo y juego a la vez sin tirones."', 'testimonial6.text': '"Atención profesional de principio a fin, plazo cumplido y resultado tal como se prometió."', 'testimonial7.text': '"La temperatura bajó 12°C y el PC quedó silencioso. Explicó cada ajuste antes de aplicarlo."', 'testimonial8.text': '"Trabajo hecho en el horario acordado y con seguimiento después. Confianza total."', 'testimonial4.text': '"Soporte impecable, todo explicado durante el proceso. Ya se lo recomendé a todo mi equipo."',
         'nav.partners': 'Colaboradores',
         'partners.label': 'Colaboraciones', 'partners.title1': 'Nuestros', 'partners.title2': 'colaboradores',
         'partners.desc': 'Creadores y organizaciones que confían en el trabajo de GustavoTweaks y recomiendan la optimización a quien juega en serio.',
@@ -2425,13 +2125,12 @@ footer.footer-slim .footer-legal button:hover {
         'opt.c3.title': 'Atención remota', 'opt.c3.desc': 'El procedimiento dura de media entre 1h y 2h, de forma totalmente remota. Yo desde aquí y tú desde ahí, pudiendo ver e intervenir en todo lo que se hace.',
         'opt.c4.title': 'Después, ¡hazlo tú mismo!', 'opt.c4.desc': 'Recibes un manual de cuidados prácticos esenciales para mantener la máquina volando por tu cuenta, con enlaces de drivers y futuras actualizaciones. Total autonomía, sin mensualidades.',
         'opt.tag1': 'Deep Tuning', 'opt.tag2': 'Respuesta rápida', 'opt.tag3': 'Para tu comodidad', 'opt.tag4': 'Autonomía',
-        'acct.login': 'Entrar', 'acct.myAccount': 'Mi cuenta', 'acct.title': 'Entrar en la cuenta', 'acct.sub': 'Acceso para el administrador del sitio y creadores de contenido asociados.', 'acct.email': 'Correo', 'acct.password': 'Contraseña', 'acct.submit': 'Entrar',
         'ticket.title': 'Pide tu presupuesto', 'ticket.sub': 'Cuéntame por aquí lo que necesitas — el pedido llega directo a mí y te respondo lo antes posible. Sin salir a WhatsApp.',
         'ticket.titleSupport': 'Abrir ticket de soporte', 'ticket.subSupport': 'Cuéntame por aquí cuál es el problema — el ticket llega directo a mí y te respondo lo antes posible. Sin salir a WhatsApp.',
         'ticket.name': 'Tu nombre', 'ticket.namePh': 'Ej.: Juan Pérez', 'ticket.contact': 'Contacto (correo o WhatsApp)', 'ticket.contactPh': 'Ej.: juan@email.com o +54 9 11 1234-5678',
         'ticket.category': 'Categoría', 'ticket.cat1': 'Presupuesto / Nuevo servicio', 'ticket.cat2': 'Soporte técnico', 'ticket.cat3': 'Duda sobre el servicio', 'ticket.cat4': 'Cobro / Pago', 'ticket.cat5': 'Otro',
         'ticket.message': 'Describe lo que necesitas', 'ticket.messagePh': 'Ej.: la configuración de tu PC, qué quieres mejorar o el problema que estás teniendo...',
-        'ticket.coupon': 'Cupón de descuento (opcional)', 'ticket.couponPh': 'Ej.: FTNLUCCA', 'ticket.submit': 'Abrir ticket', 'ticket.sending': 'Enviando…',
+        'ticket.submit': 'Abrir ticket', 'ticket.sending': 'Enviando…',
         'ticket.altBtn': 'Contactar por otras redes (opcional)', 'ticket.altHint': 'Opción 2 · Discord y WhatsApp', 'ticket.waInline': 'hablar ahora por WhatsApp',
         'net.title': 'Hablar por otras redes', 'net.sub': '¿Prefieres hablar directo? Elige un canal oficial abajo — atención por Discord o WhatsApp Business.',
         'net.d1name': 'Discord — Embajadores FTNLUCCA', 'net.d1desc': 'Comunidad oficial de los embajadores', 'net.d2name': 'Discord — GustavoTweaks (oficial)', 'net.d2desc': 'Servidor oficial de GustavoTweaks', 'net.wadesc': 'Atención directa conmigo', 'net.hint': 'Normalmente respondo en pocos minutos'
@@ -2499,37 +2198,22 @@ footer.footer-slim .footer-legal button:hover {
     ========================================================= */
     const WHATSAPP_NUMBER = '5511957460235';
 
-    // Cupom aplicado automaticamente via link personalizado (?cupom=CODIGO)
-    // — usado pelos links que os criadores de conteúdo compartilham com o público deles
-    function getRefCupomFromUrl(){
-      try {
-        const params = new URLSearchParams(window.location.search);
-        const fromUrl = (params.get('cupom') || '').trim();
-        if (fromUrl) { sessionStorage.setItem('gustavotweaks_ref_cupom', fromUrl); return fromUrl; }
-        return (sessionStorage.getItem('gustavotweaks_ref_cupom') || '').trim();
-      } catch(e) { return ''; }
-    }
-    const REF_CUPOM = getRefCupomFromUrl();
-
     function getSteps(lang){
       if (lang === 'en') return [
         { key:'servico', q:'Which service do you want?', placeholder:'Choose an option below', suggestions:['Complete optimization — R$ 95','Overclock Pro — R$ 150'] },
         { key:'nome', q:'Great choice! What\'s your name?', placeholder:'Your name' },
         { key:'configuracao', q:'What are your main PC components?', placeholder:'Ex.: Ryzen 5 5600, RTX 3060, 16GB RAM, B550M', multiline:true },
         { key:'objetivo', q:'What do you want to improve?', placeholder:'Ex.: More FPS, less delay or lower temperatures', suggestions:['More FPS','Less input lag','Lower temperatures','Overall performance'], multiline:true },
-        { key:'cupom', q:'Do you have a discount coupon code? Type it in, or tap "No coupon".', placeholder:'Ex.: FTNLUCCA', suggestions:['No coupon'], optional:true },
       ];
       return [
         { key:'servico', q:'Qual serviço você deseja?', placeholder:'Escolha uma opção abaixo', suggestions:['Otimização completa — R$ 95','Overclock Pro — R$ 150'] },
         { key:'nome', q:'Ótima escolha! Qual é o seu nome?', placeholder:'Seu nome' },
         { key:'configuracao', q:'Quais são as principais peças do seu PC?', placeholder:'Ex.: Ryzen 5 5600, RTX 3060, 16GB RAM, B550M', multiline:true },
         { key:'objetivo', q:'O que você quer melhorar?', placeholder:'Ex.: Mais FPS, menos delay ou temperatura mais baixa', suggestions:['Mais FPS','Menos input lag','Temperatura mais baixa','Desempenho geral'], multiline:true },
-        { key:'cupom', q:'Você tem um cupom de desconto? Digite o código ou toque em "Não tenho cupom".', placeholder:'Ex.: FTNLUCCA', suggestions:['Não tenho cupom'], optional:true },
       ];
     }
 
     let steps = getSteps(currentLang);
-    if (REF_CUPOM) steps = steps.filter(s => s.key !== 'cupom');
     let stepIndex = 0, answers = {}, finished = false, currentLeadId = null;
     const overlay = document.getElementById('chatOverlay');
     const messagesEl = document.getElementById('chatMessages');
@@ -2601,21 +2285,21 @@ footer.footer-slim .footer-legal button:hover {
       }
     }
 
-    function buildWaLines(isEn, answers, couponLine){
+    function buildWaLines(isEn, answers, extraLine){
       return isEn ? [
         '*New quote request — GustavoTweaks*','',
         `👤 *Name:* ${answers.nome||'-'}`,
         `🛠️ *Service:* ${answers.servico||'-'}`,
         `🖥️ *PC:* ${answers.configuracao||'-'}`,
         `🎯 *Goal:* ${answers.objetivo||'-'}`,
-        ...(couponLine ? ['', couponLine] : [])
+        ...(extraLine ? ['', extraLine] : [])
       ] : [
         '*Novo pedido de orçamento — GustavoTweaks*','',
         `👤 *Nome:* ${answers.nome||'-'}`,
         `🛠️ *Serviço:* ${answers.servico||'-'}`,
         `🖥️ *PC:* ${answers.configuracao||'-'}`,
         `🎯 *Objetivo:* ${answers.objetivo||'-'}`,
-        ...(couponLine ? ['', couponLine] : [])
+        ...(extraLine ? ['', extraLine] : [])
       ];
     }
 
@@ -2627,12 +2311,6 @@ footer.footer-slim .footer-legal button:hover {
       finished = true;
       const isEn = currentLang === 'en';
 
-      // normaliza o cupom digitado (ignora "Não tenho cupom" / "No coupon")
-      // — se veio de um link personalizado, usa o cupom do link direto, sem precisar perguntar
-      const rawCupom = (REF_CUPOM || answers.cupom || '').trim();
-      const semCupomLabels = ['não tenho cupom','no coupon',''];
-      const cupomDigitado = semCupomLabels.includes(rawCupom.toLowerCase()) ? '' : rawCupom;
-
       formEl.classList.add('hidden');
       document.getElementById('postFinishActions').classList.remove('hidden');
       stepEl.textContent = stepLabel();
@@ -2640,17 +2318,11 @@ footer.footer-slim .footer-legal button:hover {
       waCopyRow.classList.add('hidden');
       waBtn.classList.remove('wa-attention');
 
-      // valida o cupom no Firestore (se houver)
-      let coupon = { valid: false, code: '', discountPercent: 0 };
-      if (cupomDigitado && window.GT && typeof window.GT.validateCoupon === 'function') {
-        try { coupon = await window.GT.validateCoupon(cupomDigitado); } catch(e) { coupon = { valid:false, code: cupomDigitado, discountPercent:0 }; }
-      }
-
       // salva o pedido como um "chamado" no Firestore (só você vê isso no painel) —
       // essa é a ação principal; o WhatsApp abaixo é só uma opção extra, opcional
       currentLeadId = null;
       if (window.GT && typeof window.GT.saveLead === 'function') {
-        try { currentLeadId = await window.GT.saveLead({ answers, coupon, lang: currentLang }); }
+        try { currentLeadId = await window.GT.saveLead({ answers, lang: currentLang }); }
         catch(e) { currentLeadId = null; }
       }
       const shortCode = currentLeadId ? ('#' + currentLeadId.slice(-6).toUpperCase()) : '';
@@ -2665,18 +2337,14 @@ footer.footer-slim .footer-legal button:hover {
         `<li>🛠️ ${answers.servico||'-'}</li>`+
         `<li>🖥️ ${answers.configuracao||'-'}</li>`+
         `<li>🎯 ${answers.objetivo||'-'}</li>`+
-        (coupon.valid ? `<li>🏷️ ${isEn ? 'Coupon' : 'Cupom'} <strong>${coupon.code}</strong> — 5% ${isEn ? 'off applied' : 'de desconto aplicado'}</li>` : (cupomDigitado ? `<li>⚠️ ${isEn ? `Coupon "${cupomDigitado}" not found` : `Cupom "${cupomDigitado}" não encontrado`}</li>` : '')) +
       '</ul>';
       messagesEl.appendChild(sum);
       messagesEl.scrollTop = messagesEl.scrollHeight;
 
       // monta o link do WhatsApp — só pra quem CLICAR nele por vontade própria, não abre sozinho
-      const couponLine = coupon.valid
-        ? (isEn ? `🏷️ *Coupon:* ${coupon.code} (5% discount)` : `🏷️ *Cupom:* ${coupon.code} (5% de desconto)`)
-        : (cupomDigitado ? (isEn ? `🏷️ *Coupon typed (not valid):* ${cupomDigitado}` : `🏷️ *Cupom digitado (não válido):* ${cupomDigitado}`) : '');
       const codeLine = shortCode ? (isEn ? `🎫 *Request:* ${shortCode}` : `🎫 *Pedido:* ${shortCode}`) : '';
 
-      const finalText = buildWaLines(isEn, answers, [couponLine, codeLine].filter(Boolean).join('\n')).join('\n');
+      const finalText = buildWaLines(isEn, answers, codeLine).join('\n');
       waBtn.href = waLink(finalText);
 
       const displayNumber = '+' + WHATSAPP_NUMBER.replace(/^55/, '55 ').replace(/(\d{2})(\d{5})(\d{4})$/, '$1 $2-$3');
@@ -2703,7 +2371,6 @@ footer.footer-slim .footer-legal button:hover {
 
     function openChat(){
       steps = getSteps(currentLang);
-      if (REF_CUPOM) steps = steps.filter(s => s.key !== 'cupom');
       overlay.classList.remove('hidden');
       stepIndex=0; answers={}; finished=false; currentLeadId=null;
       messagesEl.innerHTML='';
@@ -2720,11 +2387,6 @@ footer.footer-slim .footer-legal button:hover {
         <button type="button" id="cancelReasonSend" class="brand-btn ripple-fx" style="width:100%;margin-top:0.5rem">Enviar e cancelar</button>`;
       document.getElementById('cancelReasonSend').onclick = sendCancelReason;
       inputEl.value='';
-      if (REF_CUPOM) {
-        addMsg('bot', currentLang==='en'
-          ? `🏷️ Coupon ${REF_CUPOM} automatically applied — 5% off!`
-          : `🏷️ Cupom ${REF_CUPOM} aplicado automaticamente — 5% de desconto!`);
-      }
       ask();
       setTimeout(()=>inputEl.focus(), 50);
     }
@@ -2745,7 +2407,6 @@ footer.footer-slim .footer-legal button:hover {
       document.getElementById('ticketContato').value = '';
       document.getElementById('ticketCategoria').value = isOrcamento ? 'Orçamento / Novo serviço' : 'Suporte técnico';
       document.getElementById('ticketMensagem').value = '';
-      document.getElementById('ticketCupom').value = REF_CUPOM ? REF_CUPOM.toUpperCase() : '';
       const titleEl = document.getElementById('ticketTitle');
       const subEl = document.getElementById('ticketSub');
       const isEn = currentLang === 'en';
@@ -2770,7 +2431,6 @@ footer.footer-slim .footer-legal button:hover {
       const contato = document.getElementById('ticketContato').value.trim();
       const categoria = document.getElementById('ticketCategoria').value;
       const mensagem = document.getElementById('ticketMensagem').value.trim();
-      const cupom = document.getElementById('ticketCupom').value.trim();
       const isOrcamento = categoria === 'Orçamento / Novo serviço';
 
       ticketError.textContent = '';
@@ -2786,9 +2446,9 @@ footer.footer-slim .footer-legal button:hover {
       ticketSubmitBtn.disabled = true;
       ticketSubmitBtn.textContent = tr('ticket.sending');
       try {
-        const ticketId = await window.GT.saveTicket({ nome, contato, categoria, mensagem, cupom, isOrcamento, lang: currentLang });
+        const ticketId = await window.GT.saveTicket({ nome, contato, categoria, mensagem, isOrcamento, lang: currentLang });
         const shortId = '#' + ticketId.slice(-6).toUpperCase();
-        const waText = `*Chamado de suporte ${shortId} — GustavoTweaks*\n\n👤 *Nome:* ${nome}\n📞 *Contato:* ${contato}\n🗂️ *Categoria:* ${categoria}\n📝 *Detalhes:* ${mensagem}` + (cupom ? `\n🏷️ *Cupom:* ${cupom}` : '');
+        const waText = `*Chamado de suporte ${shortId} — GustavoTweaks*\n\n👤 *Nome:* ${nome}\n📞 *Contato:* ${contato}\n🗂️ *Categoria:* ${categoria}\n📝 *Detalhes:* ${mensagem}`;
 
         // joga a mensagem que a pessoa já escreveu no formulário como a primeira
         // mensagem da conversa em tempo real (assim ela não precisa repetir nada)
@@ -2897,10 +2557,6 @@ footer.footer-slim .footer-legal button:hover {
       try { savedId = localStorage.getItem('gustavotweaks_chat_ticket'); } catch(e) {}
       if (savedId) document.getElementById('liveChatFab').classList.remove('hidden');
     });
-    // Nota: openLiveChatFn/closeLiveChatFn/reopenLiveChatFn são funções globais
-    // (declaradas com "function" neste script clássico), por isso o módulo Firebase
-    // mais abaixo consegue referenciá-las ao montar o objeto final window.GT.
-
     /* ================= CHAT AO VIVO (visão do administrador) ================= */
     let adminChatUnsub = null;
     let adminChatTicketId = null;
@@ -2919,8 +2575,6 @@ footer.footer-slim .footer-legal button:hover {
       } else {
         msgs.forEach(m => {
           const div = document.createElement('div');
-          // do ponto de vista do admin: mensagem dele mesmo cai à direita (msg-user),
-          // mensagem do cliente cai à esquerda (msg-bot)
           div.className = 'msg ' + (m.sender === 'admin' ? 'msg-user' : 'msg-bot');
           div.textContent = m.text || '';
           adminChatMessages.appendChild(div);
@@ -2948,7 +2602,6 @@ footer.footer-slim .footer-legal button:hover {
       adminChatOverlay.classList.add('hidden');
       if (adminChatUnsub) { adminChatUnsub(); adminChatUnsub = null; }
       adminChatTicketId = null;
-      // atualiza a listinha de chamados (pra refletir "lido"/status mais recente)
       if (window.GT && typeof window.GT.switchAdminTab === 'function') {
         try { window.GT.switchAdminTab('tickets'); } catch(e) {}
       }
@@ -2978,6 +2631,11 @@ footer.footer-slim .footer-legal button:hover {
       this.style.height = 'auto';
       this.style.height = Math.min(this.scrollHeight, 128) + 'px';
     });
+
+    // Nota: openLiveChatFn/closeLiveChatFn/reopenLiveChatFn são funções globais
+    // (declaradas com "function" neste script clássico), por isso o módulo Firebase
+    // mais abaixo consegue referenciá-las ao montar o objeto final window.GT.
+
 
     document.getElementById('cancelBtn').onclick = function(){
       document.getElementById('postFinishActions').classList.add('hidden');
@@ -3090,7 +2748,12 @@ footer.footer-slim .footer-legal button:hover {
       }
       document.addEventListener('click', handleInteractive, true);
     })();
-  </script><script>
+  </script>
+
+
+
+<div id="gt-tip" role="tooltip"></div>
+<script>
 /* ===== GLOSSÁRIO DIDÁTICO — tooltips nos termos em branco ===== */
 (function(){
   var GLOSSARY = {
@@ -3164,7 +2827,10 @@ footer.footer-slim .footer-legal button:hover {
   document.addEventListener('click', function(e){ if (current && !current.contains(e.target)) hide(); });
   new MutationObserver(function(){ scan(); }).observe(document.body, { childList: true, subtree: true });
 })();
-</script><script>
+</script>
+<div id="cursor-halo"></div>
+<svg id="cursor-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 2.5 19 12.2l-6.4.7 3.4 7.1-2.6 1.2-3.4-7.2L5 18.6z" fill="#0b0b0b" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+<script>
 (function(){
   var track = document.getElementById('tcTrack');
   var dotsWrap = document.getElementById('tcDots');
@@ -3277,17 +2943,22 @@ footer.footer-slim .footer-legal button:hover {
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   targets.forEach(function(el){ io.observe(el); });
 })();
-</script><script>
-  // placeholder de segurança: evita erro no botão "Entrar" caso o módulo
-  // abaixo ainda não tenha carregado (ex.: sem internet, config incompleta)
-  window.GT = window.GT || {
-    openAccountArea: function(){ alert('Configuração do Firebase pendente. Veja o guia enviado junto com o site (firestore.rules + instruções).'); }
-  };
-</script><script type="module">
-  import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+</script>
+
+<!-- =========================================================
+     GT · CONTAS, CUPONS E DASHBOARDS (Firebase)
+     Substitua firebaseConfig pelos dados do SEU projeto Firebase.
+     Veja o arquivo firestore.rules e o guia de configuração enviados junto.
+========================================================= -->
+<script>
+  // placeholder: evita erro no botão "Entrar" caso o módulo abaixo ainda não tenha carregado
+  window.GT = window.GT || { openAccountArea: function(){ alert('Carregando… tente novamente em instantes.'); } };
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
     getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
-    createUserWithEmailAndPassword, setPersistence, browserLocalPersistence
+    setPersistence, browserLocalPersistence
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import {
     getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where,
@@ -3307,50 +2978,18 @@ footer.footer-slim .footer-legal button:hover {
     appId: "1:497130733036:web:2de52026c4baafef3714c9"
   };
 
-  // contas "semente" — precisam existir em Authentication > Users
-  // (crie manualmente no Console com esses e-mails/senhas)
+  // única conta com acesso ao painel — o administrador do site (Gustavo)
   const OWNER_EMAIL = 'gustavotweaks@gmail.com';
-  const CREATOR_SEED = { email: 'ftnlucca@gmail.com', code: 'FTNLUCCA', discountPercent: 5, commissionPercent: 25 };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
   const db = getFirestore(app);
+  const auth = getAuth(app);
   setPersistence(auth, browserLocalPersistence).catch(()=>{});
 
   let currentUser = null;
-  let currentProfile = null;
-  let activeAdminTab = 'overview';
-  let activeCreatorTab = 'overview';
-  const cache = { leads: null, creators: null, coupons: null, myLeads: null, manual: null, myManual: null, linkClicks: null, myLinkClicks: null, tickets: null };
-
-  /* ================= LINK PERSONALIZADO (?cupom=CODIGO) ================= */
-  // registra 1 clique por sessão de navegador quando alguém chega pelo link
-  // personalizado de um criador (ex.: seusite.com/?cupom=FTNLUCCA#orcamento)
-  async function logLinkClick(codeRaw){
-    const code = (codeRaw||'').trim().toUpperCase();
-    if (!code) return;
-    let ownerUid = null;
-    try {
-      const snap = await getDoc(doc(db,'coupons',code));
-      if (snap.exists()) ownerUid = snap.data().ownerUid || null;
-    } catch(e) {}
-    await addDoc(collection(db,'linkClicks'), {
-      couponCode: code, ownerUid, createdAt: serverTimestamp(),
-      path: window.location.pathname
-    });
-  }
-  (function registerLinkClickOnce(){
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const fromUrl = (params.get('cupom')||'').trim().toUpperCase();
-      if (fromUrl) sessionStorage.setItem('gustavotweaks_ref_cupom', fromUrl);
-      const code = fromUrl || (sessionStorage.getItem('gustavotweaks_ref_cupom')||'').trim().toUpperCase();
-      if (code && !sessionStorage.getItem('gustavotweaks_ref_logged_'+code)) {
-        sessionStorage.setItem('gustavotweaks_ref_logged_'+code, '1');
-        logLinkClick(code).catch(()=>{});
-      }
-    } catch(e) {}
-  })();
+  let isOwner = false;
+  let activeAdminTab = 'tickets';
+  const cache = { leads: null, tickets: null };
 
   const $ = (id) => document.getElementById(id);
   function money(v){ if (v===null||v===undefined||v==='') return '—'; return 'R$ ' + Number(v).toFixed(2).replace('.', ','); }
@@ -3364,105 +3003,8 @@ footer.footer-slim .footer-legal button:hover {
       return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
     }catch(e){ return '—'; }
   }
-  function creatorLinkUrl(code){
-    return window.location.origin + window.location.pathname + '?cupom=' + encodeURIComponent(code) + '#orcamento';
-  }
-  async function copyCreatorLink(code){
-    const url = creatorLinkUrl(code);
-    try {
-      await navigator.clipboard.writeText(url);
-      alert('Link copiado!\n' + url);
-    } catch(e) {
-      prompt('Copie o link abaixo:', url);
-    }
-  }
-
-  /* ================= LOGIN / LOGOUT ================= */
-  function openLogin(){ $('loginError').textContent=''; $('loginOverlay').classList.remove('hidden'); }
-  function closeLogin(){ $('loginOverlay').classList.add('hidden'); }
-  function openDash(){ $('dashOverlay').classList.remove('hidden'); renderDashboard(); }
-  function closeDash(){ $('dashOverlay').classList.add('hidden'); }
-  function openAccountArea(){ currentUser ? openDash() : openLogin(); }
-
-  async function doLogin(){
-    const email = $('loginEmail').value.trim();
-    const password = $('loginPassword').value;
-    $('loginError').textContent = '';
-    if(!email || !password){ $('loginError').textContent = 'Preencha e-mail e senha.'; return; }
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      closeLogin();
-    } catch(e){
-      $('loginError').textContent = 'E-mail ou senha inválidos.';
-    }
-  }
-  async function doLogout(){ await signOut(auth); closeDash(); }
-
-  /* ================= BOOTSTRAP DE PERFIL ================= */
-  async function ensureProfile(user){
-    const ref = doc(db, 'users', user.uid);
-    const snap = await getDoc(ref);
-    if (snap.exists()) return snap.data();
-
-    let profile = null;
-    if (user.email === OWNER_EMAIL) {
-      profile = { email: user.email, role: 'admin', createdAt: serverTimestamp() };
-    } else if (user.email === CREATOR_SEED.email) {
-      profile = {
-        email: user.email, role: 'creator',
-        couponCode: CREATOR_SEED.code,
-        discountPercent: CREATOR_SEED.discountPercent,
-        commissionPercent: CREATOR_SEED.commissionPercent,
-        createdAt: serverTimestamp()
-      };
-    } else {
-      return null; // conta sem perfil pré-autorizado — sem acesso a dashboard
-    }
-    await setDoc(ref, profile);
-
-    if (profile.role === 'creator') {
-      const couponRef = doc(db, 'coupons', profile.couponCode);
-      const couponSnap = await getDoc(couponRef);
-      if (!couponSnap.exists()) {
-        await setDoc(couponRef, {
-          code: profile.couponCode, ownerUid: user.uid,
-          discountPercent: profile.discountPercent, commissionPercent: profile.commissionPercent,
-          active: true, createdAt: serverTimestamp()
-        });
-      }
-    }
-    return profile;
-  }
-
-  onAuthStateChanged(auth, async (user) => {
-    currentUser = user;
-    if (user) {
-      currentProfile = await ensureProfile(user).catch(()=>null);
-      $('acctBtnLabel').textContent = currentProfile ? tr('acct.myAccount') : (user.email || 'Conta');
-    } else {
-      currentProfile = null;
-      $('acctBtnLabel').textContent = tr('acct.login');
-      cache.leads = cache.creators = cache.coupons = cache.myLeads = cache.manual = cache.myManual = cache.linkClicks = cache.myLinkClicks = cache.tickets = null;
-    }
-  });
-
-  /* ================= CUPOM (usado no chat de orçamento) ================= */
-  async function validateCoupon(codeRaw){
-    const code = (codeRaw||'').trim().toUpperCase();
-    if (!code) return { valid:false, code:'', discountPercent:0 };
-    try {
-      const snap = await getDoc(doc(db, 'coupons', code));
-      if (snap.exists() && snap.data().active) {
-        const d = snap.data();
-        return { valid:true, code, discountPercent: d.discountPercent||0, commissionPercent: d.commissionPercent||0, ownerUid: d.ownerUid||null };
-      }
-    } catch(e) {}
-    return { valid:false, code, discountPercent:0 };
-  }
-
-  /* ================= CHAMADO DE SUPORTE (visível só para o admin) ================= */
-  async function saveTicket({ nome, contato, categoria, mensagem, cupom, isOrcamento, lang }){
-    const cupomDigitado = (cupom||'').trim();
+  /* ================= CHAMADO DE SUPORTE ================= */
+  async function saveTicket({ nome, contato, categoria, mensagem, isOrcamento, lang }){
     const data = {
       nome: (nome||'').trim().slice(0,120),
       contato: (contato||'').trim().slice(0,120),
@@ -3474,17 +3016,11 @@ footer.footer-slim .footer-legal button:hover {
     };
     const ref = await addDoc(collection(db, 'tickets'), data);
 
-    // Se veio da tela de orçamento (ou com um cupom digitado), também vira um "lead"
-    // pra manter o rastreio de cupom/comissão de criadores funcionando.
-    if (isOrcamento || cupomDigitado) {
-      let coupon = { valid:false, code: cupomDigitado, discountPercent:0 };
-      if (cupomDigitado) {
-        try { coupon = await validateCoupon(cupomDigitado); } catch(e) {}
-      }
+    // Se veio da tela de orçamento, também vira um "lead" pro histórico interno.
+    if (isOrcamento) {
       try {
         await saveLead({
-          answers: { nome, servico: mensagem, configuracao: '', objetivo: categoria, cupom: cupomDigitado },
-          coupon,
+          answers: { nome, servico: mensagem, configuracao: '', objetivo: categoria },
           lang
         });
       } catch(e) {}
@@ -3494,15 +3030,10 @@ footer.footer-slim .footer-legal button:hover {
   }
 
   /* ================= SALVAR LEAD (formulário de orçamento) ================= */
-  async function saveLead({ answers, coupon, lang }){
+  async function saveLead({ answers, lang }){
     const data = {
-        nome: answers.nome || '', servico: answers.servico || '', configuracao: answers.configuracao || '',
-        objetivo: answers.objetivo || '', orcamentoTexto: answers.servico || '',
-      couponCode: coupon.valid ? coupon.code : (answers.cupom || ''),
-      couponValid: !!coupon.valid,
-      ownerUid: coupon.valid ? (coupon.ownerUid || null) : null,
-      discountPercent: coupon.valid ? (coupon.discountPercent||0) : null,
-      commissionPercent: coupon.valid ? (coupon.commissionPercent||0) : null,
+      nome: answers.nome || '', servico: answers.servico || '', configuracao: answers.configuracao || '',
+      objetivo: answers.objetivo || '', orcamentoTexto: answers.servico || '',
       lang: lang || 'pt', status: 'novo', saleValue: null,
       createdAt: serverTimestamp()
     };
@@ -3518,68 +3049,6 @@ footer.footer-slim .footer-legal button:hover {
       cancelReason: (reason||'').trim().slice(0,500),
       cancelledAt: serverTimestamp()
     });
-  }
-
-  /* ================= ADMIN: CRIAR CONTA DE CRIADOR ================= */
-  async function createCreatorAccount({ email, password, code, discountPercent, commissionPercent }){
-    const secondaryApp = initializeApp(firebaseConfig, 'Secondary-' + Date.now());
-    const secondaryAuth = getAuth(secondaryApp);
-    try {
-      const cred = await createUserWithEmailAndPassword(secondaryAuth, email, password);
-      const uid = cred.user.uid;
-      await setDoc(doc(db, 'users', uid), {
-        email, role: 'creator', couponCode: code.toUpperCase(),
-        discountPercent, commissionPercent, createdAt: serverTimestamp()
-      });
-      await setDoc(doc(db, 'coupons', code.toUpperCase()), {
-        code: code.toUpperCase(), ownerUid: uid, discountPercent, commissionPercent,
-        active: true, createdAt: serverTimestamp()
-      });
-      await signOut(secondaryAuth);
-      return { ok:true };
-    } catch(e){
-      return { ok:false, error: e.message };
-    } finally {
-      deleteApp(secondaryApp).catch(()=>{});
-    }
-  }
-
-  /* ================= FETCHERS ================= */
-  async function fetchAllLeads(){
-    const snap = await getDocs(query(collection(db,'leads'), orderBy('createdAt','desc')));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  }
-  async function fetchCreators(){
-    const snap = await getDocs(query(collection(db,'users'), where('role','==','creator')));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  }
-  async function fetchCoupons(){
-    const snap = await getDocs(collection(db,'coupons'));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  }
-  async function fetchManualEarnings(){
-    const snap = await getDocs(query(collection(db,'manualEarnings'), orderBy('createdAt','desc')));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  }
-  async function fetchMyManualEarnings(uid){
-    const snap = await getDocs(query(collection(db,'manualEarnings'), where('ownerUid','==',uid)));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  }
-  async function fetchMyLeads(uid){
-    const snap = await getDocs(query(collection(db,'leads'), where('ownerUid','==',uid), orderBy('createdAt','desc')));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  }
-  async function fetchLinkClicks(){
-    const snap = await getDocs(query(collection(db,'linkClicks'), orderBy('createdAt','desc')));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  }
-  async function fetchMyLinkClicks(uid){
-    const snap = await getDocs(query(collection(db,'linkClicks'), where('ownerUid','==',uid)));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  }
-  async function fetchTickets(){
-    const snap = await getDocs(query(collection(db,'tickets'), orderBy('createdAt','desc')));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
   }
 
   /* ================= CHAT EM TEMPO REAL DO CHAMADO (só cliente + admin) =================
@@ -3611,209 +3080,137 @@ footer.footer-slim .footer-legal button:hover {
   function listenTicketDoc(ticketId, cb){
     return onSnapshot(doc(db,'tickets',ticketId), snap => cb(snap.exists() ? { id:snap.id, ...snap.data() } : null), err => console.error('Erro ao observar chamado:', err));
   }
-  async function markTicketReadByAdmin(ticketId){
-    try { await updateDoc(doc(db,'tickets',ticketId), { unreadForAdmin: false }); } catch(e) {}
-  }
   async function markTicketReadByClient(ticketId){
     try { await updateDoc(doc(db,'tickets',ticketId), { unreadForClient: false }); } catch(e) {}
   }
 
-  /* ================= RENDER: PAINEL PRINCIPAL ================= */
-  async function renderDashboard(){
-    if (!currentUser) { closeDash(); openLogin(); return; }
-    $('dashUserEmail').textContent = currentUser.email;
-    if (!currentProfile) {
-      $('dashTitle').textContent = 'Sem acesso';
-      $('dashBody').innerHTML = '<p class="gt-empty">Essa conta não tem um perfil de dashboard configurado. Fale com o administrador do site.</p>';
+  /* ================= LOGIN / LOGOUT (só administrador) ================= */
+  function openLogin(){ $('loginError').textContent=''; $('loginOverlay').classList.remove('hidden'); }
+  function closeLogin(){ $('loginOverlay').classList.add('hidden'); }
+  function openDash(){ $('dashOverlay').classList.remove('hidden'); renderDashboard(); }
+  function closeDash(){ $('dashOverlay').classList.add('hidden'); }
+  function openAccountArea(){ (currentUser && isOwner) ? openDash() : openLogin(); }
+
+  async function doLogin(){
+    const email = $('loginEmail').value.trim();
+    const password = $('loginPassword').value;
+    $('loginError').textContent = '';
+    if(!email || !password){ $('loginError').textContent = 'Preencha e-mail e senha.'; return; }
+    if(email.toLowerCase() !== OWNER_EMAIL){ $('loginError').textContent = 'Acesso restrito ao administrador.'; return; }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      closeLogin();
+      openDash();
+    } catch(e){
+      $('loginError').textContent = 'E-mail ou senha inválidos.';
+    }
+  }
+  async function doLogout(){ await signOut(auth); closeDash(); }
+
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+    isOwner = !!(user && (user.email||'').toLowerCase() === OWNER_EMAIL);
+    const label = $('acctBtnLabel');
+    if (label) label.textContent = isOwner ? 'Meu painel' : 'Entrar';
+    if (!isOwner) { cache.leads = null; cache.tickets = null; }
+    if (user && !isOwner) { signOut(auth).catch(()=>{}); }
+  });
+
+  /* ================= FETCHERS (só admin autenticado) ================= */
+  async function fetchAllLeads(){
+    const snap = await getDocs(query(collection(db,'leads'), orderBy('createdAt','desc')));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+  async function fetchTickets(){
+    const snap = await getDocs(query(collection(db,'tickets'), orderBy('createdAt','desc')));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+  async function markTicketReadByAdmin(ticketId){
+    try { await updateDoc(doc(db,'tickets',ticketId), { unreadForAdmin: false }); } catch(e) {}
+  }
+
+  /* ================= PAINEL ================= */
+  function renderDashboard(){
+    if (!isOwner) {
+      $('dashBody').innerHTML = '<div class="surface-card gt-panel"><p class="gt-panel-title">Sem acesso</p><p style="color:var(--muted);font-size:0.85rem">Essa área é exclusiva do administrador do site.</p></div>';
       return;
     }
-    if (currentProfile.role === 'admin') { $('dashTitle').textContent = 'Painel do Administrador'; await renderAdminDash(); }
-    else { $('dashTitle').textContent = 'Painel do Criador de Conteúdo'; await renderCreatorDash(); }
+    $('dashUserEmail').textContent = currentUser ? currentUser.email : '—';
+    $('dashBody').innerHTML = `
+      <div class="gt-tabs">
+        <button type="button" class="gt-tab ripple-fx" id="tab_tickets" onclick="GT.switchAdminTab('tickets')">Chamados</button>
+        <button type="button" class="gt-tab ripple-fx" id="tab_leads" onclick="GT.switchAdminTab('leads')">Leads / Orçamentos</button>
+      </div>
+      <div id="dashContent"><p class="gt-empty">Carregando…</p></div>`;
+    switchAdminTab(activeAdminTab || 'tickets');
   }
 
-  /* ================= ADMIN ================= */
-  function adminTabsHtml(){
-    const tabs = [['overview','Visão geral'],['tickets','Chamados de suporte'],['creators','Criadores de conteúdo'],['leads','Leads / Orçamentos'],['manual','Vendas / Ganhos'],['coupons','Cupons']];
-    return '<div class="gt-tabs">' + tabs.map(([k,label]) =>
-      `<button type="button" class="gt-tab ${activeAdminTab===k?'active':''} ripple-fx" onclick="GT.switchAdminTab('${k}')">${label}</button>`
-    ).join('') + '</div>';
-  }
-  async function renderAdminDash(){
-    $('dashBody').innerHTML = adminTabsHtml() + '<div id="dashContent"><p class="gt-empty">Carregando…</p></div>';
-    await renderAdminTab(activeAdminTab);
-  }
-  async function switchAdminTab(tab){ activeAdminTab = tab; await renderAdminDash(); }
-
-  async function renderAdminTab(tab){
+  async function switchAdminTab(tab){
+    if (!isOwner) return;
+    activeAdminTab = tab;
+    ['tickets','leads'].forEach(t=>{
+      const el = $('tab_'+t);
+      if (el) el.classList.toggle('active', t===tab);
+    });
     const content = $('dashContent');
     if (!content) return;
+    content.innerHTML = '<p class="gt-empty">Carregando…</p>';
     try {
-    if (tab === 'overview') {
-      const leads = cache.leads || (cache.leads = await fetchAllLeads());
-      const creators = cache.creators || (cache.creators = await fetchCreators());
-      const tickets = cache.tickets || (cache.tickets = await fetchTickets());
-      const withCoupon = leads.filter(l=>l.couponValid);
-      const openTickets = tickets.filter(t=>t.status!=='resolvido');
-      const manual = cache.manual || (cache.manual = await fetchManualEarnings());
-      const linkClicks = cache.linkClicks || (cache.linkClicks = await fetchLinkClicks());
-      const totalManual = manual.reduce((s,m)=> s + Number(m.amount||0), 0);
-      const totalComissao = withCoupon.reduce((s,l)=> s + (l.saleValue ? (l.saleValue*(l.commissionPercent||25)/100) : 0), 0) + totalManual;
-      const totalVendasFechadas = leads.filter(l=>l.saleValue).reduce((s,l)=>s+Number(l.saleValue),0);
-      content.innerHTML = `
-        <div class="gt-stats-grid">
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Chamados em aberto</p><p class="gt-stat-val">${openTickets.length}</p></div>
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Total de leads</p><p class="gt-stat-val">${leads.length}</p></div>
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Leads com cupom</p><p class="gt-stat-val">${withCoupon.length}</p></div>
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Criadores ativos</p><p class="gt-stat-val">${creators.length}</p></div>
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Cliques em links</p><p class="gt-stat-val">${linkClicks.length}</p></div>
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Comissões a pagar</p><p class="gt-stat-val">${money(totalComissao)}</p></div>
-        </div>
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Resumo</p>
-          <p style="color:var(--muted);font-size:0.85rem;line-height:1.7">
-            Total já vendido (leads com valor lançado): <strong style="color:var(--fg)">${money(totalVendasFechadas)}</strong><br/>
-            Vá em <strong style="color:var(--fg)">Leads / Orçamentos</strong> para lançar o valor final de cada venda — a comissão de cada criador é calculada automaticamente.<br/>
-            Vá em <strong style="color:var(--fg)">Chamados de suporte</strong> pra ver e responder os pedidos de ajuda dos clientes.
-          </p>
-        </div>`;
-    } else if (tab === 'creators') {
-      const creators = cache.creators || (cache.creators = await fetchCreators());
-      const linkClicks = cache.linkClicks || (cache.linkClicks = await fetchLinkClicks());
-      const clicksFor = (code) => linkClicks.filter(c => (c.couponCode||'').toUpperCase() === (code||'').toUpperCase()).length;
-      content.innerHTML = `
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Criar novo criador de conteúdo</p>
-          <div class="gt-inline-form">
-            <div class="gt-field"><label>E-mail</label><input id="newCreatorEmail" type="email" placeholder="parceiro@email.com"/></div>
-            <div class="gt-field"><label>Senha</label><input id="newCreatorPass" type="text" placeholder="Senha de acesso"/></div>
-            <div class="gt-field"><label>Código do cupom</label><input id="newCreatorCode" type="text" placeholder="EX: FULANOBOOST"/></div>
-            <div class="gt-field"><label>Desconto p/ cliente (%)</label><input id="newCreatorDiscount" type="number" value="5"/></div>
-            <div class="gt-field"><label>Comissão do criador (%)</label><input id="newCreatorCommission" type="number" value="25"/></div>
-            <button type="button" class="brand-btn ripple-fx" onclick="GT.submitCreateCreator()">Criar conta</button>
-          </div>
-          <p id="createCreatorMsg" class="gt-error"></p>
-        </div>
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Criadores cadastrados</p>
-          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>E-mail</th><th>Cupom</th><th>Desconto</th><th>Comissão</th><th>Cliques no link</th><th>Link personalizado</th></tr></thead><tbody>
-          ${creators.length ? creators.map(c=>`<tr>
-            <td>${c.email}</td>
-            <td><span class="gt-coupon-tag">${c.couponCode||'-'}</span></td>
-            <td>${c.discountPercent||0}%</td>
-            <td>${c.commissionPercent||0}%</td>
-            <td>${clicksFor(c.couponCode)}</td>
-            <td>${c.couponCode ? `<button type="button" class="gt-small-btn ripple-fx" onclick="GT.copyCreatorLink('${c.couponCode}')">Copiar link</button>` : '—'}</td>
-          </tr>`).join('') : '<tr><td colspan="6" class="gt-empty">Nenhum criador cadastrado ainda.</td></tr>'}
-          </tbody></table></div>
-        </div>`;
-    } else if (tab === 'leads') {
-      const leads = cache.leads || (cache.leads = await fetchAllLeads());
-      content.innerHTML = `
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Todos os leads / orçamentos</p>
-          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Cupom</th><th>Orçamento pedido</th><th>Status</th><th>Valor da venda</th><th>Comissão</th><th></th><th></th></tr></thead><tbody>
-          ${leads.length ? leads.map(l=>{
-            const commission = l.saleValue ? (l.saleValue*(l.commissionPercent||25)/100) : null;
-            return `<tr>
+      if (tab === 'tickets') {
+        const tickets = cache.tickets || (cache.tickets = await fetchTickets());
+        const statusPill = (s) => s === 'resolvido'
+          ? '<span class="gt-pill gt-pill--closed">Resolvido</span>'
+          : s === 'andamento' ? '<span class="gt-pill gt-pill--progress">Em andamento</span>'
+          : '<span class="gt-pill gt-pill--open">Aberto</span>';
+        content.innerHTML = `
+          <div class="surface-card gt-panel">
+            <p class="gt-panel-title">Chamados de suporte</p>
+            <p style="color:var(--muted);font-size:0.8rem;line-height:1.6;margin-bottom:1rem">Só você (administrador) enxerga essa lista. Cada chamado tem uma conversa em tempo real com o cliente — clique em <strong style="color:var(--fg)">Chat</strong> pra responder.</p>
+            <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Contato</th><th>Categoria</th><th>Problema</th><th>Status</th><th></th></tr></thead><tbody>
+            ${tickets.length ? tickets.map(t=>`<tr>
+              <td>${fmtDate(t.createdAt)}</td>
+              <td>${escapeHtml(t.nome)||'-'}${t.unreadForAdmin ? ' <span class="gt-pill" style="background:rgba(248,113,113,0.15);color:#f87171">Nova msg</span>' : ''}</td>
+              <td>${escapeHtml(t.contato)||'-'}</td>
+              <td>${escapeHtml(t.categoria)||'-'}</td>
+              <td style="max-width:22rem;white-space:pre-wrap">${escapeHtml(t.mensagem)||'-'}</td>
+              <td>
+                ${statusPill(t.status)}
+                <select class="gt-mini-input" style="margin-top:0.4rem" onchange="GT.updateTicketStatus('${t.id}', this.value)">
+                  <option value="aberto" ${t.status==='aberto'||!t.status?'selected':''}>Aberto</option>
+                  <option value="andamento" ${t.status==='andamento'?'selected':''}>Em andamento</option>
+                  <option value="resolvido" ${t.status==='resolvido'?'selected':''}>Resolvido</option>
+                </select>
+              </td>
+              <td style="display:flex;flex-direction:column;gap:0.4rem">
+                <button type="button" class="gt-small-btn ripple-fx" onclick="GT.openAdminChat('${t.id}', '${(t.nome||'').replace(/'/g,"\\'")}')">Chat</button>
+                <button type="button" class="gt-small-btn ripple-fx" style="background:#3a1414;color:#ff8080" onclick="GT.deleteTicket('${t.id}')">Apagar</button>
+              </td>
+            </tr>`).join('') : '<tr><td colspan="7" class="gt-empty">Nenhum chamado aberto ainda.</td></tr>'}
+            </tbody></table></div>
+          </div>`;
+      } else {
+        const leads = cache.leads || (cache.leads = await fetchAllLeads());
+        content.innerHTML = `
+          <div class="surface-card gt-panel">
+            <p class="gt-panel-title">Leads / orçamentos</p>
+            <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Orçamento pedido</th><th>Status</th><th>Valor da venda</th><th></th><th></th></tr></thead><tbody>
+            ${leads.length ? leads.map(l=>`<tr>
               <td>${fmtDate(l.createdAt)}</td>
-              <td>${l.nome||'-'}</td>
-              <td>${l.couponValid ? `<span class="gt-coupon-tag">${l.couponCode}</span>` : (l.couponCode || '—')}</td>
-              <td>${l.orcamentoTexto||'-'}</td>
+              <td>${escapeHtml(l.nome)||'-'}</td>
+              <td>${escapeHtml(l.orcamentoTexto)||'-'}</td>
               <td>${l.cancelled
-                  ? `<span class="gt-pill" style="background:rgba(248,113,113,0.12);color:#f87171;border-color:rgba(248,113,113,0.35)" title="${(l.cancelReason||'').replace(/"/g,'&quot;')}">Cancelado</span>`
+                  ? `<span class="gt-pill" style="background:rgba(248,113,113,0.12);color:#f87171" title="${escapeHtml(l.cancelReason||'')}">Cancelado</span>`
                   : `<span class="gt-pill ${l.saleValue?'gt-pill--closed':'gt-pill--open'}">${l.saleValue?'Fechado':'Novo'}</span>`}</td>
               <td><input class="gt-mini-input" type="number" step="0.01" id="sale_${l.id}" value="${l.saleValue||''}" placeholder="0,00"/></td>
-              <td>${money(commission)}</td>
               <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.saveLeadSale('${l.id}')">Salvar</button></td>
               <td><button type="button" class="gt-small-btn ripple-fx" style="background:#3a1414;color:#ff8080" onclick="GT.deleteLead('${l.id}')">Apagar</button></td>
-            </tr>`;
-          }).join('') : '<tr><td colspan="9" class="gt-empty">Nenhum lead recebido ainda.</td></tr>'}
-          </tbody></table></div>
-        </div>`;
-    } else if (tab === 'manual') {
-      const creators = cache.creators || (cache.creators = await fetchCreators());
-      const manual = cache.manual || (cache.manual = await fetchManualEarnings());
-      const nameOf = (uid) => (creators.find(c=>c.id===uid)?.email) || uid;
-      content.innerHTML = `
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Adicionar venda</p>
-          <div class="gt-inline-form">
-            <div class="gt-field"><label>Criador</label>
-              <select id="manualCreator">
-                ${creators.length ? creators.map(c=>`<option value="${c.id}">${c.email}${c.couponCode?' ('+c.couponCode+')':''}</option>`).join('') : '<option value="">Nenhum criador</option>'}
-              </select>
-            </div>
-            <div class="gt-field"><label>Valor da venda (R$)</label><input id="manualSale" type="number" step="0.01" placeholder="0,00"/></div>
-            <div class="gt-field"><label>Valor para o criador (R$)</label><input id="manualAmount" type="number" step="0.01" placeholder="0,00"/></div>
-            <div class="gt-field"><label>Cliente / descrição (opcional)</label><input id="manualNote" type="text" placeholder="Ex.: PC do João - indicado no WhatsApp"/></div>
-            <button type="button" class="brand-btn ripple-fx" onclick="GT.submitManualEarning()">Adicionar venda</button>
-          </div>
-          <p id="manualMsg" class="gt-error"></p>
-        </div>
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Vendas lançadas</p>
-          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Criador</th><th>Cliente / descrição</th><th>Valor da venda</th><th>Valor do criador</th><th></th></tr></thead><tbody>
-          ${manual.length ? manual.map(m=>`<tr>
-            <td>${fmtDate(m.createdAt)}</td>
-            <td>${nameOf(m.ownerUid)}</td>
-            <td>${m.note||'—'}</td>
-            <td>${m.saleValue ? money(m.saleValue) : '—'}</td>
-            <td>${money(m.amount)}</td>
-            <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.deleteManualEarning('${m.id}')">Excluir</button></td>
-          </tr>`).join('') : '<tr><td colspan="6" class="gt-empty">Nenhuma venda lançada ainda.</td></tr>'}
-          </tbody></table></div>
-        </div>`;
-    } else if (tab === 'coupons') {
-      const coupons = cache.coupons || (cache.coupons = await fetchCoupons());
-      content.innerHTML = `
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Cupons de desconto</p>
-          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Código</th><th>Desconto</th><th>Comissão</th><th>Status</th><th></th></tr></thead><tbody>
-          ${coupons.length ? coupons.map(c=>`<tr>
-            <td><span class="gt-coupon-tag">${c.code}</span></td>
-            <td>${c.discountPercent||0}%</td>
-            <td>${c.commissionPercent||0}%</td>
-            <td>${c.active?'Ativo':'Inativo'}</td>
-            <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.toggleCoupon('${c.id}', ${!c.active})">${c.active?'Desativar':'Ativar'}</button></td>
-          </tr>`).join('') : '<tr><td colspan="5" class="gt-empty">Nenhum cupom cadastrado.</td></tr>'}
-          </tbody></table></div>
-        </div>`;
-    } else if (tab === 'tickets') {
-      const tickets = cache.tickets || (cache.tickets = await fetchTickets());
-      const statusPill = (s) => s === 'resolvido'
-        ? '<span class="gt-pill gt-pill--closed">Resolvido</span>'
-        : s === 'andamento' ? '<span class="gt-pill gt-pill--progress">Em andamento</span>'
-        : '<span class="gt-pill gt-pill--open">Aberto</span>';
-      content.innerHTML = `
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Chamados de suporte</p>
-          <p style="color:var(--muted);font-size:0.8rem;line-height:1.6;margin-bottom:1rem">Só você (administrador) enxerga essa lista. Cada chamado tem uma conversa em tempo real com o cliente — clique em <strong style="color:var(--fg)">💬 Chat</strong> pra ver e responder.</p>
-          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Contato</th><th>Categoria</th><th>Problema</th><th>Status</th><th></th></tr></thead><tbody>
-          ${tickets.length ? tickets.map(t=>`<tr>
-            <td>${fmtDate(t.createdAt)}</td>
-            <td>${escapeHtml(t.nome)||'-'}${t.unreadForAdmin ? ' <span class="gt-pill" style="background:rgba(248,113,113,0.15);color:#f87171">Nova msg</span>' : ''}</td>
-            <td>${escapeHtml(t.contato)||'-'}</td>
-            <td>${escapeHtml(t.categoria)||'-'}</td>
-            <td style="max-width:22rem;white-space:pre-wrap">${escapeHtml(t.mensagem)||'-'}</td>
-            <td>
-              ${statusPill(t.status)}
-              <select class="gt-mini-input" style="margin-top:0.4rem" onchange="GT.updateTicketStatus('${t.id}', this.value)">
-                <option value="aberto" ${t.status==='aberto'||!t.status?'selected':''}>Aberto</option>
-                <option value="andamento" ${t.status==='andamento'?'selected':''}>Em andamento</option>
-                <option value="resolvido" ${t.status==='resolvido'?'selected':''}>Resolvido</option>
-              </select>
-            </td>
-            <td style="display:flex;flex-direction:column;gap:0.4rem">
-              <button type="button" class="gt-small-btn ripple-fx" onclick="GT.openAdminChat('${t.id}', '${(t.nome||'').replace(/'/g,"\\'")}')">💬 Chat</button>
-              <button type="button" class="gt-small-btn ripple-fx" style="background:#3a1414;color:#ff8080" onclick="GT.deleteTicket('${t.id}')">Apagar</button>
-            </td>
-          </tr>`).join('') : '<tr><td colspan="7" class="gt-empty">Nenhum chamado aberto ainda.</td></tr>'}
-          </tbody></table></div>
-        </div>`;
-    }
+            </tr>`).join('') : '<tr><td colspan="7" class="gt-empty">Nenhum lead recebido ainda.</td></tr>'}
+            </tbody></table></div>
+          </div>`;
+      }
     } catch(e) {
-      content.innerHTML = `<div class="surface-card gt-panel"><p class="gt-panel-title">Erro ao carregar</p><p style="color:var(--muted);font-size:0.85rem;line-height:1.7">${e.message || e}</p></div>`;
-      console.error('Erro em renderAdminTab("'+tab+'"):', e);
+      content.innerHTML = `<div class="surface-card gt-panel"><p class="gt-panel-title">Erro ao carregar</p><p style="color:var(--muted);font-size:0.85rem">${escapeHtml(e.message || e)}</p></div>`;
+      console.error(e);
     }
   }
 
@@ -3822,170 +3219,54 @@ footer.footer-slim .footer-legal button:hover {
     const val = input.value !== '' ? Number(input.value) : null;
     await updateDoc(doc(db,'leads',leadId), { saleValue: val, status: val ? 'fechado' : 'novo' });
     cache.leads = null;
-    await renderAdminTab('leads');
+    await switchAdminTab('leads');
   }
   async function deleteLead(leadId){
-    if (!confirm('Tem certeza que quer apagar esse lead? Essa ação não pode ser desfeita.')) return;
+    if (!confirm('Tem certeza que quer apagar esse lead?')) return;
     await deleteDoc(doc(db,'leads',leadId));
     cache.leads = null;
-    await renderAdminTab('leads');
+    await switchAdminTab('leads');
   }
   async function updateTicketStatus(ticketId, status){
     await updateDoc(doc(db,'tickets',ticketId), { status });
     cache.tickets = null;
-    await renderAdminTab('tickets');
+    await switchAdminTab('tickets');
   }
   async function deleteTicket(ticketId){
-    if (!confirm('Tem certeza que quer apagar esse chamado? Essa ação não pode ser desfeita.')) return;
+    if (!confirm('Tem certeza que quer apagar esse chamado?')) return;
     await deleteDoc(doc(db,'tickets',ticketId));
     cache.tickets = null;
-    await renderAdminTab('tickets');
-  }
-  async function submitManualEarning(){
-    const uid = $('manualCreator').value;
-    const saleValue = $('manualSale').value !== '' ? Number($('manualSale').value) : null;
-    const amount = Number($('manualAmount').value);
-    const note = $('manualNote').value.trim();
-    const msg = $('manualMsg');
-    msg.className='gt-error'; msg.textContent='';
-    if(!uid){ msg.textContent='Selecione um criador.'; return; }
-    if(!amount || amount <= 0){ msg.textContent='Digite quanto o criador vai receber.'; return; }
-    msg.textContent='Salvando…';
-    try {
-      await addDoc(collection(db,'manualEarnings'), { ownerUid: uid, saleValue, amount, note, createdAt: serverTimestamp() });
-      $('manualSale').value=''; $('manualAmount').value=''; $('manualNote').value='';
-      cache.manual = null;
-      await renderAdminTab('manual');
-    } catch(e){ msg.textContent = 'Erro: ' + e.message; }
-  }
-  async function deleteManualEarning(id){
-    await deleteDoc(doc(db,'manualEarnings',id));
-    cache.manual = null;
-    await renderAdminTab('manual');
-  }
-  async function toggleCoupon(code, newActive){
-    await updateDoc(doc(db,'coupons',code), { active: newActive });
-    cache.coupons = null;
-    await renderAdminTab('coupons');
-  }
-  async function submitCreateCreator(){
-    const email = $('newCreatorEmail').value.trim();
-    const pass = $('newCreatorPass').value;
-    const code = $('newCreatorCode').value.trim().toUpperCase();
-    const discount = Number($('newCreatorDiscount').value)||0;
-    const commission = Number($('newCreatorCommission').value)||0;
-    const msg = $('createCreatorMsg');
-    msg.className='gt-error'; msg.textContent='';
-    if(!email||!pass||!code){ msg.textContent='Preencha e-mail, senha e código do cupom.'; return; }
-    msg.textContent='Criando conta…';
-    const res = await createCreatorAccount({ email, password: pass, code, discountPercent: discount, commissionPercent: commission });
-    if (res.ok) {
-      msg.className='gt-success'; msg.textContent='Conta criada com sucesso!';
-      cache.creators = null; cache.coupons = null;
-      await renderAdminTab('creators');
-    } else {
-      msg.textContent = 'Erro: ' + res.error;
-    }
-  }
-
-  /* ================= CRIADOR DE CONTEÚDO ================= */
-  function creatorTabsHtml(){
-    const tabs = [['overview','Minhas estatísticas'],['leads','Meus leads']];
-    return '<div class="gt-tabs">' + tabs.map(([k,label]) =>
-      `<button type="button" class="gt-tab ${activeCreatorTab===k?'active':''} ripple-fx" onclick="GT.switchCreatorTab('${k}')">${label}</button>`
-    ).join('') + '</div>';
-  }
-  async function renderCreatorDash(){
-    $('dashBody').innerHTML = creatorTabsHtml() + '<div id="dashContent"><p class="gt-empty">Carregando…</p></div>';
-    await renderCreatorTab(activeCreatorTab);
-  }
-  async function switchCreatorTab(tab){ activeCreatorTab = tab; await renderCreatorDash(); }
-
-  async function renderCreatorTab(tab){
-    const content = $('dashContent');
-    try {
-    const leads = cache.myLeads || (cache.myLeads = await fetchMyLeads(currentUser.uid));
-    if (tab === 'overview') {
-      const fechados = leads.filter(l=>l.saleValue);
-      const manual = cache.myManual || (cache.myManual = await fetchMyManualEarnings(currentUser.uid));
-      const myClicks = cache.myLinkClicks || (cache.myLinkClicks = await fetchMyLinkClicks(currentUser.uid));
-      const totalManual = manual.reduce((s,m)=> s + Number(m.amount||0), 0);
-      const totalComissao = fechados.reduce((s,l)=> s + (l.saleValue*(l.commissionPercent||currentProfile.commissionPercent||25)/100), 0) + totalManual;
-      content.innerHTML = `
-        <div class="gt-stats-grid">
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Seu cupom</p><p class="gt-stat-val">${currentProfile.couponCode}</p></div>
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Total de leads</p><p class="gt-stat-val">${leads.length}</p></div>
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Cliques no seu link</p><p class="gt-stat-val">${myClicks.length}</p></div>
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Vendas fechadas</p><p class="gt-stat-val">${fechados.length}</p></div>
-          <div class="surface-card gt-stat-card"><p class="gt-stat-label">Comissão total</p><p class="gt-stat-val">${money(totalComissao)}</p></div>
-        </div>
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Seu link personalizado</p>
-          <p style="color:var(--muted);font-size:0.85rem;line-height:1.7;margin-bottom:0.75rem">
-            Compartilhe esse link com quem te assiste — quem clicar já entra direto no orçamento com o cupom <strong style="color:var(--fg)">${currentProfile.couponCode}</strong> aplicado, sem precisar digitar nada.
-          </p>
-          <button type="button" class="gt-small-btn ripple-fx" onclick="GT.copyCreatorLink('${currentProfile.couponCode}')">Copiar meu link</button>
-        </div>
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Suas vendas (venda por venda)</p>
-          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Cliente / descrição</th><th>Valor da venda</th><th>Você recebe</th></tr></thead><tbody>
-          ${manual.length ? manual.slice().sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)).map(m=>`<tr><td>${fmtDate(m.createdAt)}</td><td>${m.note||'—'}</td><td>${m.saleValue ? money(m.saleValue) : '—'}</td><td>${money(m.amount)}</td></tr>`).join('') : '<tr><td colspan="4" class="gt-empty">Nenhuma venda lançada ainda.</td></tr>'}
-          </tbody></table></div>
-        </div>
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Como funciona</p>
-          <p style="color:var(--muted);font-size:0.85rem;line-height:1.7">
-            Todo cliente que digitar o cupom <strong style="color:var(--fg)">${currentProfile.couponCode}</strong> no orçamento ganha ${currentProfile.discountPercent}% de desconto e aparece aqui.
-            Quando o administrador lança o valor final da venda, sua comissão de ${currentProfile.commissionPercent}% é calculada automaticamente.
-          </p>
-        </div>`;
-    } else {
-      content.innerHTML = `
-        <div class="surface-card gt-panel">
-          <p class="gt-panel-title">Leads que usaram seu cupom</p>
-          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Uso</th><th>Orçamento pedido</th><th>Status</th><th>Valor da venda</th><th>Sua comissão</th></tr></thead><tbody>
-          ${leads.length ? leads.map(l=>{
-            const commission = l.saleValue ? (l.saleValue*(l.commissionPercent||currentProfile.commissionPercent||25)/100) : null;
-            return `<tr>
-              <td>${fmtDate(l.createdAt)}</td>
-              <td>${l.nome||'-'}</td>
-              <td>${l.uso||'-'}</td>
-              <td>${l.orcamentoTexto||'-'}</td>
-              <td>${l.cancelled
-                  ? `<span class="gt-pill" style="background:rgba(248,113,113,0.12);color:#f87171;border-color:rgba(248,113,113,0.35)" title="${(l.cancelReason||'').replace(/"/g,'&quot;')}">Cancelado</span>`
-                  : `<span class="gt-pill ${l.saleValue?'gt-pill--closed':'gt-pill--open'}">${l.saleValue?'Fechado':'Novo'}</span>`}</td>
-              <td>${money(l.saleValue)}</td>
-              <td>${money(commission)}</td>
-            </tr>`;
-          }).join('') : '<tr><td colspan="7" class="gt-empty">Ninguém usou seu cupom ainda.</td></tr>'}
-          </tbody></table></div>
-        </div>`;
-    }
-    } catch(e) {
-      content.innerHTML = `<div class="surface-card gt-panel"><p class="gt-panel-title">Erro ao carregar</p><p style="color:var(--muted);font-size:0.85rem;line-height:1.7">${e.message || e}</p></div>`;
-      console.error('Erro em renderCreatorTab("'+tab+'"):', e);
-    }
+    await switchAdminTab('tickets');
   }
 
   /* ================= EXPÕE PARA OS onclick="" DO HTML ================= */
   window.GT = {
-    openAccountArea, closeLogin, doLogin, doLogout, closeDash,
-    validateCoupon, saveLead, saveCancelReason, logLinkClick, copyCreatorLink,
-    switchAdminTab, saveLeadSale, deleteLead, toggleCoupon, submitCreateCreator,
-    submitManualEarning, deleteManualEarning,
-    switchCreatorTab,
-    saveTicket, updateTicketStatus, deleteTicket,
+    openAccountArea, openLogin, closeLogin, doLogin, doLogout, closeDash,
+    switchAdminTab, saveLeadSale, deleteLead, updateTicketStatus, deleteTicket,
+    markTicketReadByAdmin,
+    openAdminChat: (typeof openAdminChatFn === 'function') ? openAdminChatFn : function(){},
+    closeAdminChat: (typeof closeAdminChatFn === 'function') ? closeAdminChatFn : function(){},
+    saveLead, saveCancelReason,
+    saveTicket,
     sendTicketMessage, listenTicketMessages, listenTicketDoc,
-    markTicketReadByAdmin, markTicketReadByClient,
+    markTicketReadByClient,
     // funções do chat ao vivo (declaradas no script clássico, acima do módulo —
     // como são "function" normais, ficam disponíveis em window/global daqui)
     openLiveChat: (typeof openLiveChatFn === 'function') ? openLiveChatFn : function(){},
     closeLiveChat: (typeof closeLiveChatFn === 'function') ? closeLiveChatFn : function(){},
-    reopenLiveChat: (typeof reopenLiveChatFn === 'function') ? reopenLiveChatFn : function(){},
-    openAdminChat: (typeof openAdminChatFn === 'function') ? openAdminChatFn : function(){},
-    closeAdminChat: (typeof closeAdminChatFn === 'function') ? closeAdminChatFn : function(){}
+    reopenLiveChat: (typeof reopenLiveChatFn === 'function') ? reopenLiveChatFn : function(){}
   };
-</script><script>
+</script>
+
+
+  <!-- ================= WHATSAPP OFICIAL (canto inferior direito) ================= -->
+  <div class="social-dock" aria-label="WhatsApp oficial GustavoTweaks">
+    <a class="sd-whatsapp" href="https://api.whatsapp.com/send/?phone=5511957460235&text=%2ANovo+pedido+de+or%C3%A7amento+%E2%80%94+GustavoTweaks%2A&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" data-tip="Falar no WhatsApp" aria-label="WhatsApp oficial">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Zm-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Zm8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+    </a>
+  </div>
+
+  <script>
   /* ============ ANIMAÇÕES: contadores + reveal on scroll ============ */
   (function () {
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -4147,12 +3428,153 @@ footer.footer-slim .footer-legal button:hover {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
     else boot();
   })();
-  </script><script>
+  </script>
+  <script>
   function openNetworks(){ var el=document.getElementById('networksOverlay'); if(el) el.classList.remove('hidden'); }
   function closeNetworks(){ var el=document.getElementById('networksOverlay'); if(el) el.classList.add('hidden'); }
   window.openNetworks = openNetworks; window.closeNetworks = closeNetworks;
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeNetworks(); });
-  </script><script>
+  </script>
+  <!-- ================= TERMOS DE SERVIÇO ================= -->
+  <div id="tosPage" class="legal-page hidden" role="dialog" aria-modal="true">
+    <div class="legal-wrap">
+      <button type="button" class="legal-back" onclick="GTLegal.close()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span data-i18n="legal.back"></span></button>
+      <div class="legal-head">
+        <span class="legal-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5M9 13h6M9 17h4"/></svg></span>
+        <div><h2 data-i18n="tos.title"></h2><p data-i18n="tos.sub"></p></div>
+      </div>
+      <div class="legal-list">
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c1.t"></h3>
+            <p data-i18n="tos.c1.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 5.5L20.5 9l-4.2 4 1 6-5.3-2.8L6.7 19l1-6-4.2-4 6-.5z"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c2.t"></h3>
+            <p data-i18n="tos.c2.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c3.t"></h3>
+            <p data-i18n="tos.c3.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c4.t"></h3>
+            <p data-i18n="tos.c4.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 10a2 2 0 1 1 0 4 1.6 1.6 0 0 0-1.6 1z"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c5.t"></h3>
+            <p data-i18n="tos.c5.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4c3 0 6 3 6 6-2.5 4.5-6 7-10 8l-4-4c1-4 3.5-7.5 8-10z"/><circle cx="14.5" cy="9.5" r="1.5"/><path d="M6 14c-1.5 1-2 4-2 4s3-.5 4-2"/></svg></span>
+          <div>
+            <h3 data-i18n="tos.c6.t"></h3>
+            <p data-i18n="tos.c6.d"></p>
+          </div>
+        </div>
+      </div>
+      <p class="legal-foot" data-i18n="tos.foot"></p>
+    </div>
+  </div>
+
+  <!-- ================= POLÍTICA DE COOKIES ================= -->
+  <div id="cookiePage" class="legal-page hidden" role="dialog" aria-modal="true">
+    <div class="legal-wrap">
+      <button type="button" class="legal-back" onclick="GTLegal.close()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span data-i18n="legal.back"></span></button>
+      <div class="legal-head">
+        <span class="legal-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4 4 0 0 1-5-5 3.5 3.5 0 0 1-4-4z"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="14" r="1"/><circle cx="10" cy="15" r="1"/></svg></span>
+        <div><h2 data-i18n="ck.title"></h2><p data-i18n="ck.sub"></p></div>
+      </div>
+      <div class="legal-list">
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c1.t"></h3>
+            <p data-i18n="ck.c1.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c2.t"></h3>
+            <p data-i18n="ck.c2.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c3.t"></h3>
+            <p data-i18n="ck.c3.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3a2 2 0 1 1 4 0 1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21 10a2 2 0 1 1 0 4 1.6 1.6 0 0 0-1.6 1z"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c4.t"></h3>
+            <p data-i18n="ck.c4.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.5"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c5.t"></h3>
+            <p data-i18n="ck.c5.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c6.t"></h3>
+            <p data-i18n="ck.c6.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="6"/><circle cx="8" cy="12" r="3"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c7.t"></h3>
+            <p data-i18n="ck.c7.d"></p>
+          </div>
+        </div>
+        <div class="legal-card">
+          <span class="legal-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <h3 data-i18n="ck.c8.t"></h3>
+            <p data-i18n="ck.c8.d"></p>
+          </div>
+        </div>
+      </div>
+      <div class="legal-note">
+        <p data-i18n="ck.noteText"></p>
+        <button type="button" class="brand-btn ripple-fx" onclick="GTCookies.accept(true)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9 4 4 0 0 1-5-5 3.5 3.5 0 0 1-4-4z"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="14" r="1"/><circle cx="10" cy="15" r="1"/></svg><span data-i18n="ck.noteBtn"></span></button>
+      </div>
+      <p class="legal-foot" data-i18n="ck.foot"></p>
+    </div>
+  </div>
+
+  <!-- ================= COOKIE BANNER ================= -->
+  <div id="cookieBar" class="cookie-bar hidden" role="region" aria-label="Cookies">
+    <p><span data-i18n="ckbar.text"></span> <a onclick="GTLegal.openCookies()" data-i18n="ckbar.link"></a></p>
+    <div class="cookie-actions">
+      <button type="button" class="ck-reject" onclick="GTCookies.reject()" data-i18n="ckbar.reject"></button>
+      <button type="button" class="ck-accept" onclick="GTCookies.accept()" data-i18n="ckbar.accept"></button>
+    </div>
+  </div>
+
+  <script>
   /* ================= LEGAL PAGES ================= */
   (function () {
     function open(id) {
@@ -4272,118 +3694,6 @@ footer.footer-slim .footer-legal button:hover {
     else setTimeout(boot, 800);
   })();
   </script>
-<script>
-/* ===== Extras: reveal on scroll + som de clique clean ===== */
-(function () {
-  /* ---------- Reveal ---------- */
-  var SEL = [
-    '.hero-tag', '.stats .stat-item', '.kc-card', '.testimonial',
-    '.faq-item', '.cta-card', '.footer-hero', '.section-label',
-    '.section-title', '.section-desc', '.partner-card', '.fps-row'
-  ].join(',');
 
-  function setupReveal() {
-    var els = Array.prototype.slice.call(document.querySelectorAll(SEL));
-    els.forEach(function (el) {
-      if (el.classList.contains('reveal')) return;
-      el.classList.add('gt-rise');
-    });
-    if (!('IntersectionObserver' in window)) {
-      els.forEach(function (el) { el.classList.add('gt-in'); });
-      return;
-    }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e, i) {
-        if (!e.isIntersecting) return;
-        var el = e.target;
-        setTimeout(function () { el.classList.add('gt-in'); }, Math.min(i * 60, 240));
-        io.unobserve(el);
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-    els.forEach(function (el) { io.observe(el); });
-  }
-
-  /* ---------- Som de clique ---------- */
-  var KEY = 'gt-sound';
-  var enabled = true;
-  try { enabled = localStorage.getItem(KEY) !== 'off'; } catch (e) {}
-  var ctx = null;
-
-  function ac() {
-    if (!ctx) {
-      var AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return null;
-      ctx = new AC();
-    }
-    if (ctx.state === 'suspended') ctx.resume();
-    return ctx;
-  }
-
-  function blip(freq, gainPeak, dur) {
-    if (!enabled) return;
-    var c = ac();
-    if (!c) return;
-    var t = c.currentTime;
-    var osc = c.createOscillator();
-    var g = c.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(freq, t);
-    osc.frequency.exponentialRampToValueAtTime(freq * 0.6, t + dur);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(gainPeak, t + 0.008);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    osc.connect(g);
-    g.connect(c.destination);
-    osc.start(t);
-    osc.stop(t + dur + 0.02);
-  }
-
-  document.addEventListener('pointerdown', function (ev) {
-    var el = ev.target && ev.target.closest
-      ? ev.target.closest('button, a, .ripple-fx, summary, .tc-dot, input[type="submit"]')
-      : null;
-    if (!el) return;
-    if (el.classList && el.classList.contains('gt-sound-toggle')) return;
-    blip(660, 0.05, 0.075);
-  }, { passive: true });
-
-  document.addEventListener('mouseover', function (ev) {
-    var el = ev.target && ev.target.closest ? ev.target.closest('.brand-btn') : null;
-    if (!el || el.__gtHover) return;
-    el.__gtHover = true;
-    setTimeout(function () { el.__gtHover = false; }, 400);
-    blip(1120, 0.018, 0.05);
-  }, { passive: true });
-
-  function mountToggle() {
-    if (document.querySelector('.gt-sound-toggle')) return;
-    var btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'gt-sound-toggle';
-    btn.setAttribute('aria-label', 'Ligar/desligar sons');
-    function paint() {
-      btn.innerHTML = enabled
-        ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>'
-        : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m17 9 4 6"/><path d="m21 9-4 6"/></svg>';
-    }
-    paint();
-    btn.addEventListener('click', function () {
-      enabled = !enabled;
-      try { localStorage.setItem(KEY, enabled ? 'on' : 'off'); } catch (e) {}
-      paint();
-      if (enabled) blip(880, 0.05, 0.08);
-    });
-    document.body.appendChild(btn);
-  }
-
-  function boot() { setupReveal(); mountToggle(); }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
-  } else {
-    setTimeout(boot, 0);
-  }
-})();
-
-</script>
 </body>
 </html>
