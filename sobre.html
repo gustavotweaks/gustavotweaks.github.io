@@ -112,19 +112,6 @@
   .social-link { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.6); transition: color .2s, border-color .2s, transform .2s, background .2s; }
   .social-link:hover { color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); transform: translateY(-2px); }
 
-  /* Cursor customizado — traço único, sem atraso */
-  html, body, a, button, [role="button"] { cursor: none !important; }
-  #cursor {
-    position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none;
-    width: 22px; height: 22px; border-radius: 50%;
-    border: 1.5px solid rgba(255,255,255,0.9);
-    mix-blend-mode: difference;
-    transform: translate(-50%,-50%);
-    transition: width .16s cubic-bezier(.2,.8,.2,1), height .16s cubic-bezier(.2,.8,.2,1), border-width .16s ease, background .16s ease;
-  }
-  body.cursor-hover #cursor { width: 40px; height: 40px; background: rgba(255,255,255,0.95); border-width: 0; }
-  body.cursor-active #cursor { width: 16px; height: 16px; }
-  @media (hover: none) { #cursor { display: none !important; } html, body, a, button { cursor: auto !important; } }
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
@@ -142,7 +129,6 @@
 </div>
 <div aria-hidden class="pointer-events-none fixed inset-0 z-0 vignette"></div>
 
-<div id="cursor"></div>
 
 <header class="relative z-10 border-b border-white/10">
   <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
@@ -371,22 +357,7 @@
     }, true);
   })();
 
-  /* --- cursor único, sem atraso, sem bolinha seguindo --- */
-  (function(){
-    if (matchMedia('(hover: none)').matches) return;
-    var cursor = document.getElementById('cursor');
-    if (!cursor) return;
-    document.addEventListener('mousemove', function(e){
-      cursor.style.transform = 'translate('+e.clientX+'px,'+e.clientY+'px) translate(-50%,-50%)';
-    });
-    var hoverSel = 'a,button,[role=button]';
-    document.addEventListener('mouseover', function(e){ if(e.target.closest(hoverSel)) document.body.classList.add('cursor-hover'); });
-    document.addEventListener('mouseout',  function(e){ if(e.target.closest(hoverSel)) document.body.classList.remove('cursor-hover'); });
-    document.addEventListener('mousedown', function(){ document.body.classList.add('cursor-active'); });
-    document.addEventListener('mouseup',   function(){ document.body.classList.remove('cursor-active'); });
-    document.addEventListener('mouseleave', function(){ cursor.style.opacity='0'; });
-    document.addEventListener('mouseenter', function(){ cursor.style.opacity='1'; });
-  })();
+  /* --- fim cursor --- */
 
   /* --- contadores animados (idêntico ao site principal) --- */
   (function(){
