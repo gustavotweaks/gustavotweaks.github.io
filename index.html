@@ -5343,6 +5343,19 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       if (from === to) return;
       c.tx.update(c.ref, { valor: to }); logL(c.tx, c.a, c.id, 'price_changed', { from, to });
     }),
+    setResolvedAt: (d) => withTicketL(d, (c) => {
+      if (!c.a.isOwner) throw new Error('Somente OWNER.');
+      const when = d.useNow ? Timestamp.now() : Timestamp.fromMillis(Number(d.millis));
+      if (!when || !Number.isFinite(when.toMillis())) throw new Error('Data/hora inválida.');
+      const oldMs = ms(c.t.resolvedAt);
+      c.tx.update(c.ref, {
+        resolvedAt: when,
+        resolvedAtEditedAt: serverTimestamp(),
+        resolvedAtEditedBy: c.a.uid,
+        resolvedAtManual: !d.useNow
+      });
+      logL(c.tx, c.a, c.id, 'resolved_time_changed', { from: oldMs || null, to: when.toMillis(), manual: !d.useNow });
+    }),
     syncAdmins: async (d) => { if (!isOwner) throw new Error('Somente OWNER.'); for (const e of d.emails) await setDoc(doc(db, 'staff', e.toLowerCase()), { email: e.toLowerCase(), username: e.split('@')[0], role: 'admin' }); return { results: d.emails.map(e => ({ email: e, ok: true })) }; }
   };
   const callFn = (n, d) => LOCAL[n](d);
@@ -5387,7 +5400,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   /* ---------- modal do chamado: dados, histórico, resposta, status, preço, timeline (owner) ---------- */
   let tdUnsubs = [], tdCurrentTicket = null;
   function closeTicketDetail() { tdUnsubs.forEach(u => u()); tdUnsubs = []; const o = $('tdOverlay'); if (o) o.classList.add('hidden'); }
-  const LBL = { ticket_assigned: (l) => '@' + l.adminUsername + ' assumiu', response_sent: (l) => '@' + l.adminUsername + ' respondeu', status_changed: (l) => 'Status alterado (' + (l.metadata.from || '') + ' → ' + (l.metadata.to || '') + ')', ticket_resolved: (l) => '@' + l.adminUsername + ' resolveu', price_changed: (l) => '@' + l.adminUsername + ' alterou o valor ' + money(l.metadata.from) + ' → ' + money(l.metadata.to) };
+  const LBL = { ticket_assigned: (l) => '@' + l.adminUsername + ' assumiu', response_sent: (l) => '@' + l.adminUsername + ' respondeu', status_changed: (l) => 'Status alterado (' + (l.metadata.from || '') + ' → ' + (l.metadata.to || '') + ')', ticket_resolved: (l) => '@' + l.adminUsername + ' resolveu', price_changed: (l) => '@' + l.adminUsername + ' alterou o valor ' + money(l.metadata.from) + ' → ' + money(l.metadata.to), resolved_time_changed: (l) => 'OWNER ajustou a data/hora de fechamento' };
   function openTicketDetail(id) {
     closeTicketDetail();
     let o = $('tdOverlay');
@@ -5420,6 +5433,15 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
           <div class="gt-field" style="margin:0"><label>Valor (R$)</label><input id="tdPrice" class="gt-mini-input" type="number" min="0" step="0.01" value="${Number(t.valor ?? 75)}"></div>
           <button type="button" class="gt-small-btn ripple-fx" onclick="GT.tdPrice('${id}')">Salvar valor</button>
         </div>
+        ${isOwner ? `<div class="surface-card" style="padding:.8rem;margin:0 0 1rem;border:1px solid rgba(139,92,246,.25)">
+          <div style="font-size:.78rem;font-weight:700;margin-bottom:.25rem">Data/hora de fechamento</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-bottom:.55rem">Use para organizar relatórios antigos. O sistema mantém separadamente o horário real em que a alteração foi feita.</div>
+          <div style="display:flex;gap:.45rem;flex-wrap:wrap;align-items:center">
+            <input id="tdResolvedAt" class="gt-mini-input" type="datetime-local" value="${t.resolvedAt ? new Date(ms(t.resolvedAt)-new Date(ms(t.resolvedAt)).getTimezoneOffset()*60000).toISOString().slice(0,16) : ''}">
+            <button type="button" class="gt-small-btn" onclick="GT.tdResolvedAt('${id}')">Salvar fechamento</button>
+            ${t.resolvedAt ? `<button type="button" class="gt-small-btn" onclick="GT.tdResolvedAt('${id}',true)">Usar horário atual</button>` : ''}
+          </div>
+        </div>` : ''}
         <p class="gt-panel-title" style="font-size:.85rem;margin-bottom:.5rem">Histórico</p>
         <div style="max-height:11rem;overflow-y:auto;margin-bottom:.8rem">${msgs.map(m => `<div style="font-size:.78rem;margin-bottom:.35rem"><strong>${m.sender === 'admin' ? '@' + escapeHtml(m.adminUsername || 'admin') : 'Cliente'}</strong> <span style="color:var(--muted)">${hhmm(m.createdAt)}</span><br>${escapeHtml(m.text)}</div>`).join('') || '<p class="gt-empty" style="padding:.5rem 0">Sem mensagens.</p>'}</div>
         ${isTrainer ? `<div style="padding:.8rem .9rem;margin:.8rem 0 1rem;border:1px solid rgba(139,92,246,.28);background:rgba(139,92,246,.07);border-radius:.75rem;font-size:.74rem;line-height:1.55;color:var(--muted)">
@@ -5449,6 +5471,19 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   async function tdSend(id) { const el = $('tdMsg'); const v = el.value.trim(); if (!v) return; el.disabled = true; try { await callFn('replyTicket', { ticketId: id, message: v }); el.value = ''; } catch (e) { tdErr(e); } el.disabled = false; }
   async function tdStatus(id, s) { try { await callFn('setTicketStatus', { ticketId: id, status: s }); } catch (e) { tdErr(e); } }
   async function tdPrice(id) { try { await callFn('setTicketPrice', { ticketId: id, valor: Number($('tdPrice').value) }); } catch (e) { tdErr(e); } }
+  async function tdResolvedAt(id,useNow=false){
+    if(!isOwner)return;
+    try{
+      let millis=Date.now();
+      if(!useNow){
+        const v=$('tdResolvedAt')?.value;
+        if(!v) throw new Error('Selecione a data e o horário.');
+        millis=new Date(v).getTime();
+        if(!Number.isFinite(millis)) throw new Error('Data/hora inválida.');
+      }
+      await callFn('setResolvedAt',{ticketId:id,millis,useNow});
+    }catch(e){tdErr(e);}
+  }
 
   /* ---------- OWNER: aba Gerador ---------- */
   const calcNext = (c) => { const m = c.mode === 'fixed' ? c.fixedMinutes : c.minMinutes + Math.random() * (c.maxMinutes - c.minMinutes); return Timestamp.fromMillis(Date.now() + Math.round(m * 60000)); };
@@ -5935,7 +5970,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     liveUnsubs.push(onSnapshot(doc(db, 'teamStats', 'main'), (s) => { ov = s.exists() ? (s.data().values || {}) : {}; tc = s.exists() ? (s.data().topClicks || null) : null; statG = { g: s.exists() ? (s.data().growth || {}) : {}, at: s.exists() ? ms(s.data().updatedAt) : 0 }; paint(); }, () => paint()));
     liveUnsubs.push(onSnapshot(query(collection(db, 'tickets'), where('simulated', '==', true), limit(300)), (s) => { tix = s.docs.map(d => d.data()); paint(); }));
   }
-  const GTX = { setTeamRange, selTeam, tcAdd, tcDel, statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins, deleteResolvedTicket, saveCommission, openTeamNotifications, publishTeamNotice, openProfilePhoto, saveProfilePhoto, addWhatsAppOrder, waSetStatus, waDelete, adsAddMonth, adsMoveMonth, adsRemoveMonth, adsSave, moveDashMetric, editDashboardTexts, saveDashboardTexts };
+  const GTX = { setTeamRange, selTeam, tcAdd, tcDel, statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, tdResolvedAt, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins, deleteResolvedTicket, saveCommission, openTeamNotifications, publishTeamNotice, openProfilePhoto, saveProfilePhoto, addWhatsAppOrder, waSetStatus, waDelete, adsAddMonth, adsMoveMonth, adsRemoveMonth, adsSave, moveDashMetric, editDashboardTexts, saveDashboardTexts };
 
   /* ================= EXPÕE PARA OS onclick="" DO HTML ================= */
   window.GT = {
