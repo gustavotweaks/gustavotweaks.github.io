@@ -4734,7 +4734,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
         <button type="button" class="gt-tab ripple-fx" id="tab_tickets" onclick="GT.switchAdminTab('tickets')">Chamados</button>
         <button type="button" class="gt-tab ripple-fx" id="tab_leads" onclick="GT.switchAdminTab('leads')">Leads / Orçamentos</button>
         <button type="button" class="gt-tab ripple-fx" id="tab_sim" onclick="GT.switchAdminTab('sim')">Simulados</button>
-        <button type="button" class="gt-tab ripple-fx" id="tab_team" onclick="GT.switchAdminTab('team')">👥 Equipe</button>
+        <button type="button" class="gt-tab ripple-fx" id="tab_team" onclick="GT.switchAdminTab('team')">🏆 Ranking da equipe</button>
       </div>
       <div id="dashContent"><p class="gt-empty">Carregando…</p></div>`;
     switchAdminTab(activeAdminTab || 'analytics');
@@ -4801,7 +4801,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
         var totalRevenue  = leads.reduce(function(s,l){return s+(l.saleValue?Number(l.saleValue):0);},0);
 
         lastReal = { visitas: aStore.visits||0, pageviews: pageViews, scroll75: deepScrolls, tempo: avgMin+'m '+avgSec+'s', scrollmax: (aStore.maxScroll||0)+'%', eventos: (aStore.events||[]).length, abertos: openTickets, andamento: inProgress, resolvidos: closedTickets, leads: leads.length, vendas: closedLeads, receita: 'R$ '+totalRevenue.toFixed(2).replace('.',',') };
-        lastRealTC = topClicks; let statOv = {}, statTC = null; try { const so = await getDoc(doc(db,'teamStats','main')); if (so.exists()) { statOv = so.data().values || {}; statTC = so.data().topClicks || null; } } catch(e){}
+        lastRealTC = topClicks; let statOv = {}, statTC = null; try { const so = await getDoc(doc(db,'teamStats','main')); if (so.exists()) { statOv = so.data().values || {}; statTC = so.data().topClicks || null; statG = { g: so.data().growth || {}, at: ms(so.data().updatedAt) }; } else statG = { g: {}, at: 0 }; } catch(e){}
         content.innerHTML = `
           ${renderStatCards(lastReal, statOv, statEdit)}
 
@@ -5136,7 +5136,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       if (!c.t.firstResponseAt) { patch.firstResponseAt = serverTimestamp(); patch.firstResponseBy = c.a.uid; }
       c.tx.update(c.ref, patch);
       c.tx.set(doc(collection(c.ref, 'messages')), { sender: 'admin', text, message: text, ticketId: c.id, adminId: c.a.uid, adminUsername: c.a.username, createdAt: serverTimestamp() });
-      logL(c.tx, c.a, c.id, 'response_sent', { length: text.length });
+      logL(c.tx, c.a, c.id, 'response_sent', { length: text.length, text: text.slice(0, 500) });
     }),
     setTicketStatus: (d) => withTicketL(d, (c) => {
       const to = d.status, from = c.t.status || 'aberto';
@@ -5335,20 +5335,48 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   }
 
   /* ---------- OWNER: atividade da equipe (só ações reais: vêm de tickets + auditLogs) ---------- */
-  async function renderTeam() {
+  let teamRange = 'all', teamSel = null, teamData = null;
+  const setTeamRange = (v) => { teamRange = v; renderTeam(false); };
+  const selTeam = (u) => { teamSel = teamSel === u ? null : u; renderTeam(false); };
+  async function renderTeam(fetchNew = true) {
     const content = $('dashContent');
-    const [st, lg, tix] = await Promise.all([getDocs(collection(db, 'staff')), getDocs(query(collection(db, 'auditLogs'), orderBy('createdAt', 'desc'), limit(3000))), fetchSimTickets()]);
-    const logs = lg.docs.map(d => d.data());
-    const rows = st.docs.map(d => {
-      const u = d.data().username, mine = tix.filter(t => t.assignedAdminUsername === u);
-      const fr = mine.filter(t => t.firstResponseAt && t.assignedAdminUsername === u).map(t => ms(t.firstResponseAt) - ms(t.createdAt));
-      const last = Math.max(0, ...logs.filter(l => l.adminUsername === u).map(l => ms(l.createdAt)));
-      return `<tr><td>@${escapeHtml(d.data().username)}</td><td>${mine.length}</td><td>${mine.filter(t => t.status === 'resolvido').length}</td><td>${mine.filter(t => t.status === 'andamento').length}</td><td>${logs.filter(l => l.adminUsername === u && l.action === 'response_sent').length}</td><td>${fr.length ? fmtDur(fr.reduce((a, b) => a + b, 0) / fr.length) : '—'}</td><td>${last ? fmtDate(new Date(last)) : '—'}</td></tr>`;
-    }).join('');
-    content.innerHTML = `<div class="surface-card gt-panel"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem"><p class="gt-panel-title" style="margin:0">ATIVIDADE DA EQUIPE</p>
-      <button type="button" class="gt-small-btn ripple-fx" onclick="GT.syncAdmins()">Sincronizar admins</button></div>
-      <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Username</th><th>Atendidos</th><th>Resolvidos</th><th>Em andamento</th><th>Respostas</th><th>1ª resposta (média)</th><th>Última atividade</th></tr></thead><tbody>
-      ${rows || '<tr><td colspan="7" class="gt-empty">Nenhum admin cadastrado. Use “Sincronizar admins”.</td></tr>'}</tbody></table></div></div>`;
+    if (fetchNew || !teamData) {
+      const [st, lg, tix] = await Promise.all([getDocs(collection(db, 'staff')), getDocs(query(collection(db, 'auditLogs'), orderBy('createdAt', 'desc'), limit(3000))), fetchSimTickets()]);
+      teamData = { staff: st.docs.map(d => d.data()), logs: lg.docs.map(d => d.data()), tix };
+    }
+    const { staff, logs, tix } = teamData, tmap = {}; tix.forEach(t => tmap[t.id] = t);
+    const since = teamRange === 'all' ? 0 : Date.now() - Number(teamRange) * 864e5, inR = (t) => ms(t) >= since;
+    const rows = staff.map(sd => {
+      const u = sd.username, L = logs.filter(l => l.adminUsername === u && inR(l.createdAt)), rl = L.filter(l => l.action === 'response_sent');
+      const mine = tix.filter(t => t.assignedAdminUsername === u);
+      const fr = mine.filter(t => t.firstResponseAt && inR(t.firstResponseAt)).map(t => ms(t.firstResponseAt) - ms(t.createdAt));
+      return { u, rl, resp: rl.length, clients: new Set(rl.map(l => l.ticketId)).size, resolved: new Set(L.filter(l => l.action === 'ticket_resolved').map(l => l.ticketId)).size,
+        claimed: L.filter(l => l.action === 'ticket_assigned').length, prog: mine.filter(t => t.status === 'andamento').length,
+        fr: fr.length ? fr.reduce((a, b) => a + b, 0) / fr.length : 0, last: Math.max(0, ...logs.filter(l => l.adminUsername === u).map(l => ms(l.createdAt))) };
+    }).sort((a, b) => b.resp - a.resp || b.resolved - a.resolved);
+    const max = Math.max(1, ...rows.map(r => r.resp)), medal = ['🥇', '🥈', '🥉'];
+    const big = (v) => `<div style="font-size:1.2rem;font-weight:700;color:var(--fg)">${v}</div>`;
+    const totalResp = rows.reduce((s, r) => s + r.resp, 0), totalCli = rows.reduce((s, r) => s + r.clients, 0), waiting = tix.filter(t => !t.assignedAdminId && t.status !== 'resolvido').length;
+    const sel = rows.find(r => r.u === teamSel);
+    content.innerHTML = `
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem">
+        ${[['1', 'Últimas 24 h'], ['7', '7 dias'], ['30', '30 dias'], ['all', 'Tudo']].map(([v, l]) => `<button type="button" class="gt-tab ripple-fx ${teamRange === v ? 'active' : ''}" onclick="GT.setTeamRange('${v}')">${l}</button>`).join('')}
+        <button type="button" class="gt-small-btn ripple-fx" style="margin-left:auto" onclick="GT.syncAdmins()">Sincronizar admins</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem">
+        ${statBox('Respostas enviadas', big(totalResp), '💬')}${statBox('Clientes respondidos', big(totalCli), '🙋')}${statBox('Aguardando atendimento', big(waiting), '⏳')}</div>
+      <div class="surface-card gt-panel"><p class="gt-panel-title">Ranking da equipe <span style="font-size:.65rem;color:var(--muted);font-weight:400">— clique num admin para ver o que ele respondeu</span></p>
+      <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>#</th><th>Admin</th><th>Respostas</th><th style="min-width:7rem"></th><th>Clientes respondidos</th><th>Assumidos</th><th>Resolvidos</th><th>Em andamento</th><th>1ª resposta (média)</th><th>Última atividade</th></tr></thead><tbody>
+      ${rows.map((r, i) => `<tr style="cursor:pointer;${r.u === teamSel ? 'background:rgba(255,255,255,.05)' : ''}" onclick="GT.selTeam('${escapeHtml(r.u)}')"><td>${r.resp ? (medal[i] || i + 1) : '—'}</td><td><strong>@${escapeHtml(r.u)}</strong></td><td><strong>${r.resp}</strong></td>
+        <td><div style="height:6px;border-radius:99px;background:rgba(255,255,255,.08)"><div style="height:100%;width:${r.resp / max * 100}%;background:#34d399;border-radius:99px"></div></div></td>
+        <td>${r.clients}</td><td>${r.claimed}</td><td>${r.resolved}</td><td>${r.prog}</td><td>${r.fr ? fmtDur(r.fr) : '—'}</td><td>${r.last ? fmtDate(new Date(r.last)) : '—'}</td></tr>`).join('') || '<tr><td colspan="10" class="gt-empty">Nenhum admin cadastrado. Use “Sincronizar admins”.</td></tr>'}
+      </tbody></table></div></div>
+      ${sel ? `<div class="surface-card gt-panel"><p class="gt-panel-title">O que @${escapeHtml(sel.u)} respondeu</p>
+        <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Quando</th><th>Cliente</th><th>Status</th><th>Resposta</th><th></th></tr></thead><tbody>
+        ${sel.rl.map(l => { const t = tmap[l.ticketId] || {}; return `<tr><td style="white-space:nowrap">${fmtDate(l.createdAt)}</td><td>${escapeHtml(t.nome) || '—'}</td><td>${pillOf(t.status)}</td>
+          <td style="max-width:26rem;white-space:pre-wrap;font-size:.78rem">${escapeHtml((l.metadata && l.metadata.text) || '(texto não registrado)')}</td>
+          <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.openTicketDetail('${l.ticketId}')">Abrir conversa</button></td></tr>`; }).join('') || '<tr><td colspan="5" class="gt-empty">Nenhuma resposta neste período.</td></tr>'}
+        </tbody></table></div></div>` : ''}`;
   }
   async function syncAdmins() { try { const r = await callFn('syncAdmins', { emails: TRAINER_EMAILS }); alert(r.results.map(x => x.email + ': ' + (x.ok ? 'ok' : x.error)).join('\n')); renderTeam(); } catch (e) { tdErr(e); } }
 
@@ -5357,41 +5385,68 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   const STAT_DEFS = [['visitas','Visitas (sessão)','👁️'],['pageviews','Page views','📄'],['scroll75','Scroll 75%+','📜'],['tempo','Tempo no site','⏱️'],['scrollmax','Scroll máx.','📊'],['eventos','Eventos log.','🔔'],['abertos','Chamados abertos','🎫'],['andamento','Em andamento','⚙️'],['resolvidos','Resolvidos','✅'],['leads','Leads','💡'],['vendas','Vendas fechadas','💰'],['receita','Receita total','💵']];
   let statEdit = false;
   const statBox = (label, inner, icon) => `<div class="surface-card" style="padding:1rem;text-align:center;border-radius:0.75rem"><div style="font-size:1.6rem;margin-bottom:0.3rem">${icon}</div>${inner}<div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:0.2rem">${label}</div></div>`;
+  /* crescimento com o tempo: valor = base + soma de incrementos por hora (curva diária + variação), determinístico */
+  let statG = { g: {}, at: 0 }, statCur = { real: {}, ov: {} };
+  const HW = [0.35,0.25,0.2,0.2,0.2,0.3,0.5,0.7,0.9,1.0,1.1,1.1,1.1,1.1,1.1,1.2,1.3,1.4,1.5,1.6,1.6,1.4,1.0,0.6], HM = HW.reduce((a, b) => a + b, 0) / 24;
+  const hashN = (str) => { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return ((h >>> 0) % 1000) / 1000; };
+  function grown(key, baseVal, perDay, atMs) {
+    const str = String(baseVal), pd = Number(perDay);
+    if (!pd || !atMs || /%/.test(str) || /[a-z]/i.test(str.replace('R$', ''))) return str;
+    const n0 = parseFloat(str.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.'));
+    if (!Number.isFinite(n0)) return str;
+    const H = 3600000, now = Date.now(); let add = 0;
+    for (let h = Math.floor(atMs / H); h <= Math.floor(now / H); h++) {
+      const w = (0.4 + 1.2 * hashN(key + ':' + h)) * HW[new Date(h * H).getHours()] / HM;
+      const sMs = Math.max(atMs, h * H), eMs = Math.min(now, (h + 1) * H);
+      if (eMs > sMs) add += pd / 24 * w * ((eMs - sMs) / H);
+    }
+    const n = n0 + add;
+    if (/R\$/.test(str)) { const [i, d] = n.toFixed(2).split('.'); return 'R$ ' + i.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + d; }
+    return String(Math.floor(n));
+  }
+  function tickStats() {
+    STAT_DEFS.forEach(([k]) => { const el = $('sv_' + k); if (el && statCur.ov[k] !== undefined && statG.g[k]) el.textContent = grown(k, statCur.ov[k], statG.g[k], statG.at); });
+    (statG.tcRows || []).forEach((r, i) => { const el = document.querySelector('[data-tc="' + i + '"]'); if (el && r.perDay) el.textContent = grown('tc:' + r.label, r.count, r.perDay, statG.at); });
+  }
   function renderStatCards(real, ov, editing) {
+    statCur = { real, ov };
     const grid = STAT_DEFS.map(([k, l, ic]) => {
-      const shown = ov[k] !== undefined ? ov[k] : real[k];
-      if (editing) return statBox(l, `<input id="st_${k}" class="gt-mini-input" style="width:100%;text-align:center" value="${escapeHtml(shown)}">`, ic);
-      return statBox(l, `<div style="font-size:1.2rem;font-weight:700;color:var(--fg)">${escapeHtml(shown)}${ov[k] !== undefined && isOwner ? '<span class="gt-sim-tag">editado</span>' : ''}</div>`, ic);
+      const has = ov[k] !== undefined, base = has ? ov[k] : real[k];
+      const shown = has ? grown(k, base, statG.g[k], statG.at) : base;
+      if (editing) return statBox(l, `<input id="st_${k}" class="gt-mini-input" style="width:100%;text-align:center" value="${escapeHtml(shown)}"><input id="gr_${k}" class="gt-mini-input" style="width:100%;text-align:center;margin-top:.35rem;font-size:.68rem" placeholder="+ por dia (vazio = fixo)" value="${statG.g[k] || ''}">`, ic);
+      return statBox(l, `<div style="font-size:1.2rem;font-weight:700;color:var(--fg)"><span id="sv_${k}">${escapeHtml(shown)}</span>${has && isOwner ? '<span class="gt-sim-tag">editado</span>' : ''}</div>`, ic);
     }).join('');
     const btns = !isOwner ? '' : editing
       ? `<button type="button" class="acc-btn ripple-fx" onclick="GT.statSave()">Salvar e publicar para a equipe</button><button type="button" class="secondary-btn ripple-fx" onclick="GT.statToggle(false)">Cancelar</button><button type="button" class="gt-small-btn ripple-fx" onclick="GT.statReset()">Restaurar números reais</button>`
       : `<button type="button" class="gt-small-btn ripple-fx" onclick="GT.statToggle(true)">✏️ Editar números</button>`;
+    if (!editing) { if (genTimer) clearInterval(genTimer); genTimer = setInterval(tickStats, 20000); }
     return `<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem">${btns}</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem">${grid}</div>`;
   }
   let lastReal = {};
   /* ---- Top Cliques editável ---- */
   let tcRows = null, lastRealTC = [];
-  const tcEditHtml = () => tcRows.map((r, i) => `<div style="display:flex;gap:.4rem;margin-bottom:.4rem"><input id="tc_l_${i}" class="gt-mini-input" style="flex:1;width:auto" value="${escapeHtml(r.l)}"><input id="tc_c_${i}" class="gt-mini-input" style="width:5rem" value="${escapeHtml(r.c)}"><button type="button" class="gt-small-btn" onclick="GT.tcDel(${i})">✕</button></div>`).join('') + '<button type="button" class="gt-small-btn ripple-fx" onclick="GT.tcAdd()">+ linha</button>';
-  const tcSync = () => { tcRows = tcRows.map((r, i) => ({ l: $('tc_l_' + i).value, c: $('tc_c_' + i).value })); };
-  const tcAdd = () => { tcSync(); tcRows.push({ l: '', c: '0' }); $('tcBox').innerHTML = tcEditHtml(); };
+  const tcEditHtml = () => tcRows.map((r, i) => `<div style="display:flex;gap:.4rem;margin-bottom:.4rem"><input id="tc_l_${i}" class="gt-mini-input" style="flex:1;width:auto" value="${escapeHtml(r.l)}"><input id="tc_c_${i}" class="gt-mini-input" style="width:4.5rem" value="${escapeHtml(r.c)}"><input id="tc_g_${i}" class="gt-mini-input" style="width:4.5rem" placeholder="+/dia" value="${escapeHtml(r.g || '')}"><button type="button" class="gt-small-btn" onclick="GT.tcDel(${i})">✕</button></div>`).join('') + '<button type="button" class="gt-small-btn ripple-fx" onclick="GT.tcAdd()">+ linha</button>';
+  const tcSync = () => { tcRows = tcRows.map((r, i) => ({ l: $('tc_l_' + i).value, c: $('tc_c_' + i).value, g: $('tc_g_' + i).value })); };
+  const tcAdd = () => { tcSync(); tcRows.push({ l: '', c: '0', g: '' }); $('tcBox').innerHTML = tcEditHtml(); };
   const tcDel = (i) => { tcSync(); tcRows.splice(i, 1); $('tcBox').innerHTML = tcEditHtml(); };
   function renderTopClicks(real, tc, editing) {
-    const shown = tc ? tc.map(x => [x.label, x.count]) : real;
-    if (editing) { if (!tcRows) tcRows = shown.map(([l, c]) => ({ l, c: String(c) })); return '<div id="tcBox">' + tcEditHtml() + '</div>'; }
+    statG.tcRows = tc;
+    if (editing) { if (!tcRows) tcRows = tc ? tc.map(x => ({ l: x.label, c: grown('tc:' + x.label, x.count, x.perDay, statG.at), g: x.perDay || '' })) : real.map(([l, c]) => ({ l, c: String(c), g: '' })); return '<div id="tcBox">' + tcEditHtml() + '</div>'; }
+    const shown = tc ? tc.map(x => [x.label, grown('tc:' + x.label, x.count, x.perDay, statG.at)]) : real;
     if (!shown.length) return '<p class="gt-empty" style="padding:1rem 0">Nenhum clique registrado ainda.</p>';
-    return `<div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Elemento</th><th>Cliques</th></tr></thead><tbody>${shown.map(([l, c]) => `<tr><td>${escapeHtml(l) || '—'}</td><td><strong>${escapeHtml(c)}</strong></td></tr>`).join('')}</tbody></table></div>${tc && isOwner ? '<span class="gt-sim-tag" style="margin:.6rem 0 0">editado</span>' : ''}`;
+    return `<div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Elemento</th><th>Cliques</th></tr></thead><tbody>${shown.map(([l, c], i) => `<tr><td>${escapeHtml(l) || '—'}</td><td><strong><span ${tc ? 'data-tc="' + i + '"' : ''}>${escapeHtml(c)}</span></strong></td></tr>`).join('')}</tbody></table></div>${tc && isOwner ? '<span class="gt-sim-tag" style="margin:.6rem 0 0">editado</span>' : ''}`;
   }
   const statToggle = (on) => { statEdit = on; tcRows = null; switchAdminTab('analytics'); };
   async function statSave() {
-    const values = {};
-    STAT_DEFS.forEach(([k]) => { const v = $('st_' + k).value.trim(); if (v !== String(lastReal[k])) values[k] = v; });
+    const values = {}, growth = {};
+    STAT_DEFS.forEach(([k]) => { const v = $('st_' + k).value.trim(), g = Number($('gr_' + k).value.replace(',', '.')); if (g > 0) { growth[k] = g; values[k] = v; } else if (v !== String(lastReal[k])) values[k] = v; });
     let topClicks = null;
-    if (tcRows) { tcSync(); const rows = tcRows.filter(r => r.l.trim()).map(r => ({ label: r.l.trim(), count: Number(r.c) || 0 }));
-      const same = JSON.stringify(rows.map(r => [r.label, r.count])) === JSON.stringify(lastRealTC.map(([l, c]) => [l, Number(c)])); topClicks = same ? null : rows; }
-    try { await setDoc(doc(db, 'teamStats', 'main'), { values, topClicks, updatedAt: serverTimestamp() }); statEdit = false; tcRows = null; switchAdminTab('analytics'); } catch (e) { alert(e.message); }
+    if (tcRows) { tcSync(); const rows = tcRows.filter(r => r.l.trim()).map(r => ({ label: r.l.trim(), count: Number(String(r.c).replace(/\./g, '')) || 0, perDay: Number(String(r.g).replace(',', '.')) || 0 }));
+      const same = rows.every(r => !r.perDay) && JSON.stringify(rows.map(r => [r.label, r.count])) === JSON.stringify(lastRealTC.map(([l, c]) => [l, Number(c)])); topClicks = same ? null : rows; }
+    try { await setDoc(doc(db, 'teamStats', 'main'), { values, growth, topClicks, updatedAt: serverTimestamp() }); statEdit = false; tcRows = null; switchAdminTab('analytics'); } catch (e) { alert(e.message); }
   }
-  async function statReset() { if (!confirm('Voltar a mostrar os números reais para todos?')) return; try { await setDoc(doc(db, 'teamStats', 'main'), { values: {}, topClicks: null, updatedAt: serverTimestamp() }); statEdit = false; tcRows = null; switchAdminTab('analytics'); } catch (e) { alert(e.message); } }
+  async function statReset() { if (!confirm('Voltar a mostrar os números reais para todos?')) return; try { await setDoc(doc(db, 'teamStats', 'main'), { values: {}, growth: {}, topClicks: null, updatedAt: serverTimestamp() }); statEdit = false; tcRows = null; switchAdminTab('analytics'); } catch (e) { alert(e.message); } }
   /* aba Analytics do ADMIN: mostra o que o OWNER publicou (somente leitura) */
   function renderStaffStats() {
     const content = $('dashContent'); let ov = {}, tix = [], tc = null;
@@ -5400,10 +5455,10 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       const real = { visitas: '—', pageviews: '—', scroll75: '—', tempo: '—', scrollmax: '—', eventos: '—', abertos: c(t => !t.status || t.status === 'aberto'), andamento: c(t => t.status === 'andamento'), resolvidos: c(t => t.status === 'resolvido'), leads: tix.length, vendas: c(t => t.status === 'resolvido'), receita: money(tix.filter(t => t.status === 'resolvido').reduce((s, t) => s + Number(t.valor ?? 75), 0)) };
       content.innerHTML = `<p class="gt-panel-title">Analytics</p>` + renderStatCards(real, ov, false) + (tc ? `<div class="surface-card gt-panel"><p class="gt-panel-title">🖱️ Top Cliques</p>${renderTopClicks([], tc, false)}</div>` : '');
     };
-    liveUnsubs.push(onSnapshot(doc(db, 'teamStats', 'main'), (s) => { ov = s.exists() ? (s.data().values || {}) : {}; tc = s.exists() ? (s.data().topClicks || null) : null; paint(); }, () => paint()));
+    liveUnsubs.push(onSnapshot(doc(db, 'teamStats', 'main'), (s) => { ov = s.exists() ? (s.data().values || {}) : {}; tc = s.exists() ? (s.data().topClicks || null) : null; statG = { g: s.exists() ? (s.data().growth || {}) : {}, at: s.exists() ? ms(s.data().updatedAt) : 0 }; paint(); }, () => paint()));
     liveUnsubs.push(onSnapshot(query(collection(db, 'tickets'), where('simulated', '==', true), limit(300)), (s) => { tix = s.docs.map(d => d.data()); paint(); }));
   }
-  const GTX = { tcAdd, tcDel, statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins };
+  const GTX = { setTeamRange, selTeam, tcAdd, tcDel, statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins };
 
   /* ================= EXPÕE PARA OS onclick="" DO HTML ================= */
   window.GT = {
