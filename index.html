@@ -1,10 +1,4 @@
-
-    await loadDashboardAccess();
-    if(isTrainer && !isOwner && dashboardAccessLocked){
-      const c=$('dashContent'); if(c)c.innerHTML=dashboardLockedView();
-      return;
-    }
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -4834,6 +4828,13 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   }
 
   function renderDashboard(){
+    loadDashboardAccess().then((locked)=>{
+      if(isTrainer && !isOwner && locked){
+        const body=$('dashBody');
+        if(body) body.innerHTML=dashboardLockedView();
+      }
+    });
+
     loadDashCopy().then(()=>setTimeout(applyDashboardCopy,0));
     if (!isOwner && !isTrainer) {
       $('dashBody').innerHTML = '<div class="surface-card gt-panel"><p class="gt-panel-title">Sem acesso</p><p style="color:var(--muted);font-size:0.85rem">Essa área é exclusiva do administrador do site.</p></div>';
