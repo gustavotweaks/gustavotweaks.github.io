@@ -1180,6 +1180,7 @@
     .gt-switch-line { font-size: 0.8rem; color: var(--muted); margin-top: 1.25rem; text-align: center; }
     .gt-switch-line button { color: var(--fg); font-weight: 600; text-decoration: underline; background: none; }
 
+    .gt-sim-tag { font-size: 0.55rem; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.28); border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: .05rem .4rem; margin-left: .4rem; vertical-align: middle; }
     /* DASHBOARD PANEL */
     .gt-dash-overlay { position: fixed; inset: 0; z-index: 210; background: var(--bg); overflow-y: auto; }
     .gt-dash-overlay.hidden { display: none; }
@@ -4524,7 +4525,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import {
     getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where,
-    getDocs, updateDoc, deleteDoc, serverTimestamp, orderBy, onSnapshot
+    getDocs, updateDoc, deleteDoc, serverTimestamp, orderBy, onSnapshot, limit, Timestamp, runTransaction
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   /* ======================================================
@@ -4697,7 +4698,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   }
   async function fetchTickets(){
     const snap = await getDocs(query(collection(db,'tickets'), orderBy('createdAt','desc')));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(t => !t.simulated); // simulados ficam fora das métricas reais
   }
   async function markTicketReadByAdmin(ticketId){
     try { await updateDoc(doc(db,'tickets',ticketId), { unreadForAdmin: false }); } catch(e) {}
@@ -4710,32 +4711,30 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       return;
     }
     $('dashUserEmail').textContent = currentUser ? currentUser.email : '—';
+    if ($('dashTitle')) $('dashTitle').textContent = isTrainer ? 'ADMIN' : 'Painel do administrador';
 
     if (isTrainer) {
       /* ── PAINEL DE TREINAMENTO ── */
       $('dashBody').innerHTML = `
-        <div style="display:flex;align-items:center;gap:0.6rem;padding:0.6rem 1rem;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.28);border-radius:0.7rem;margin-bottom:1.25rem">
-          <span style="font-size:1.1rem">🎓</span>
-          <div>
-            <p style="font-size:0.8rem;font-weight:700;color:#fbbf24">Ambiente de Treinamento</p>
-            <p style="font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:0.1rem">Os dados exibidos são simulados para fins de treinamento. Nenhuma informação real do negócio é acessível aqui.</p>
-          </div>
-        </div>
         <div class="gt-tabs">
+          <button type="button" class="gt-tab ripple-fx" id="tab_sim_stats" onclick="GT.switchAdminTab('sim_stats')">📊 Analytics</button>
           <button type="button" class="gt-tab ripple-fx" id="tab_sim_tickets" onclick="GT.switchAdminTab('sim_tickets')">Chamados</button>
           <button type="button" class="gt-tab ripple-fx" id="tab_sim_leads"   onclick="GT.switchAdminTab('sim_leads')">Leads / Orçamentos</button>
         </div>
         <div id="dashContent"><p class="gt-empty">Carregando…</p></div>`;
-      switchAdminTab('sim_tickets');
+      switchAdminTab('sim_stats');
       return;
     }
 
     /* ── PAINEL REAL (owner) ── */
     $('dashBody').innerHTML = `
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1rem"><button type="button" class="acc-btn ripple-fx" onclick="GT.openCreate()">+ CRIAR PEDIDO</button></div>
       <div class="gt-tabs">
         <button type="button" class="gt-tab ripple-fx" id="tab_analytics" onclick="GT.switchAdminTab('analytics')">📊 Analytics</button>
         <button type="button" class="gt-tab ripple-fx" id="tab_tickets" onclick="GT.switchAdminTab('tickets')">Chamados</button>
         <button type="button" class="gt-tab ripple-fx" id="tab_leads" onclick="GT.switchAdminTab('leads')">Leads / Orçamentos</button>
+        <button type="button" class="gt-tab ripple-fx" id="tab_sim" onclick="GT.switchAdminTab('sim')">Simulados</button>
+        <button type="button" class="gt-tab ripple-fx" id="tab_team" onclick="GT.switchAdminTab('team')">👥 Equipe</button>
       </div>
       <div id="dashContent"><p class="gt-empty">Carregando…</p></div>`;
     switchAdminTab(activeAdminTab || 'analytics');
@@ -4744,13 +4743,14 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   async function switchAdminTab(tab){
     if (!isOwner && !isTrainer) return;
     activeAdminTab = tab;
+    stopLive();
 
     /* ── abas reais (owner only) ── */
-    ['analytics','tickets','leads'].forEach(t=>{
+    ['analytics','tickets','leads','sim','team'].forEach(t=>{
       const el = $('tab_'+t); if (el) el.classList.toggle('active', t===tab);
     });
     /* ── abas simuladas (trainer) ── */
-    ['sim_tickets','sim_leads'].forEach(t=>{
+    ['sim_stats','sim_tickets','sim_leads'].forEach(t=>{
       const el = $('tab_'+t); if (el) el.classList.toggle('active', t===tab);
     });
 
@@ -4758,67 +4758,9 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     if (!content) return;
     content.innerHTML = '<p class="gt-empty">Carregando…</p>';
 
-    /* ========================================================
-       ABAS SIMULADAS — dados gerados deterministicamente
-    ======================================================== */
-    if (tab === 'sim_tickets' || tab === 'sim_leads') {
-      const sim = generateSimData();
-
-      if (tab === 'sim_tickets') {
-        const statusPill = (s) => s==='resolvido'
-          ? '<span class="gt-pill gt-pill--closed">Resolvido</span>'
-          : s==='andamento' ? '<span class="gt-pill gt-pill--progress">Em andamento</span>'
-          : '<span class="gt-pill gt-pill--open">Aberto</span>';
-        content.innerHTML = `
-          <div class="surface-card gt-panel">
-            <p class="gt-panel-title">Chamados de suporte <span style="font-size:0.65rem;color:rgba(251,191,36,0.7);margin-left:0.5rem">🎓 simulado</span></p>
-            <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Contato</th><th>Categoria</th><th>Descrição</th><th>Status</th><th>Ação</th></tr></thead><tbody>
-            ${sim.tickets.map(t=>`<tr>
-              <td>${t.data}</td>
-              <td>${escapeHtml(t.nome)}</td>
-              <td>${escapeHtml(t.contato)}</td>
-              <td>${escapeHtml(t.categoria)}</td>
-              <td style="max-width:22rem;white-space:pre-wrap">${escapeHtml(t.mensagem)}</td>
-              <td>
-                ${statusPill(t.status)}
-                <select class="gt-mini-input" style="margin-top:0.4rem" onchange="GT.simUpdateStatus(this,'${t.id}')">
-                  <option value="aberto" ${t.status==='aberto'?'selected':''}>Aberto</option>
-                  <option value="andamento" ${t.status==='andamento'?'selected':''}>Em andamento</option>
-                  <option value="resolvido" ${t.status==='resolvido'?'selected':''}>Resolvido</option>
-                </select>
-              </td>
-              <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.simReply('${t.id}','${escapeHtml(t.nome).replace(/'/g,"\\'")}')">Responder</button></td>
-            </tr>`).join('')}
-            </tbody></table></div>
-          </div>`;
-      } else {
-        content.innerHTML = `
-          <div class="surface-card gt-panel">
-            <p class="gt-panel-title">Leads / Orçamentos <span style="font-size:0.65rem;color:rgba(251,191,36,0.7);margin-left:0.5rem">🎓 simulado</span></p>
-            <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Config. do PC</th><th>Serviço</th><th>Status</th><th>Valor</th><th>Salvar</th></tr></thead><tbody>
-            ${sim.leads.map(l=>`<tr>
-              <td>${l.data}</td>
-              <td>${escapeHtml(l.nome)}</td>
-              <td style="max-width:18rem;font-size:0.78rem">${escapeHtml(l.config)}</td>
-              <td>${escapeHtml(l.servico)}</td>
-              <td><span class="gt-pill ${l.fechado?'gt-pill--closed':'gt-pill--open'}">${l.fechado?'Fechado':'Novo'}</span></td>
-              <td>
-                <input class="gt-mini-input" type="number" step="0.01" id="simval_${l.id}"
-                  value="${l.valor}" placeholder="75,00"
-                  title="Ajuste o valor conforme o tipo de PC. Padrão: R$ 75. Notebook: R$ 50. BIOS limitada: R$ 65." />
-                <p style="font-size:0.6rem;color:rgba(255,255,255,0.3);margin-top:0.2rem">Padrão R$75 · Notebook R$50 · BIOS limitada R$65</p>
-              </td>
-              <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.simSaveVal('${l.id}')">Salvar</button></td>
-            </tr>`).join('')}
-            </tbody></table></div>
-            <div style="margin-top:1rem;padding:0.85rem 1rem;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:0.7rem">
-              <p style="font-size:0.72rem;color:var(--muted)">💰 Receita simulada do mês: <strong id="simRevenue" style="color:#4ade80">R$ ${sim.receita.toFixed(2).replace('.',',')}</strong></p>
-              <p style="font-size:0.65rem;color:rgba(255,255,255,0.25);margin-top:0.3rem">Atualiza automaticamente ao salvar valores.</p>
-            </div>
-          </div>`;
-      }
-      return;
-    }
+    if (tab === 'sim_stats') { renderStaffStats(); return; }
+    if (tab === 'sim_tickets' || tab === 'sim_leads') { renderStaffTab(tab); return; }
+    if (isOwner && ['gen','sim','team'].includes(tab)) { await renderOwnerTab(tab); return; }
 
     /* ========================================================
        ABAS REAIS (owner)
@@ -4858,21 +4800,10 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
         var closedLeads   = leads.filter(l=>l.saleValue).length;
         var totalRevenue  = leads.reduce(function(s,l){return s+(l.saleValue?Number(l.saleValue):0);},0);
 
+        lastReal = { visitas: aStore.visits||0, pageviews: pageViews, scroll75: deepScrolls, tempo: avgMin+'m '+avgSec+'s', scrollmax: (aStore.maxScroll||0)+'%', eventos: (aStore.events||[]).length, abertos: openTickets, andamento: inProgress, resolvidos: closedTickets, leads: leads.length, vendas: closedLeads, receita: 'R$ '+totalRevenue.toFixed(2).replace('.',',') };
+        let statOv = {}; try { const so = await getDoc(doc(db,'teamStats','main')); if (so.exists()) statOv = so.data().values || {}; } catch(e){}
         content.innerHTML = `
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem">
-            ${statCard('Visitas (sessão)', aStore.visits||0, '👁️')}
-            ${statCard('Page views', pageViews, '📄')}
-            ${statCard('Scroll 75%+', deepScrolls, '📜')}
-            ${statCard('Tempo no site', avgMin+'m '+avgSec+'s', '⏱️')}
-            ${statCard('Scroll máx.', (aStore.maxScroll||0)+'%', '📊')}
-            ${statCard('Eventos log.', (aStore.events||[]).length, '🔔')}
-            ${statCard('Chamados abertos', openTickets, '🎫')}
-            ${statCard('Em andamento', inProgress, '⚙️')}
-            ${statCard('Resolvidos', closedTickets, '✅')}
-            ${statCard('Leads', leads.length, '💡')}
-            ${statCard('Vendas fechadas', closedLeads, '💰')}
-            ${statCard('Receita total', 'R$ '+totalRevenue.toFixed(2).replace('.',','), '💵')}
-          </div>
+          ${renderStatCards(lastReal, statOv, statEdit)}
 
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
             <div class="surface-card gt-panel">
@@ -5178,6 +5109,289 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     await switchAdminTab('tickets');
   }
 
+  /* ================================================================
+     GERADOR / FILA / ATENDIMENTO / EQUIPE  (dados no Firestore; lógica privilegiada nas Cloud Functions)
+  ================================================================ */
+  async function actorL() {
+    if (isOwner) return { uid: currentUser.uid, username: 'owner', isOwner: true };
+    const st = await getDoc(doc(db, 'staff', (currentUser.email || '').toLowerCase()));
+    if (!st.exists()) throw new Error('Sem permissão.');
+    return { uid: currentUser.uid, username: st.data().username, isOwner: false };
+  }
+  const logL = (tx, a, ticketId, action, metadata) => tx.set(doc(collection(db, 'auditLogs')), { adminId: a.uid, adminUsername: a.username, ticketId, action, metadata: metadata || {}, createdAt: serverTimestamp() });
+  async function withTicketL(d, fn) {
+    const a = await actorL(), ref = doc(db, 'tickets', String(d.ticketId));
+    return runTransaction(db, async (tx) => {   // transação = dois admins não assumem o mesmo chamado
+      const s = await tx.get(ref); if (!s.exists()) throw new Error('Chamado não existe.');
+      const t = s.data();
+      if (!a.isOwner && t.assignedAdminId && t.assignedAdminId !== a.uid) throw new Error('Chamado já em atendimento por @' + t.assignedAdminUsername + '.');
+      return fn({ tx, ref, t, a, id: ref.id });
+    });
+  }
+  function claimL(c, patch) { if (c.t.assignedAdminId) return; Object.assign(patch, { assignedAdminId: c.a.uid, assignedAdminUsername: c.a.username, assignedAt: serverTimestamp() }); logL(c.tx, c.a, c.id, 'ticket_assigned'); }
+  const LOCAL = {
+    replyTicket: (d) => withTicketL(d, (c) => {
+      const text = String(d.message || '').trim().slice(0, 2000); if (!text) throw new Error('Mensagem vazia.');
+      if (c.t.status === 'resolvido' && !c.a.isOwner) throw new Error('Chamado já resolvido.');
+      const patch = { lastMessageAt: serverTimestamp(), lastMessageText: text, lastMessageBy: 'admin', unreadForClient: true, unreadForAdmin: false };
+      claimL(c, patch); if (!c.t.status || c.t.status === 'aberto') patch.status = 'andamento';
+      if (!c.t.firstResponseAt) { patch.firstResponseAt = serverTimestamp(); patch.firstResponseBy = c.a.uid; }
+      c.tx.update(c.ref, patch);
+      c.tx.set(doc(collection(c.ref, 'messages')), { sender: 'admin', text, message: text, ticketId: c.id, adminId: c.a.uid, adminUsername: c.a.username, createdAt: serverTimestamp() });
+      logL(c.tx, c.a, c.id, 'response_sent', { length: text.length });
+    }),
+    setTicketStatus: (d) => withTicketL(d, (c) => {
+      const to = d.status, from = c.t.status || 'aberto';
+      if (!['aberto', 'andamento', 'resolvido'].includes(to)) throw new Error('Status inválido.');
+      if (from === to) return;
+      const patch = { status: to }; if (to !== 'aberto') claimL(c, patch);
+      if (to === 'resolvido') { patch.resolvedAt = serverTimestamp(); patch.resolvedByUsername = c.t.assignedAdminUsername || c.a.username; } else patch.resolvedAt = null;
+      c.tx.update(c.ref, patch); logL(c.tx, c.a, c.id, 'status_changed', { from, to });
+      if (to === 'resolvido') logL(c.tx, c.a, c.id, 'ticket_resolved');
+    }),
+    setTicketPrice: (d) => withTicketL(d, (c) => {
+      const to = Number(d.valor), from = Number(c.t.valor ?? 75);
+      if (!Number.isFinite(to) || to < 0 || to > 100000) throw new Error('Valor inválido.');
+      if (from === to) return;
+      c.tx.update(c.ref, { valor: to }); logL(c.tx, c.a, c.id, 'price_changed', { from, to });
+    }),
+    syncAdmins: async (d) => { if (!isOwner) throw new Error('Somente OWNER.'); for (const e of d.emails) await setDoc(doc(db, 'staff', e.toLowerCase()), { email: e.toLowerCase(), username: e.split('@')[0], role: 'admin' }); return { results: d.emails.map(e => ({ email: e, ok: true })) }; }
+  };
+  const callFn = (n, d) => LOCAL[n](d);
+  const ms = (t) => !t ? 0 : t.toMillis ? t.toMillis() : +new Date(t);
+  const hhmm = (t) => t ? new Date(ms(t)).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '—';
+  const fmtDur = (x) => { if (!x) return '—'; const m = Math.round(x / 60000); return m < 60 ? m + ' min' : Math.floor(m / 60) + 'h ' + (m % 60) + 'min'; };
+  const pillOf = (s) => s === 'resolvido' ? '<span class="gt-pill gt-pill--closed">Resolvido</span>' : s === 'andamento' ? '<span class="gt-pill gt-pill--progress">Em andamento</span>' : '<span class="gt-pill gt-pill--open">Aberto</span>';
+  const simTag = (t) => t.simulated ? '<span class="gt-sim-tag" title="Registro simulado">sim</span>' : '';
+  const respTxt = (t) => t.assignedAdminUsername ? (t.status === 'resolvido' ? 'Resolvido' : 'Em atendimento') + ' — @' + escapeHtml(t.assignedAdminUsername) : '—';
+  let liveUnsubs = [], genTimer = null, genCfg = null;
+  function stopLive() { liveUnsubs.forEach(u => u()); liveUnsubs = []; if (genTimer) { clearInterval(genTimer); genTimer = null; } }
+
+  async function fetchSimTickets() {
+    const s = await getDocs(query(collection(db, 'tickets'), where('simulated', '==', true), orderBy('createdAt', 'desc'), limit(300)));
+    return s.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+
+  /* ---------- lista de chamados simulados (ADMIN e OWNER), tempo real ---------- */
+  function renderStaffTab(tab) {
+    const content = $('dashContent');
+    const q = query(collection(db, 'tickets'), where('simulated', '==', true), orderBy('createdAt', 'desc'), limit(300));
+    liveUnsubs.push(onSnapshot(q, (snap) => {
+      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      if (tab === 'sim_leads') {
+        const rev = list.filter(t => t.status === 'resolvido').reduce((s, t) => s + Number(t.valor ?? 75), 0);
+        content.innerHTML = `<div class="surface-card gt-panel"><p class="gt-panel-title">Leads / Orçamentos</p>
+          <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Config. do PC</th><th>Status</th><th>Valor</th></tr></thead><tbody>
+          ${list.map(t => `<tr><td>${fmtDate(t.createdAt)}</td><td>${escapeHtml(t.nome)}${simTag(t)}</td><td style="max-width:20rem;font-size:0.78rem">${escapeHtml((t.mensagem || '').split('\n')[1] || '')}</td><td>${pillOf(t.status)}</td><td>${money(t.valor ?? 75)}</td></tr>`).join('') || '<tr><td colspan="5" class="gt-empty">Nada ainda.</td></tr>'}
+          </tbody></table></div>
+          <p style="margin-top:1rem;font-size:0.75rem;color:var(--muted)">Receita dos resolvidos: <strong style="color:#4ade80">${money(rev)}</strong> — muda quando o valor é ajustado no chamado.</p></div>`;
+        return;
+      }
+      content.innerHTML = `<div class="surface-card gt-panel"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem"><p class="gt-panel-title" style="margin:0">Chamados de suporte</p>${isOwner ? '<button type="button" class="acc-btn ripple-fx" onclick="GT.openCreate()">+ CRIAR PEDIDO</button>' : ''}</div>
+        <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Contato</th><th>Categoria</th><th>Descrição</th><th>Status</th><th>Responsável</th><th>Valor</th><th></th></tr></thead><tbody>
+        ${list.map(t => `<tr><td>${fmtDate(t.createdAt)}</td><td>${escapeHtml(t.nome)}${simTag(t)}</td><td>${escapeHtml(t.contato)}</td><td>${escapeHtml(t.categoria)}</td>
+          <td style="max-width:22rem;white-space:pre-wrap;font-size:0.78rem">${escapeHtml(t.mensagem)}</td><td>${pillOf(t.status)}</td><td style="font-size:0.75rem">${respTxt(t)}</td><td>${money(t.valor ?? 75)}</td>
+          <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.openTicketDetail('${t.id}')">Responder</button></td></tr>`).join('') || '<tr><td colspan="9" class="gt-empty">Nenhum chamado ainda.</td></tr>'}
+        </tbody></table></div></div>`;
+    }, (e) => { content.innerHTML = '<div class="surface-card gt-panel"><p class="gt-panel-title">Erro ao carregar</p><p style="color:var(--muted);font-size:0.85rem">' + escapeHtml(e.message) + '</p></div>'; }));
+  }
+
+  /* ---------- modal do chamado: dados, histórico, resposta, status, preço, timeline (owner) ---------- */
+  let tdUnsubs = [];
+  function closeTicketDetail() { tdUnsubs.forEach(u => u()); tdUnsubs = []; const o = $('tdOverlay'); if (o) o.classList.add('hidden'); }
+  const LBL = { ticket_assigned: (l) => '@' + l.adminUsername + ' assumiu', response_sent: (l) => '@' + l.adminUsername + ' respondeu', status_changed: (l) => 'Status alterado (' + (l.metadata.from || '') + ' → ' + (l.metadata.to || '') + ')', ticket_resolved: (l) => '@' + l.adminUsername + ' resolveu', price_changed: (l) => '@' + l.adminUsername + ' alterou o valor ' + money(l.metadata.from) + ' → ' + money(l.metadata.to) };
+  function openTicketDetail(id) {
+    closeTicketDetail();
+    let o = $('tdOverlay');
+    if (!o) {
+      o = document.createElement('div'); o.id = 'tdOverlay'; o.className = 'gt-overlay hidden'; o.style.zIndex = 230;
+      o.onclick = (e) => { if (e.target === o) closeTicketDetail(); };
+      o.innerHTML = '<div class="surface-card gt-modal" style="max-width:42rem"><button type="button" class="gt-modal-close ripple-fx" onclick="GT.closeTicketDetail()">&#10005;</button><div id="tdBody"></div></div>';
+      document.body.appendChild(o);
+    }
+    o.classList.remove('hidden');
+    $('tdBody').innerHTML = '<p class="gt-empty">Carregando…</p>';
+    let t = null, msgs = [], logs = [];
+    const paint = () => {
+      if (!t) return;
+      const c = t.config || {};
+      const cfgRows = Object.entries({ 'Sistema': c.so, 'CPU': c.cpu, 'GPU': c.gpu, 'RAM': c.ram, 'Placa-mãe': c.placaMae, 'Armazenamento': c.armazenamento, 'Jogo': c.jogo, 'Objetivo': c.objetivo }).filter(([, v]) => v)
+        .map(([k, v]) => `<div style="font-size:0.78rem;color:var(--muted)"><strong style="color:var(--fg)">${k}:</strong> ${escapeHtml(v)}</div>`).join('');
+      const tl = [{ at: ms(t.createdAt), txt: 'Chamado criado' }, ...logs.map(l => ({ at: ms(l.createdAt), txt: (LBL[l.action] || (() => l.action))(l) }))].sort((a, b) => a.at - b.at)
+        .map(x => `<div style="font-size:0.78rem;color:var(--muted)">${new Date(x.at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} — ${escapeHtml(x.txt)}</div>`).join('');
+      const draft = ($('tdMsg') || {}).value || '';
+      $('tdBody').innerHTML = `
+        <p class="gt-title">${escapeHtml(t.nome)} ${simTag(t)}</p>
+        <p class="gt-sub">${escapeHtml(t.contato)} · ${escapeHtml(t.categoria)} · ${fmtDate(t.createdAt)}<br>${pillOf(t.status)} <span style="margin-left:.4rem">${respTxt(t)}</span></p>
+        <div style="margin-bottom:1rem">${cfgRows}</div>
+        <p style="font-size:0.8rem;white-space:pre-wrap;margin-bottom:1rem">${escapeHtml(t.mensagem)}</p>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;align-items:end">
+          <div class="gt-field" style="margin:0"><label>Status</label><select id="tdStatus" class="gt-mini-input" onchange="GT.tdStatus('${id}',this.value)">
+            ${['aberto', 'andamento', 'resolvido'].map(s => `<option value="${s}" ${(t.status || 'aberto') === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+          <div class="gt-field" style="margin:0"><label>Valor (R$)</label><input id="tdPrice" class="gt-mini-input" type="number" min="0" step="0.01" value="${Number(t.valor ?? 75)}"></div>
+          <button type="button" class="gt-small-btn ripple-fx" onclick="GT.tdPrice('${id}')">Salvar valor</button>
+        </div>
+        <p class="gt-panel-title" style="font-size:.85rem;margin-bottom:.5rem">Histórico</p>
+        <div style="max-height:11rem;overflow-y:auto;margin-bottom:.8rem">${msgs.map(m => `<div style="font-size:.78rem;margin-bottom:.35rem"><strong>${m.sender === 'admin' ? '@' + escapeHtml(m.adminUsername || 'admin') : 'Cliente'}</strong> <span style="color:var(--muted)">${hhmm(m.createdAt)}</span><br>${escapeHtml(m.text)}</div>`).join('') || '<p class="gt-empty" style="padding:.5rem 0">Sem mensagens.</p>'}</div>
+        <div class="gt-field"><textarea id="tdMsg" rows="3" placeholder="Escreva a resposta…">${escapeHtml(draft)}</textarea></div>
+        <button type="button" class="acc-btn ripple-fx" onclick="GT.tdSend('${id}')">ENVIAR RESPOSTA</button>
+        ${isOwner ? `<p class="gt-panel-title" style="font-size:.85rem;margin:1.2rem 0 .5rem">Timeline</p>${tl}` : ''}`;
+    };
+    tdUnsubs.push(onSnapshot(doc(db, 'tickets', id), (s) => { t = s.exists() ? { id, ...s.data() } : null; if (isOwner) loadLogs(); paint(); }));
+    tdUnsubs.push(onSnapshot(query(ticketMessagesCol(id), orderBy('createdAt', 'asc')), (s) => { msgs = s.docs.map(d => d.data()); paint(); }));
+    let lt = 0;
+    async function loadLogs() { if (Date.now() - lt < 1500) return; lt = Date.now(); try { const s = await getDocs(query(collection(db, 'auditLogs'), where('ticketId', '==', id))); logs = s.docs.map(d => d.data()); paint(); } catch (e) {} }
+  }
+  const tdErr = (e) => alert(e && e.message ? e.message : 'Erro');
+  async function tdSend(id) { const el = $('tdMsg'); const v = el.value.trim(); if (!v) return; el.disabled = true; try { await callFn('replyTicket', { ticketId: id, message: v }); el.value = ''; } catch (e) { tdErr(e); } el.disabled = false; }
+  async function tdStatus(id, s) { try { await callFn('setTicketStatus', { ticketId: id, status: s }); } catch (e) { tdErr(e); } }
+  async function tdPrice(id) { try { await callFn('setTicketPrice', { ticketId: id, valor: Number($('tdPrice').value) }); } catch (e) { tdErr(e); } }
+
+  /* ---------- OWNER: aba Gerador ---------- */
+  const calcNext = (c) => { const m = c.mode === 'fixed' ? c.fixedMinutes : c.minMinutes + Math.random() * (c.maxMinutes - c.minMinutes); return Timestamp.fromMillis(Date.now() + Math.round(m * 60000)); };
+  function readCfg() {
+    const mode = document.querySelector('input[name="genMode"]:checked').value;
+    const c = { mode, minMinutes: Number($('genMin').value), maxMinutes: Number($('genMax').value), fixedMinutes: Number($('genFix').value) };
+    const bad = (v) => !Number.isFinite(v) || v <= 0;
+    if (mode === 'random' && (bad(c.minMinutes) || bad(c.maxMinutes) || c.maxMinutes < c.minMinutes)) throw new Error('Mínimo deve ser > 0 e máximo ≥ mínimo.');
+    if (mode === 'fixed' && bad(c.fixedMinutes)) throw new Error('Intervalo fixo deve ser > 0.');
+    return c;
+  }
+  async function genSave() { try { const c = readCfg(); await setDoc(doc(db, 'config', 'generator'), { ...c, nextGenerationAt: calcNext(c) }, { merge: true }); } catch (e) { alert(e.message); } }
+  async function genToggle(on) { try { const c = { ...(genCfg || {}), ...readCfg() }; await setDoc(doc(db, 'config', 'generator'), { ...c, enabled: on, nextGenerationAt: on ? calcNext(c) : null }, { merge: true }); } catch (e) { alert(e.message); } }
+  function tickCountdown() {
+    const el = $('genCountdown'); if (!el) return;
+    const on = genCfg && genCfg.enabled === true, n = genCfg && genCfg.nextGenerationAt ? ms(genCfg.nextGenerationAt) : 0;
+    $('genStatus').innerHTML = on ? '<span style="color:#34d399">ATIVO</span>' : '<span style="color:#f87171">PAUSADO</span>';
+    $('genNext').textContent = on && n ? hhmm(n) : '—';
+    const d = n - Date.now();
+    el.textContent = !on || !n ? '—' : d <= 0 ? 'aguardando execução…' : String(Math.floor(d / 60000)).padStart(2, '0') + ':' + String(Math.floor(d / 1000) % 60).padStart(2, '0');
+  }
+  function renderGen() {
+    const content = $('dashContent');
+    content.innerHTML = `
+      <div class="surface-card gt-panel"><p class="gt-panel-title">Controle do Gerador</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.2rem">
+          <div><p class="gt-stat-label">Status</p><p class="gt-stat-val" id="genStatus" style="font-size:1.3rem">…</p></div>
+          <div><p class="gt-stat-label">Próximo pedido</p><p class="gt-stat-val" id="genNext" style="font-size:1.3rem">—</p></div>
+          <div><p class="gt-stat-label">Próximo pedido em</p><p class="gt-stat-val" id="genCountdown" style="font-size:1.3rem">—</p></div></div>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.2rem">
+          <button type="button" class="acc-btn ripple-fx" onclick="GT.genToggle(true)">ATIVAR GERADOR</button>
+          <button type="button" class="secondary-btn ripple-fx" onclick="GT.genToggle(false)">PAUSAR GERADOR</button></div>
+        <div class="gt-inline-form">
+          <div class="gt-field"><label><input type="radio" name="genMode" value="random" checked> Modo aleatório — mínimo (min)</label><input id="genMin" type="number" min="1" step="any" value="10"></div>
+          <div class="gt-field"><label>Máximo (min)</label><input id="genMax" type="number" min="1" step="any" value="30"></div>
+          <div class="gt-field"><label><input type="radio" name="genMode" value="fixed"> Modo fixo — a cada (min)</label><input id="genFix" type="number" min="1" step="any" value="15"></div></div>
+        <button type="button" class="gt-small-btn ripple-fx" onclick="GT.genSave()">SALVAR CONFIGURAÇÃO</button>
+        <p style="font-size:.68rem;color:var(--muted);margin-top:.8rem">A geração roda no servidor (Cloud Functions), com o site fechado. Esta tela só exibe o Firestore.</p></div>
+      <div class="surface-card gt-panel"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem"><p class="gt-panel-title" style="margin:0">FILA PROGRAMADA</p>
+        <button type="button" class="acc-btn ripple-fx" onclick="GT.openCreate()">+ CRIAR PEDIDO</button></div><div id="genQueue"></div></div>`;
+    liveUnsubs.push(onSnapshot(doc(db, 'config', 'generator'), (s) => {
+      genCfg = s.exists() ? s.data() : null;
+      if (genCfg && !renderGen._filled) { renderGen._filled = true; $('genMin').value = genCfg.minMinutes ?? 10; $('genMax').value = genCfg.maxMinutes ?? 30; $('genFix').value = genCfg.fixedMinutes ?? 15; const r = document.querySelector('input[name="genMode"][value="' + (genCfg.mode || 'random') + '"]'); if (r) r.checked = true; }
+      tickCountdown();
+    }));
+    genTimer = setInterval(tickCountdown, 1000);
+    renderGen._filled = false;
+    liveUnsubs.push(onSnapshot(query(collection(db, 'scheduled'), where('status', '==', 'pending')), (s) => {
+      const q = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => ms(a.runAt) - ms(b.runAt));
+      $('genQueue').innerHTML = q.length ? `<div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Horário</th><th>Nome</th><th>Configuração</th><th>Valor</th><th>Status</th><th></th></tr></thead><tbody>
+        ${q.map(x => `<tr><td>${new Date(ms(x.runAt)).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</td><td>${escapeHtml(x.ticket.nome)}</td><td style="font-size:.75rem">${escapeHtml(((x.ticket.mensagem || '').split('\n')[1] || '').replace('Config: ', ''))}</td><td>${money(x.ticket.valor)}</td><td>${x.status}</td>
+        <td style="display:flex;gap:.3rem;flex-wrap:wrap"><button class="gt-small-btn" onclick="GT.openCreate('${x.id}')">EDITAR</button><button class="gt-small-btn" onclick="GT.qResched('${x.id}')">REAGENDAR</button><button class="gt-small-btn" style="background:#3a1414;color:#ff8080" onclick="GT.qCancel('${x.id}')">CANCELAR</button></td></tr>`).join('')}</tbody></table></div>` : '<p class="gt-empty">Fila vazia.</p>';
+    }));
+  }
+  const parseLocal = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})$/.exec((s || '').trim()); return m ? new Date(+m[1], m[2] - 1, +m[3], +m[4], +m[5]) : null; };
+  async function qResched(id) { const d = parseLocal(prompt('Nova data e hora (AAAA-MM-DD HH:MM):')); if (!d || d <= new Date()) return alert('Data inválida ou no passado.'); await updateDoc(doc(db, 'scheduled', id), { runAt: Timestamp.fromDate(d) }); }
+  async function qCancel(id) { if (confirm('Cancelar este pedido programado?')) await updateDoc(doc(db, 'scheduled', id), { status: 'cancelled' }); }
+
+  /* ---------- OWNER: criar/editar pedido (agora ou agendado) ---------- */
+  const CF = [['nome', 'Nome'], ['contato', 'Contato'], ['so', 'Sistema operacional'], ['cpu', 'Processador'], ['gpu', 'Placa de vídeo'], ['ram', 'Memória RAM'], ['placaMae', 'Placa-mãe'], ['armazenamento', 'Armazenamento'], ['jogo', 'Jogo principal'], ['objetivo', 'Objetivo da otimização']];
+  async function openCreate(editId) {
+    let ex = null; if (editId) ex = (await getDoc(doc(db, 'scheduled', editId))).data();
+    const t = ex ? ex.ticket : { config: {}, valor: 75, categoria: 'Orçamento / Novo serviço' }, c = t.config || {};
+    let o = $('crOverlay'); if (o) o.remove();
+    o = document.createElement('div'); o.id = 'crOverlay'; o.className = 'gt-overlay'; o.style.zIndex = 240;
+    const val = (k) => escapeHtml(k === 'nome' || k === 'contato' ? t[k] : c[k]) || '';
+    o.innerHTML = `<div class="surface-card gt-modal" style="max-width:34rem"><button type="button" class="gt-modal-close ripple-fx" onclick="document.getElementById('crOverlay').remove()">&#10005;</button>
+      <p class="gt-title">${editId ? 'Editar pedido' : 'Criar pedido'}</p><p class="gt-sub">Cria um registro simulado para a equipe.</p>
+      <div class="gt-field"><label>Categoria</label><select id="crCat">${['Orçamento / Novo serviço', 'Suporte técnico', 'Dúvida sobre serviço'].map(x => `<option ${t.categoria === x ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+      ${CF.map(([k, l]) => `<div class="gt-field"><label>${l}</label><input id="cr_${k}" value="${val(k)}"></div>`).join('')}
+      <div class="gt-field"><label>Problema relatado</label><textarea id="cr_problema" rows="2">${escapeHtml(c.problema || '')}</textarea></div>
+      <div class="gt-field"><label>Observações</label><textarea id="cr_obs" rows="2">${escapeHtml(c.obs || '')}</textarea></div>
+      <div class="gt-field"><label>Valor (R$)</label><input id="cr_valor" type="number" min="0" step="0.01" value="${Number(t.valor ?? 75)}"></div>
+      <p class="gt-error" id="crErr"></p><button type="button" class="acc-btn ripple-fx" id="crSave">SALVAR</button></div>`;
+    document.body.appendChild(o);
+    $('crSave').onclick = async () => {
+      try {
+        const g = (k) => $('cr_' + k).value.trim();
+        const valor = Number($('cr_valor').value);
+        if (!g('nome')) throw new Error('Informe o nome.');
+        if (!Number.isFinite(valor) || valor < 0) throw new Error('Valor inválido.');
+        const config = { so: g('so'), cpu: g('cpu'), gpu: g('gpu'), ram: g('ram'), placaMae: g('placaMae'), armazenamento: g('armazenamento'), jogo: g('jogo'), problema: g('problema'), objetivo: g('objetivo'), obs: g('obs') };
+        const data = { nome: g('nome'), contato: g('contato'), categoria: $('crCat').value, status: 'aberto', lang: 'pt', simulated: true, source: 'manual', valor, config,
+          mensagem: `Jogo principal: ${config.jogo}.\nConfig: ${[config.cpu, config.gpu, config.ram, config.placaMae, config.armazenamento, config.so].filter(Boolean).join(' + ')}.\nProblema: ${config.problema}.\nObjetivo: ${config.objetivo}.${config.obs ? '\nObs: ' + config.obs : ''}` };
+        await addDoc(collection(db, 'tickets'), { ...data, createdAt: serverTimestamp() });
+        o.remove();
+      } catch (e) { $('crErr').textContent = e.message; }
+    };
+  }
+
+  /* ---------- OWNER: atividade da equipe (só ações reais: vêm de tickets + auditLogs) ---------- */
+  async function renderTeam() {
+    const content = $('dashContent');
+    const [st, lg, tix] = await Promise.all([getDocs(collection(db, 'staff')), getDocs(query(collection(db, 'auditLogs'), orderBy('createdAt', 'desc'), limit(3000))), fetchSimTickets()]);
+    const logs = lg.docs.map(d => d.data());
+    const rows = st.docs.map(d => {
+      const u = d.data().username, mine = tix.filter(t => t.assignedAdminUsername === u);
+      const fr = mine.filter(t => t.firstResponseAt && t.assignedAdminUsername === u).map(t => ms(t.firstResponseAt) - ms(t.createdAt));
+      const last = Math.max(0, ...logs.filter(l => l.adminUsername === u).map(l => ms(l.createdAt)));
+      return `<tr><td>@${escapeHtml(d.data().username)}</td><td>${mine.length}</td><td>${mine.filter(t => t.status === 'resolvido').length}</td><td>${mine.filter(t => t.status === 'andamento').length}</td><td>${logs.filter(l => l.adminUsername === u && l.action === 'response_sent').length}</td><td>${fr.length ? fmtDur(fr.reduce((a, b) => a + b, 0) / fr.length) : '—'}</td><td>${last ? fmtDate(new Date(last)) : '—'}</td></tr>`;
+    }).join('');
+    content.innerHTML = `<div class="surface-card gt-panel"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem"><p class="gt-panel-title" style="margin:0">ATIVIDADE DA EQUIPE</p>
+      <button type="button" class="gt-small-btn ripple-fx" onclick="GT.syncAdmins()">Sincronizar admins</button></div>
+      <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Username</th><th>Atendidos</th><th>Resolvidos</th><th>Em andamento</th><th>Respostas</th><th>1ª resposta (média)</th><th>Última atividade</th></tr></thead><tbody>
+      ${rows || '<tr><td colspan="7" class="gt-empty">Nenhum admin cadastrado. Use “Sincronizar admins”.</td></tr>'}</tbody></table></div></div>`;
+  }
+  async function syncAdmins() { try { const r = await callFn('syncAdmins', { emails: TRAINER_EMAILS }); alert(r.results.map(x => x.email + ': ' + (x.ok ? 'ok' : x.error)).join('\n')); renderTeam(); } catch (e) { tdErr(e); } }
+
+  async function renderOwnerTab(tab) { if (tab === 'gen') renderGen(); else if (tab === 'team') await renderTeam(); else renderStaffTab('sim_tickets'); }
+  /* ================= NÚMEROS DO ANALYTICS: editáveis pelo OWNER e compartilhados com a equipe (teamStats/main) ================= */
+  const STAT_DEFS = [['visitas','Visitas (sessão)','👁️'],['pageviews','Page views','📄'],['scroll75','Scroll 75%+','📜'],['tempo','Tempo no site','⏱️'],['scrollmax','Scroll máx.','📊'],['eventos','Eventos log.','🔔'],['abertos','Chamados abertos','🎫'],['andamento','Em andamento','⚙️'],['resolvidos','Resolvidos','✅'],['leads','Leads','💡'],['vendas','Vendas fechadas','💰'],['receita','Receita total','💵']];
+  let statEdit = false;
+  const statBox = (label, inner, icon) => `<div class="surface-card" style="padding:1rem;text-align:center;border-radius:0.75rem"><div style="font-size:1.6rem;margin-bottom:0.3rem">${icon}</div>${inner}<div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:0.2rem">${label}</div></div>`;
+  function renderStatCards(real, ov, editing) {
+    const grid = STAT_DEFS.map(([k, l, ic]) => {
+      const shown = ov[k] !== undefined ? ov[k] : real[k];
+      if (editing) return statBox(l, `<input id="st_${k}" class="gt-mini-input" style="width:100%;text-align:center" value="${escapeHtml(shown)}">`, ic);
+      return statBox(l, `<div style="font-size:1.2rem;font-weight:700;color:var(--fg)">${escapeHtml(shown)}${ov[k] !== undefined ? '<span class="gt-sim-tag">editado</span>' : ''}</div>`, ic);
+    }).join('');
+    const btns = !isOwner ? '' : editing
+      ? `<button type="button" class="acc-btn ripple-fx" onclick="GT.statSave()">Salvar e publicar para a equipe</button><button type="button" class="secondary-btn ripple-fx" onclick="GT.statToggle(false)">Cancelar</button><button type="button" class="gt-small-btn ripple-fx" onclick="GT.statReset()">Restaurar números reais</button>`
+      : `<button type="button" class="gt-small-btn ripple-fx" onclick="GT.statToggle(true)">✏️ Editar números</button>`;
+    return `<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem">${btns}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem">${grid}</div>`;
+  }
+  let lastReal = {};
+  const statToggle = (on) => { statEdit = on; switchAdminTab('analytics'); };
+  async function statSave() {
+    const values = {};
+    STAT_DEFS.forEach(([k]) => { const v = $('st_' + k).value.trim(); if (v !== String(lastReal[k])) values[k] = v; });
+    try { await setDoc(doc(db, 'teamStats', 'main'), { values, updatedAt: serverTimestamp() }); statEdit = false; switchAdminTab('analytics'); } catch (e) { alert(e.message); }
+  }
+  async function statReset() { if (!confirm('Voltar a mostrar os números reais para todos?')) return; try { await setDoc(doc(db, 'teamStats', 'main'), { values: {}, updatedAt: serverTimestamp() }); statEdit = false; switchAdminTab('analytics'); } catch (e) { alert(e.message); } }
+  /* aba Analytics do ADMIN: mostra o que o OWNER publicou (somente leitura) */
+  function renderStaffStats() {
+    const content = $('dashContent'); let ov = {}, tix = [];
+    const paint = () => {
+      const c = (f) => tix.filter(f).length;
+      const real = { visitas: '—', pageviews: '—', scroll75: '—', tempo: '—', scrollmax: '—', eventos: '—', abertos: c(t => !t.status || t.status === 'aberto'), andamento: c(t => t.status === 'andamento'), resolvidos: c(t => t.status === 'resolvido'), leads: tix.length, vendas: c(t => t.status === 'resolvido'), receita: money(tix.filter(t => t.status === 'resolvido').reduce((s, t) => s + Number(t.valor ?? 75), 0)) };
+      content.innerHTML = `<p class="gt-panel-title">Analytics <span class="gt-sim-tag">sim</span></p>` + renderStatCards(real, ov, false);
+    };
+    liveUnsubs.push(onSnapshot(doc(db, 'teamStats', 'main'), (s) => { ov = s.exists() ? (s.data().values || {}) : {}; paint(); }, () => paint()));
+    liveUnsubs.push(onSnapshot(query(collection(db, 'tickets'), where('simulated', '==', true), limit(300)), (s) => { tix = s.docs.map(d => d.data()); paint(); }));
+  }
+  const GTX = { statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins };
+
   /* ================= EXPÕE PARA OS onclick="" DO HTML ================= */
   window.GT = {
     openAccountArea, openLogin, closeLogin, doLogin, doLogout, closeDash,
@@ -5199,6 +5413,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     closeLiveChat: (typeof closeLiveChatFn === 'function') ? closeLiveChatFn : function(){},
     reopenLiveChat: (typeof reopenLiveChatFn === 'function') ? reopenLiveChatFn : function(){}
   };
+  Object.assign(window.GT, GTX);
 </script>
 
 
