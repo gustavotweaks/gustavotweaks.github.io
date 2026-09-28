@@ -4540,8 +4540,15 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     appId: "1:497130733036:web:2de52026c4baafef3714c9"
   };
 
-  // única conta com acesso ao painel — o administrador do site (Gustavo)
+  // única conta com acesso REAL ao painel — o dono do site (Gustavo)
   const OWNER_EMAIL = 'gustavotweaks@gmail.com';
+
+  // contas de moderador — acesso ao ambiente de treinamento (dados simulados)
+  const TRAINER_EMAILS = [
+    'nepewsz@gmail.com',
+    'theozinlegal@gmail.com',
+    'davi544p@gmail.com'
+  ];
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
@@ -4549,7 +4556,8 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   setPersistence(auth, browserLocalPersistence).catch(()=>{});
 
   let currentUser = null;
-  let isOwner = false;
+  let isOwner   = false;
+  let isTrainer = false;
   let activeAdminTab = 'tickets';
   const cache = { leads: null, tickets: null };
 
@@ -4646,19 +4654,21 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     try { await updateDoc(doc(db,'tickets',ticketId), { unreadForClient: false }); } catch(e) {}
   }
 
-  /* ================= LOGIN / LOGOUT (só administrador) ================= */
+  /* ================= LOGIN / LOGOUT ================= */
   function openLogin(){ $('loginError').textContent=''; $('loginOverlay').classList.remove('hidden'); }
   function closeLogin(){ $('loginOverlay').classList.add('hidden'); }
   function openDash(){ $('dashOverlay').classList.remove('hidden'); renderDashboard(); }
   function closeDash(){ $('dashOverlay').classList.add('hidden'); }
-  function openAccountArea(){ (currentUser && isOwner) ? openDash() : openLogin(); }
+  function openAccountArea(){ (currentUser && (isOwner || isTrainer)) ? openDash() : openLogin(); }
 
   async function doLogin(){
-    const email = $('loginEmail').value.trim();
+    const email    = $('loginEmail').value.trim();
     const password = $('loginPassword').value;
     $('loginError').textContent = '';
     if(!email || !password){ $('loginError').textContent = 'Preencha e-mail e senha.'; return; }
-    if(email.toLowerCase() !== OWNER_EMAIL){ $('loginError').textContent = 'Acesso restrito ao administrador.'; return; }
+    const emailLow = email.toLowerCase();
+    const allowed  = emailLow === OWNER_EMAIL || TRAINER_EMAILS.includes(emailLow);
+    if(!allowed){ $('loginError').textContent = 'Acesso restrito ao administrador.'; return; }
     try {
       await signInWithEmailAndPassword(auth, email, password);
       closeLogin();
@@ -4671,11 +4681,13 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
 
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
-    isOwner = !!(user && (user.email||'').toLowerCase() === OWNER_EMAIL);
+    const emailLow = (user && user.email || '').toLowerCase();
+    isOwner   = emailLow === OWNER_EMAIL;
+    isTrainer = TRAINER_EMAILS.includes(emailLow);
     const label = $('acctBtnLabel');
-    if (label) label.textContent = isOwner ? 'Meu painel' : 'Entrar';
-    if (!isOwner) { cache.leads = null; cache.tickets = null; }
-    if (user && !isOwner) { signOut(auth).catch(()=>{}); }
+    if (label) label.textContent = (isOwner || isTrainer) ? 'Meu painel' : 'Entrar';
+    if (!isOwner && !isTrainer) { cache.leads = null; cache.tickets = null; }
+    if (user && !isOwner && !isTrainer) { signOut(auth).catch(()=>{}); }
   });
 
   /* ================= FETCHERS (só admin autenticado) ================= */
@@ -4693,11 +4705,32 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
 
   /* ================= PAINEL ================= */
   function renderDashboard(){
-    if (!isOwner) {
+    if (!isOwner && !isTrainer) {
       $('dashBody').innerHTML = '<div class="surface-card gt-panel"><p class="gt-panel-title">Sem acesso</p><p style="color:var(--muted);font-size:0.85rem">Essa área é exclusiva do administrador do site.</p></div>';
       return;
     }
     $('dashUserEmail').textContent = currentUser ? currentUser.email : '—';
+
+    if (isTrainer) {
+      /* ── PAINEL DE TREINAMENTO ── */
+      $('dashBody').innerHTML = `
+        <div style="display:flex;align-items:center;gap:0.6rem;padding:0.6rem 1rem;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.28);border-radius:0.7rem;margin-bottom:1.25rem">
+          <span style="font-size:1.1rem">🎓</span>
+          <div>
+            <p style="font-size:0.8rem;font-weight:700;color:#fbbf24">Ambiente de Treinamento</p>
+            <p style="font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:0.1rem">Os dados exibidos são simulados para fins de treinamento. Nenhuma informação real do negócio é acessível aqui.</p>
+          </div>
+        </div>
+        <div class="gt-tabs">
+          <button type="button" class="gt-tab ripple-fx" id="tab_sim_tickets" onclick="GT.switchAdminTab('sim_tickets')">Chamados</button>
+          <button type="button" class="gt-tab ripple-fx" id="tab_sim_leads"   onclick="GT.switchAdminTab('sim_leads')">Leads / Orçamentos</button>
+        </div>
+        <div id="dashContent"><p class="gt-empty">Carregando…</p></div>`;
+      switchAdminTab('sim_tickets');
+      return;
+    }
+
+    /* ── PAINEL REAL (owner) ── */
     $('dashBody').innerHTML = `
       <div class="gt-tabs">
         <button type="button" class="gt-tab ripple-fx" id="tab_analytics" onclick="GT.switchAdminTab('analytics')">📊 Analytics</button>
@@ -4709,15 +4742,87 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   }
 
   async function switchAdminTab(tab){
-    if (!isOwner) return;
+    if (!isOwner && !isTrainer) return;
     activeAdminTab = tab;
+
+    /* ── abas reais (owner only) ── */
     ['analytics','tickets','leads'].forEach(t=>{
-      const el = $('tab_'+t);
-      if (el) el.classList.toggle('active', t===tab);
+      const el = $('tab_'+t); if (el) el.classList.toggle('active', t===tab);
     });
+    /* ── abas simuladas (trainer) ── */
+    ['sim_tickets','sim_leads'].forEach(t=>{
+      const el = $('tab_'+t); if (el) el.classList.toggle('active', t===tab);
+    });
+
     const content = $('dashContent');
     if (!content) return;
     content.innerHTML = '<p class="gt-empty">Carregando…</p>';
+
+    /* ========================================================
+       ABAS SIMULADAS — dados gerados deterministicamente
+    ======================================================== */
+    if (tab === 'sim_tickets' || tab === 'sim_leads') {
+      const sim = generateSimData();
+
+      if (tab === 'sim_tickets') {
+        const statusPill = (s) => s==='resolvido'
+          ? '<span class="gt-pill gt-pill--closed">Resolvido</span>'
+          : s==='andamento' ? '<span class="gt-pill gt-pill--progress">Em andamento</span>'
+          : '<span class="gt-pill gt-pill--open">Aberto</span>';
+        content.innerHTML = `
+          <div class="surface-card gt-panel">
+            <p class="gt-panel-title">Chamados de suporte <span style="font-size:0.65rem;color:rgba(251,191,36,0.7);margin-left:0.5rem">🎓 simulado</span></p>
+            <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Contato</th><th>Categoria</th><th>Descrição</th><th>Status</th><th>Ação</th></tr></thead><tbody>
+            ${sim.tickets.map(t=>`<tr>
+              <td>${t.data}</td>
+              <td>${escapeHtml(t.nome)}</td>
+              <td>${escapeHtml(t.contato)}</td>
+              <td>${escapeHtml(t.categoria)}</td>
+              <td style="max-width:22rem;white-space:pre-wrap">${escapeHtml(t.mensagem)}</td>
+              <td>
+                ${statusPill(t.status)}
+                <select class="gt-mini-input" style="margin-top:0.4rem" onchange="GT.simUpdateStatus(this,'${t.id}')">
+                  <option value="aberto" ${t.status==='aberto'?'selected':''}>Aberto</option>
+                  <option value="andamento" ${t.status==='andamento'?'selected':''}>Em andamento</option>
+                  <option value="resolvido" ${t.status==='resolvido'?'selected':''}>Resolvido</option>
+                </select>
+              </td>
+              <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.simReply('${t.id}','${escapeHtml(t.nome).replace(/'/g,"\\'")}')">Responder</button></td>
+            </tr>`).join('')}
+            </tbody></table></div>
+          </div>`;
+      } else {
+        content.innerHTML = `
+          <div class="surface-card gt-panel">
+            <p class="gt-panel-title">Leads / Orçamentos <span style="font-size:0.65rem;color:rgba(251,191,36,0.7);margin-left:0.5rem">🎓 simulado</span></p>
+            <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Config. do PC</th><th>Serviço</th><th>Status</th><th>Valor</th><th>Salvar</th></tr></thead><tbody>
+            ${sim.leads.map(l=>`<tr>
+              <td>${l.data}</td>
+              <td>${escapeHtml(l.nome)}</td>
+              <td style="max-width:18rem;font-size:0.78rem">${escapeHtml(l.config)}</td>
+              <td>${escapeHtml(l.servico)}</td>
+              <td><span class="gt-pill ${l.fechado?'gt-pill--closed':'gt-pill--open'}">${l.fechado?'Fechado':'Novo'}</span></td>
+              <td>
+                <input class="gt-mini-input" type="number" step="0.01" id="simval_${l.id}"
+                  value="${l.valor}" placeholder="75,00"
+                  title="Ajuste o valor conforme o tipo de PC. Padrão: R$ 75. Notebook: R$ 50. BIOS limitada: R$ 65." />
+                <p style="font-size:0.6rem;color:rgba(255,255,255,0.3);margin-top:0.2rem">Padrão R$75 · Notebook R$50 · BIOS limitada R$65</p>
+              </td>
+              <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.simSaveVal('${l.id}')">Salvar</button></td>
+            </tr>`).join('')}
+            </tbody></table></div>
+            <div style="margin-top:1rem;padding:0.85rem 1rem;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:0.7rem">
+              <p style="font-size:0.72rem;color:var(--muted)">💰 Receita simulada do mês: <strong id="simRevenue" style="color:#4ade80">R$ ${sim.receita.toFixed(2).replace('.',',')}</strong></p>
+              <p style="font-size:0.65rem;color:rgba(255,255,255,0.25);margin-top:0.3rem">Atualiza automaticamente ao salvar valores.</p>
+            </div>
+          </div>`;
+      }
+      return;
+    }
+
+    /* ========================================================
+       ABAS REAIS (owner)
+    ======================================================== */
     try {
       if (tab === 'analytics') {
         /* ── Dados locais (analytics próprio) ── */
@@ -4860,6 +4965,186 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     }
   }
 
+  /* ================================================================
+     GERADOR DE DADOS SIMULADOS — determinístico por data
+     Gera tickets e leads realistas com nomes e configs de PC reais
+  ================================================================ */
+  function generateSimData() {
+    /* Semente baseada na semana atual — muda a cada 7 dias */
+    const weekSeed = Math.floor(Date.now() / (1000 * 60 * 60 * 24 * 7));
+
+    function seededRand(seed) {
+      let s = seed;
+      return function() {
+        s = (s * 1664525 + 1013904223) & 0xffffffff;
+        return (s >>> 0) / 0xffffffff;
+      };
+    }
+
+    const rng = seededRand(weekSeed + 42);
+    const pick = (arr) => arr[Math.floor(rng() * arr.length)];
+
+    const NOMES = [
+      'Lucas Ferreira','Matheus Costa','Gabriel Oliveira','Pedro Alves','João Silva',
+      'Rafael Souza','Guilherme Santos','Felipe Rodrigues','Bruno Lima','Diego Martins',
+      'Thiago Pereira','Vitor Nascimento','Enzo Castro','Eduardo Carvalho','Arthur Gomes',
+      'Igor Ribeiro','Henrique Mendes','Caio Barbosa','André Freitas','Leandro Pinto',
+      'Ana Luiza Dias','Julia Moreira','Fernanda Rocha','Camila Nunes','Beatriz Cardoso'
+    ];
+
+    const CONTATOS = [
+      '(11) 9 8765-4321','(21) 9 7654-3210','(31) 9 6543-2109','(41) 9 5432-1098',
+      '(51) 9 4321-0987','(61) 9 3210-9876','(71) 9 2109-8765','(81) 9 1098-7654',
+      'lucas.gamer@gmail.com','matheus.pc@hotmail.com','gabriel_plays@gmail.com',
+      'pedro.tech@outlook.com','joao_games@gmail.com'
+    ];
+
+    const CONFIGS = [
+      'CPU: Ryzen 5 5600 · GPU: RTX 3060 · RAM: 16GB DDR4 3200MHz · SSD NVMe 500GB · Win 11',
+      'CPU: i5-12400F · GPU: RX 6600 · RAM: 16GB DDR4 3000MHz · SSD SATA 480GB · Win 10',
+      'CPU: i7-10700K · GPU: RTX 2060 Super · RAM: 32GB DDR4 3600MHz · NVMe 1TB · Win 11',
+      'CPU: Ryzen 5 3600 · GPU: GTX 1660 Super · RAM: 16GB DDR4 2666MHz · HDD 1TB · Win 10',
+      'CPU: i5-10400F · GPU: GTX 1650 · RAM: 8GB DDR4 2400MHz · SSD SATA 240GB · Win 10',
+      'CPU: Ryzen 7 5800X · GPU: RTX 3070 · RAM: 32GB DDR4 3200MHz · NVMe 512GB · Win 11',
+      'CPU: i3-12100F · GPU: RX 6500 XT · RAM: 8GB DDR4 2666MHz · SSD SATA 480GB · Win 11',
+      'CPU: i5-13400F · GPU: RTX 4060 · RAM: 16GB DDR4 3200MHz · NVMe 1TB · Win 11',
+      'CPU: Ryzen 5 5600G (APU) · Sem GPU dedicada · RAM: 16GB DDR4 3200MHz · SSD NVMe · Win 11',
+      'CPU: i5-9400F · GPU: GTX 1060 6GB · RAM: 16GB DDR4 2400MHz · HDD 500GB · Win 10',
+      'CPU: Ryzen 3 3100 · GPU: RX 580 8GB · RAM: 8GB DDR4 2666MHz · SSD SATA 240GB · Win 10',
+      'CPU: i7-8700 · GPU: RTX 2070 · RAM: 16GB DDR4 2933MHz · SSD SATA 480GB · Win 10',
+      'CPU: Ryzen 5 7600X · GPU: RX 7700 XT · RAM: 32GB DDR5 5600MHz · NVMe 1TB · Win 11',
+      'Notebook Dell G15 · i5-11400H · RTX 3050 · 8GB DDR4 · SSD 512GB · Win 11',
+      'Notebook Acer Nitro 5 · Ryzen 5 5600H · RX 5500M · 16GB · SSD 512GB · Win 11'
+    ];
+
+    const JOGOS = [
+      'Valorant','CS2','Fortnite','Apex Legends','Rainbow Six Siege',
+      'Warzone','PUBG','FiveM / GTA V','Roblox','League of Legends'
+    ];
+
+    const PROBLEMAS = [
+      'FPS caindo muito no jogo, especialmente em combate',
+      'PC esquentando bastante e com travamentos frequentes',
+      'Input lag alto, sensação de atraso nos comandos',
+      'Windows lento na inicialização e em geral',
+      'Stutters e engasgos durante as partidas',
+      'Overclock instável, tela preta às vezes',
+      'Quero extrair o máximo do meu setup para competitivo',
+      'CPU bottlenecking a GPU, FPS inconsistente',
+      'Depois de formatar o PC ficou mais lento que antes',
+      'Preciso de otimização completa para streaming + jogo'
+    ];
+
+    const CATEGORIAS = [
+      'Orçamento / Novo serviço','Orçamento / Novo serviço','Orçamento / Novo serviço',
+      'Suporte técnico','Dúvida sobre serviço'
+    ];
+
+    const STATUS_LIST = ['aberto','aberto','aberto','andamento','resolvido'];
+
+    /* Gera datas espalhadas nos últimos 30 dias */
+    function simDate(offsetDays) {
+      const d = new Date(Date.now() - offsetDays * 86400000);
+      return d.toLocaleDateString('pt-BR') + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    }
+
+    /* Número de tickets simulados varia entre 14-22 */
+    const count = 14 + Math.floor(rng() * 9);
+    const tickets = [];
+    const leads   = [];
+    let receita   = 0;
+
+    /* Pré-carrega status salvo no localStorage (para persistir mudanças do trainer) */
+    let simStore = {};
+    try { simStore = JSON.parse(localStorage.getItem('gt_sim_store') || '{}'); } catch(e){}
+
+    for (let i = 0; i < count; i++) {
+      const id      = 'sim_' + (weekSeed + i).toString(36);
+      const nome    = pick(NOMES);
+      const config  = pick(CONFIGS);
+      const jogo    = pick(JOGOS);
+      const prob    = pick(PROBLEMAS);
+      const cat     = pick(CATEGORIAS);
+      const dias    = Math.floor(rng() * 28) + 1;
+      const isNB    = config.toLowerCase().includes('notebook');
+      const isBios  = config.toLowerCase().includes('bios') || rng() < 0.12;
+
+      const defaultValor  = isNB ? 50 : isBios ? 65 : 75;
+      const savedValor    = simStore[id + '_val'] !== undefined ? simStore[id + '_val'] : defaultValor;
+      const savedStatus   = simStore[id + '_st']  || pick(STATUS_LIST);
+      const fechado       = savedStatus === 'resolvido';
+
+      if (fechado) receita += savedValor;
+
+      tickets.push({
+        id, nome,
+        contato:  pick(CONTATOS),
+        categoria: cat,
+        mensagem: `Jogo principal: ${jogo}.\nConfig: ${config}.\nProblema: ${prob}.`,
+        status:   savedStatus,
+        data:     simDate(dias)
+      });
+
+      leads.push({
+        id, nome,
+        config: config,
+        servico: `Otimização para ${jogo}`,
+        valor:   savedValor,
+        fechado: fechado,
+        data:    simDate(dias)
+      });
+    }
+
+    /* Visitas simuladas realistas */
+    const visitas = 120 + Math.floor(rng() * 200);
+
+    return { tickets, leads, receita, visitas };
+  }
+
+  /* ── helpers do painel de treinamento ── */
+  function simSaveVal(id) {
+    const input = $('simval_' + id);
+    if (!input) return;
+    let store = {};
+    try { store = JSON.parse(localStorage.getItem('gt_sim_store') || '{}'); } catch(e){}
+    store[id + '_val'] = Number(input.value) || 75;
+    localStorage.setItem('gt_sim_store', JSON.stringify(store));
+    /* recalcula receita */
+    const sim  = generateSimData();
+    const el   = $('simRevenue');
+    if (el) el.textContent = 'R$ ' + sim.receita.toFixed(2).replace('.',',');
+    input.style.border = '1px solid rgba(74,222,128,0.5)';
+    setTimeout(() => { if(input) input.style.border = ''; }, 1500);
+  }
+
+  function simUpdateStatus(sel, id) {
+    let store = {};
+    try { store = JSON.parse(localStorage.getItem('gt_sim_store') || '{}'); } catch(e){}
+    store[id + '_st'] = sel.value;
+    localStorage.setItem('gt_sim_store', JSON.stringify(store));
+    switchAdminTab(isTrainer ? 'sim_tickets' : 'tickets');
+  }
+
+  function simReply(id, nome) {
+    alert('💬 Simulação de resposta para ' + nome + '\n\nNeste ambiente de treinamento, você pratica como responder chamados.\nEm produção, o cliente receberia a mensagem em tempo real pelo chat.');
+  }
+
+  /* ================================================================
+     FUNÇÃO DE REGISTRO DAS CONTAS TRAINER
+     Chamada UMA VEZ pelo owner para criar as contas no Firebase Auth.
+     As senhas são informadas na hora — nunca ficam no código.
+  ================================================================ */
+  async function registerTrainerAccount(email, password) {
+    if (!isOwner) { alert('Apenas o dono pode registrar contas.'); return; }
+    try {
+      const { createUserWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert('✅ Conta criada: ' + email + '\nO trainer já pode fazer login.');
+    } catch(e) {
+      alert('Erro: ' + (e.message || e));
+    }
+  }
+
   function statCard(label, value, icon) {
     return `<div class="surface-card" style="padding:1rem;text-align:center;border-radius:0.75rem">
       <div style="font-size:1.6rem;margin-bottom:0.3rem">${icon}</div>
@@ -4898,6 +5183,10 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     openAccountArea, openLogin, closeLogin, doLogin, doLogout, closeDash,
     switchAdminTab, saveLeadSale, deleteLead, updateTicketStatus, deleteTicket,
     markTicketReadByAdmin, statCard,
+    /* trainer */
+    simSaveVal, simUpdateStatus, simReply,
+    /* registro de contas (uso único pelo owner) */
+    registerTrainerAccount,
     openAdminChat: (typeof openAdminChatFn === 'function') ? openAdminChatFn : function(){},
     closeAdminChat: (typeof closeAdminChatFn === 'function') ? closeAdminChatFn : function(){},
     saveLead, saveCancelReason,
