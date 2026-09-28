@@ -1,3 +1,9 @@
+
+    await loadDashboardAccess();
+    if(isTrainer && !isOwner && dashboardAccessLocked){
+      const c=$('dashContent'); if(c)c.innerHTML=dashboardLockedView();
+      return;
+    }
 ﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -2309,7 +2315,7 @@
         </div>
         <div style="display:flex;gap:0.6rem;align-items:center">
           <button id="teamBellBtn" type="button" class="secondary-btn ripple-fx" onclick="GT.openTeamNotifications()" title="Avisos da equipe" style="position:relative"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span id="teamBellBadge" style="display:none;position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:#ef4444;color:#fff;font-size:10px;line-height:17px;text-align:center"></span></button>
-          <button id="dashCopyBtn" type="button" class="gt-small-btn" style="display:none;align-items:center;gap:.4rem;border-color:rgba(139,92,246,.42);background:rgba(139,92,246,.08)" onclick="GT.editDashboardTexts()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg><span>Textos</span></button>
+          <button class="gt-small-btn" onclick="GT.toggleDashboardLock()" style="${dashboardAccessLocked?'border-color:#ef4444':''}">${dashboardAccessLocked?'Liberar dashboard dos ADMs':'Bloquear dashboard dos ADMs'}</button><button id="dashCopyBtn" type="button" class="gt-small-btn" style="display:none;align-items:center;gap:.4rem;border-color:rgba(139,92,246,.42);background:rgba(139,92,246,.08)" onclick="GT.editDashboardTexts()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg><span>Textos</span></button>
           <button id="profilePhotoBtn" type="button" class="secondary-btn ripple-fx" onclick="GT.openProfilePhoto()" title="Foto de perfil" style="display:none;padding:.45rem .6rem"><span id="profilePhotoMini"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span></button>
           <button type="button" class="secondary-btn ripple-fx" onclick="GT.closeDash()">Voltar ao site</button>
           <button type="button" class="acc-btn ripple-fx" onclick="GT.doLogout()">Sair</button>
@@ -5343,19 +5349,6 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       if (from === to) return;
       c.tx.update(c.ref, { valor: to }); logL(c.tx, c.a, c.id, 'price_changed', { from, to });
     }),
-    setResolvedAt: (d) => withTicketL(d, (c) => {
-      if (!c.a.isOwner) throw new Error('Somente OWNER.');
-      const when = d.useNow ? Timestamp.now() : Timestamp.fromMillis(Number(d.millis));
-      if (!when || !Number.isFinite(when.toMillis())) throw new Error('Data/hora inválida.');
-      const oldMs = ms(c.t.resolvedAt);
-      c.tx.update(c.ref, {
-        resolvedAt: when,
-        resolvedAtEditedAt: serverTimestamp(),
-        resolvedAtEditedBy: c.a.uid,
-        resolvedAtManual: !d.useNow
-      });
-      logL(c.tx, c.a, c.id, 'resolved_time_changed', { from: oldMs || null, to: when.toMillis(), manual: !d.useNow });
-    }),
     syncAdmins: async (d) => { if (!isOwner) throw new Error('Somente OWNER.'); for (const e of d.emails) await setDoc(doc(db, 'staff', e.toLowerCase()), { email: e.toLowerCase(), username: e.split('@')[0], role: 'admin' }); return { results: d.emails.map(e => ({ email: e, ok: true })) }; }
   };
   const callFn = (n, d) => LOCAL[n](d);
@@ -5400,7 +5393,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   /* ---------- modal do chamado: dados, histórico, resposta, status, preço, timeline (owner) ---------- */
   let tdUnsubs = [], tdCurrentTicket = null;
   function closeTicketDetail() { tdUnsubs.forEach(u => u()); tdUnsubs = []; const o = $('tdOverlay'); if (o) o.classList.add('hidden'); }
-  const LBL = { ticket_assigned: (l) => '@' + l.adminUsername + ' assumiu', response_sent: (l) => '@' + l.adminUsername + ' respondeu', status_changed: (l) => 'Status alterado (' + (l.metadata.from || '') + ' → ' + (l.metadata.to || '') + ')', ticket_resolved: (l) => '@' + l.adminUsername + ' resolveu', price_changed: (l) => '@' + l.adminUsername + ' alterou o valor ' + money(l.metadata.from) + ' → ' + money(l.metadata.to), resolved_time_changed: (l) => 'OWNER ajustou a data/hora de fechamento' };
+  const LBL = { ticket_assigned: (l) => '@' + l.adminUsername + ' assumiu', response_sent: (l) => '@' + l.adminUsername + ' respondeu', status_changed: (l) => 'Status alterado (' + (l.metadata.from || '') + ' → ' + (l.metadata.to || '') + ')', ticket_resolved: (l) => '@' + l.adminUsername + ' resolveu', price_changed: (l) => '@' + l.adminUsername + ' alterou o valor ' + money(l.metadata.from) + ' → ' + money(l.metadata.to) };
   function openTicketDetail(id) {
     closeTicketDetail();
     let o = $('tdOverlay');
@@ -5433,15 +5426,6 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
           <div class="gt-field" style="margin:0"><label>Valor (R$)</label><input id="tdPrice" class="gt-mini-input" type="number" min="0" step="0.01" value="${Number(t.valor ?? 75)}"></div>
           <button type="button" class="gt-small-btn ripple-fx" onclick="GT.tdPrice('${id}')">Salvar valor</button>
         </div>
-        ${isOwner ? `<div class="surface-card" style="padding:.8rem;margin:0 0 1rem;border:1px solid rgba(139,92,246,.25)">
-          <div style="font-size:.78rem;font-weight:700;margin-bottom:.25rem">Data/hora de fechamento</div>
-          <div style="font-size:.68rem;color:var(--muted);margin-bottom:.55rem">Use para organizar relatórios antigos. O sistema mantém separadamente o horário real em que a alteração foi feita.</div>
-          <div style="display:flex;gap:.45rem;flex-wrap:wrap;align-items:center">
-            <input id="tdResolvedAt" class="gt-mini-input" type="datetime-local" value="${t.resolvedAt ? new Date(ms(t.resolvedAt)-new Date(ms(t.resolvedAt)).getTimezoneOffset()*60000).toISOString().slice(0,16) : ''}">
-            <button type="button" class="gt-small-btn" onclick="GT.tdResolvedAt('${id}')">Salvar fechamento</button>
-            ${t.resolvedAt ? `<button type="button" class="gt-small-btn" onclick="GT.tdResolvedAt('${id}',true)">Usar horário atual</button>` : ''}
-          </div>
-        </div>` : ''}
         <p class="gt-panel-title" style="font-size:.85rem;margin-bottom:.5rem">Histórico</p>
         <div style="max-height:11rem;overflow-y:auto;margin-bottom:.8rem">${msgs.map(m => `<div style="font-size:.78rem;margin-bottom:.35rem"><strong>${m.sender === 'admin' ? '@' + escapeHtml(m.adminUsername || 'admin') : 'Cliente'}</strong> <span style="color:var(--muted)">${hhmm(m.createdAt)}</span><br>${escapeHtml(m.text)}</div>`).join('') || '<p class="gt-empty" style="padding:.5rem 0">Sem mensagens.</p>'}</div>
         ${isTrainer ? `<div style="padding:.8rem .9rem;margin:.8rem 0 1rem;border:1px solid rgba(139,92,246,.28);background:rgba(139,92,246,.07);border-radius:.75rem;font-size:.74rem;line-height:1.55;color:var(--muted)">
@@ -5471,19 +5455,6 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   async function tdSend(id) { const el = $('tdMsg'); const v = el.value.trim(); if (!v) return; el.disabled = true; try { await callFn('replyTicket', { ticketId: id, message: v }); el.value = ''; } catch (e) { tdErr(e); } el.disabled = false; }
   async function tdStatus(id, s) { try { await callFn('setTicketStatus', { ticketId: id, status: s }); } catch (e) { tdErr(e); } }
   async function tdPrice(id) { try { await callFn('setTicketPrice', { ticketId: id, valor: Number($('tdPrice').value) }); } catch (e) { tdErr(e); } }
-  async function tdResolvedAt(id,useNow=false){
-    if(!isOwner)return;
-    try{
-      let millis=Date.now();
-      if(!useNow){
-        const v=$('tdResolvedAt')?.value;
-        if(!v) throw new Error('Selecione a data e o horário.');
-        millis=new Date(v).getTime();
-        if(!Number.isFinite(millis)) throw new Error('Data/hora inválida.');
-      }
-      await callFn('setResolvedAt',{ticketId:id,millis,useNow});
-    }catch(e){tdErr(e);}
-  }
 
   /* ---------- OWNER: aba Gerador ---------- */
   const calcNext = (c) => { const m = c.mode === 'fixed' ? c.fixedMinutes : c.minMinutes + Math.random() * (c.maxMinutes - c.minMinutes); return Timestamp.fromMillis(Date.now() + Math.round(m * 60000)); };
@@ -5739,7 +5710,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     return d;
   }
   function adsAddMonth(){if(!isOwner)return;const d=syncAdsEditor();d.months.push({month:'Novo',value:0});window.__gtAds=d;renderAdsPanel(true);}
-  function adsMoveMonth(i,dir){if(!isOwner)return;const d=syncAdsEditor(),j=i+dir;if(j<0||j>=d.months.length)return;[d.months[i],d.months[j]]=[d.months[j],d.months[i]];window.__gtAds=d;renderAdsPanel(true);}
+  async function adsMoveMonth(i,dir){if(!isOwner)return;const d=syncAdsEditor(),j=i+dir;if(j<0||j>=d.months.length)return;[d.months[i],d.months[j]]=[d.months[j],d.months[i]];window.__gtAds=d;try{await setDoc(doc(db,'teamStats','ads'),{months:d.months,updatedAt:serverTimestamp()},{merge:true});await renderAdsPanel(true);}catch(e){alert('Não foi possível salvar a ordem do gráfico: '+(e.message||e));}}
   function adsRemoveMonth(i){if(!isOwner)return;const d=syncAdsEditor();d.months.splice(i,1);window.__gtAds=d;renderAdsPanel(true);}
   async function adsSave(){
     if(!isOwner)return;const d=syncAdsEditor();
@@ -5914,10 +5885,11 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     try{const s=await getDoc(doc(db,'teamStats','dashboardLayout'));if(s.exists()&&Array.isArray(s.data().metricOrder)){const got=s.data().metricOrder.filter(k=>STAT_DEFS.some(x=>x[0]===k));dashMetricOrder=[...got,...STAT_DEFS.map(x=>x[0]).filter(k=>!got.includes(k))];}}catch(e){}
   }
   async function moveDashMetric(key,dir){
-    if(!isOwner)return;const i=dashMetricOrder.indexOf(key),j=i+dir;if(i<0||j<0||j>=dashMetricOrder.length)return;
+    if(!isOwner)return;
+    const i=dashMetricOrder.indexOf(key),j=i+dir;if(i<0||j<0||j>=dashMetricOrder.length)return;
     [dashMetricOrder[i],dashMetricOrder[j]]=[dashMetricOrder[j],dashMetricOrder[i]];
-    await setDoc(doc(db,'teamStats','dashboardLayout'),{metricOrder:dashMetricOrder,updatedAt:serverTimestamp()},{merge:true});
-    switchAdminTab('analytics');
+    try{await setDoc(doc(db,'teamStats','dashboardLayout'),{metricOrder:[...dashMetricOrder],updatedAt:serverTimestamp()},{merge:true});await renderDashboard();}
+    catch(e){alert('Não foi possível salvar a ordem: '+(e.message||e));}
   }
   function renderStatCards(real, ov, editing) {
     statCur = { real, ov };
@@ -5970,7 +5942,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     liveUnsubs.push(onSnapshot(doc(db, 'teamStats', 'main'), (s) => { ov = s.exists() ? (s.data().values || {}) : {}; tc = s.exists() ? (s.data().topClicks || null) : null; statG = { g: s.exists() ? (s.data().growth || {}) : {}, at: s.exists() ? ms(s.data().updatedAt) : 0 }; paint(); }, () => paint()));
     liveUnsubs.push(onSnapshot(query(collection(db, 'tickets'), where('simulated', '==', true), limit(300)), (s) => { tix = s.docs.map(d => d.data()); paint(); }));
   }
-  const GTX = { setTeamRange, selTeam, tcAdd, tcDel, statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, tdResolvedAt, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins, deleteResolvedTicket, saveCommission, openTeamNotifications, publishTeamNotice, openProfilePhoto, saveProfilePhoto, addWhatsAppOrder, waSetStatus, waDelete, adsAddMonth, adsMoveMonth, adsRemoveMonth, adsSave, moveDashMetric, editDashboardTexts, saveDashboardTexts };
+  const GTX = { setTeamRange, selTeam, tcAdd, tcDel, statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins, deleteResolvedTicket, saveCommission, openTeamNotifications, publishTeamNotice, openProfilePhoto, saveProfilePhoto, addWhatsAppOrder, waSetStatus, waDelete, adsAddMonth, adsMoveMonth, adsRemoveMonth, adsSave, moveDashMetric, toggleDashboardLock, editDashboardTexts, saveDashboardTexts };
 
   /* ================= EXPÕE PARA OS onclick="" DO HTML ================= */
   window.GT = {
@@ -8557,4 +8529,22 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   </script>
 
 </body>
-</html>
+</htmllet dashboardAccessLocked=false;
+  async function loadDashboardAccess(){
+    try{const s=await getDoc(doc(db,'teamStats','dashboardAccess'));dashboardAccessLocked=!!(s.exists()&&s.data().locked);}
+    catch(e){dashboardAccessLocked=false;}
+    return dashboardAccessLocked;
+  }
+  async function toggleDashboardLock(){
+    if(!isOwner)return;
+    try{
+      const next=!dashboardAccessLocked;
+      await setDoc(doc(db,'teamStats','dashboardAccess'),{locked:next,updatedAt:serverTimestamp(),updatedBy:(currentUser?.email||'').toLowerCase()},{merge:true});
+      dashboardAccessLocked=next; await renderDashboard();
+    }catch(e){alert('Não foi possível alterar o acesso da dashboard: '+(e.message||e));}
+  }
+  function dashboardLockedView(){return `<div class="surface-card gt-panel" style="max-width:760px;margin:3rem auto;padding:1.5rem">
+    <div style="font-size:1rem;font-weight:800;margin-bottom:.65rem">Dashboard temporariamente indisponível</div>
+    <div style="font-size:.82rem;color:var(--muted);line-height:1.7">Estamos ampliando e reorganizando as campanhas de Ads nas redes sociais e, neste momento, o painel administrativo está fora do horário de atendimento da equipe. Durante esse período, alguns indicadores e áreas internas ficam temporariamente restritos para evitar divergências enquanto os dados são atualizados.<br><br>Se precisar de alguma informação ou tiver qualquer dúvida, entre em contato diretamente comigo.</div>
+  </div>`;}
+  >
