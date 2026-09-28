@@ -2145,7 +2145,7 @@
           <span data-i18n="nav.cta">Agendar agora</span>
         </button>
         <button id="acctBtn" class="acc-btn ripple-fx" onclick="GT.openAccountArea()" aria-label="Área do administrador">
-          <span id="navAdminAvatar" style="display:none;width:26px;height:26px;border-radius:50%;overflow:hidden;align-items:center;justify-content:center;background:rgba(255,255,255,.08);flex:0 0 26px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+          <span id="navAdminAvatar" style="display:none;width:38px;height:38px;border-radius:50%;overflow:hidden;align-items:center;justify-content:center;background:rgba(255,255,255,.10);border:2px solid rgba(139,92,246,.55);box-shadow:0 0 0 3px rgba(139,92,246,.10);flex:0 0 38px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
           <svg id="acctDefaultIcon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 1-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <span id="acctBtnLabel">Entrar</span>
         </button>
@@ -2309,7 +2309,7 @@
         </div>
         <div style="display:flex;gap:0.6rem;align-items:center">
           <button id="teamBellBtn" type="button" class="secondary-btn ripple-fx" onclick="GT.openTeamNotifications()" title="Avisos da equipe" style="position:relative"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span id="teamBellBadge" style="display:none;position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:#ef4444;color:#fff;font-size:10px;line-height:17px;text-align:center"></span></button>
-          <button id="dashCopyBtn" type="button" class="gt-small-btn" style="display:none" onclick="GT.editDashboardTexts()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg><span>Textos</span></button>
+          <button id="dashCopyBtn" type="button" class="gt-small-btn" style="display:none;align-items:center;gap:.4rem;border-color:rgba(139,92,246,.42);background:rgba(139,92,246,.08)" onclick="GT.editDashboardTexts()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg><span>Textos</span></button>
           <button id="profilePhotoBtn" type="button" class="secondary-btn ripple-fx" onclick="GT.openProfilePhoto()" title="Foto de perfil" style="display:none;padding:.45rem .6rem"><span id="profilePhotoMini"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span></button>
           <button type="button" class="secondary-btn ripple-fx" onclick="GT.closeDash()">Voltar ao site</button>
           <button type="button" class="acc-btn ripple-fx" onclick="GT.doLogout()">Sair</button>
@@ -4797,22 +4797,23 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     await loadDashCopy();
     let ov=$('dashCopyOverlay');
     if(!ov){
-      ov=document.createElement('div'); ov.id='dashCopyOverlay'; ov.className='gt-modal-overlay';
-      ov.innerHTML=`<div class="gt-modal" style="max-width:720px"><button class="gt-modal-close" onclick="document.getElementById('dashCopyOverlay').classList.remove('open')">×</button>
+      ov=document.createElement('div'); ov.id='dashCopyOverlay'; ov.className='gt-overlay hidden'; ov.style.zIndex='260';
+      ov.onclick=e=>{if(e.target===ov)ov.classList.add('hidden')};
+      ov.innerHTML=`<div class="surface-card gt-modal" style="max-width:720px"><button class="gt-modal-close" onclick="document.getElementById('dashCopyOverlay').classList.add('hidden')">×</button>
       <h3>${uiLabel('edit','Textos da dashboard')}</h3><p style="font-size:.75rem;color:var(--muted)">Altere títulos e observações exibidas nos cards.</p><div id="dashCopyFields" style="display:grid;gap:.65rem;margin-top:1rem"></div>
       <button class="acc-btn" style="margin-top:1rem" onclick="GT.saveDashboardTexts()">Salvar textos</button></div>`;
       document.body.appendChild(ov);
     }
     const defs=[['salesTitle','Vendas fechadas'],['salesNote',''],['openTitle','Chamados em aberto'],['openNote',''],['progressTitle','Em andamento'],['progressNote',''],['resolvedTitle','Resolvidos'],['resolvedNote',''],['revenueTitle','Receita'],['revenueNote',''],['visitsTitle','Visitas'],['visitsNote',''],['timeTitle','Tempo no site'],['timeNote',''],['leadsTitle','Leads'],['leadsNote','']];
     $('dashCopyFields').innerHTML=defs.map(([k,d])=>`<label style="font-size:.72rem;color:var(--muted)">${k.endsWith('Note')?'Observação':'Título'} — ${escapeHtml(d||k.replace('Note',''))}<input id="dc_${k}" class="gt-mini-input" style="width:100%;margin-top:.25rem" value="${escapeHtml(dashCopyCache[k]??d)}" placeholder="${escapeHtml(d)}"></label>`).join('');
-    ov.classList.add('open');
+    ov.classList.remove('hidden');
   }
   async function saveDashboardTexts(){
     if(!isOwner)return;
     const keys=['salesTitle','salesNote','openTitle','openNote','progressTitle','progressNote','resolvedTitle','resolvedNote','revenueTitle','revenueNote','visitsTitle','visitsNote','timeTitle','timeNote','leadsTitle','leadsNote'], data={};
     keys.forEach(k=>data[k]=($('dc_'+k)?.value||'').trim());
     await setDoc(doc(db,'teamStats','dashboardCopy'),data,{merge:true}); dashCopyCache=data;
-    $('dashCopyOverlay')?.classList.remove('open'); applyDashboardCopy();
+    $('dashCopyOverlay')?.classList.add('hidden'); applyDashboardCopy();
   }
   function applyDashboardCopy(){
     const map={vendas:['salesTitle','salesNote'],abertos:['openTitle','openNote'],andamento:['progressTitle','progressNote'],resolvidos:['resolvedTitle','resolvedNote'],receita:['revenueTitle','revenueNote'],visitas:['visitsTitle','visitsNote'],tempo:['timeTitle','timeNote'],leads:['leadsTitle','leadsNote']};
@@ -5826,7 +5827,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       const s=await getDoc(doc(db,'staff',(currentUser.email||'').toLowerCase()));
       const photo=s.exists() && s.data().photoDataUrl;
       const avatar=photo ? `<img src="${photo}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block">` : UIICON.user;
-      if(mini) mini.innerHTML=photo ? `<img src="${photo}" alt="" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block">` : UIICON.user;
+      if(mini) mini.innerHTML=photo ? `<img src="${photo}" alt="" style="width:38px;height:38px;border-radius:50%;object-fit:cover;display:block;border:2px solid rgba(139,92,246,.55);box-shadow:0 0 0 3px rgba(139,92,246,.10)">` : UIICON.user;
       if(nav) nav.innerHTML=avatar;
     } catch(e) { if(nav) nav.innerHTML=UIICON.user; }
   }
