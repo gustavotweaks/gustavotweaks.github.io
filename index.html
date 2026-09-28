@@ -4801,7 +4801,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
         var totalRevenue  = leads.reduce(function(s,l){return s+(l.saleValue?Number(l.saleValue):0);},0);
 
         lastReal = { visitas: aStore.visits||0, pageviews: pageViews, scroll75: deepScrolls, tempo: avgMin+'m '+avgSec+'s', scrollmax: (aStore.maxScroll||0)+'%', eventos: (aStore.events||[]).length, abertos: openTickets, andamento: inProgress, resolvidos: closedTickets, leads: leads.length, vendas: closedLeads, receita: 'R$ '+totalRevenue.toFixed(2).replace('.',',') };
-        let statOv = {}; try { const so = await getDoc(doc(db,'teamStats','main')); if (so.exists()) statOv = so.data().values || {}; } catch(e){}
+        lastRealTC = topClicks; let statOv = {}, statTC = null; try { const so = await getDoc(doc(db,'teamStats','main')); if (so.exists()) { statOv = so.data().values || {}; statTC = so.data().topClicks || null; } } catch(e){}
         content.innerHTML = `
           ${renderStatCards(lastReal, statOv, statEdit)}
 
@@ -4817,9 +4817,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
             </div>
             <div class="surface-card gt-panel">
               <p class="gt-panel-title">🖱️ Top Cliques</p>
-              ${topClicks.length ? `<div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Elemento</th><th>Cliques</th></tr></thead><tbody>
-                ${topClicks.map(([lbl,cnt])=>`<tr><td>${escapeHtml(lbl)||'—'}</td><td><strong>${cnt}</strong></td></tr>`).join('')}
-              </tbody></table></div>` : '<p class="gt-empty" style="padding:1rem 0">Nenhum clique registrado ainda.</p>'}
+              ${renderTopClicks(topClicks, statTC, statEdit)}
             </div>
           </div>
 
@@ -5363,7 +5361,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     const grid = STAT_DEFS.map(([k, l, ic]) => {
       const shown = ov[k] !== undefined ? ov[k] : real[k];
       if (editing) return statBox(l, `<input id="st_${k}" class="gt-mini-input" style="width:100%;text-align:center" value="${escapeHtml(shown)}">`, ic);
-      return statBox(l, `<div style="font-size:1.2rem;font-weight:700;color:var(--fg)">${escapeHtml(shown)}${ov[k] !== undefined ? '<span class="gt-sim-tag">editado</span>' : ''}</div>`, ic);
+      return statBox(l, `<div style="font-size:1.2rem;font-weight:700;color:var(--fg)">${escapeHtml(shown)}${ov[k] !== undefined && isOwner ? '<span class="gt-sim-tag">editado</span>' : ''}</div>`, ic);
     }).join('');
     const btns = !isOwner ? '' : editing
       ? `<button type="button" class="acc-btn ripple-fx" onclick="GT.statSave()">Salvar e publicar para a equipe</button><button type="button" class="secondary-btn ripple-fx" onclick="GT.statToggle(false)">Cancelar</button><button type="button" class="gt-small-btn ripple-fx" onclick="GT.statReset()">Restaurar números reais</button>`
@@ -5372,25 +5370,40 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem">${grid}</div>`;
   }
   let lastReal = {};
-  const statToggle = (on) => { statEdit = on; switchAdminTab('analytics'); };
+  /* ---- Top Cliques editável ---- */
+  let tcRows = null, lastRealTC = [];
+  const tcEditHtml = () => tcRows.map((r, i) => `<div style="display:flex;gap:.4rem;margin-bottom:.4rem"><input id="tc_l_${i}" class="gt-mini-input" style="flex:1;width:auto" value="${escapeHtml(r.l)}"><input id="tc_c_${i}" class="gt-mini-input" style="width:5rem" value="${escapeHtml(r.c)}"><button type="button" class="gt-small-btn" onclick="GT.tcDel(${i})">✕</button></div>`).join('') + '<button type="button" class="gt-small-btn ripple-fx" onclick="GT.tcAdd()">+ linha</button>';
+  const tcSync = () => { tcRows = tcRows.map((r, i) => ({ l: $('tc_l_' + i).value, c: $('tc_c_' + i).value })); };
+  const tcAdd = () => { tcSync(); tcRows.push({ l: '', c: '0' }); $('tcBox').innerHTML = tcEditHtml(); };
+  const tcDel = (i) => { tcSync(); tcRows.splice(i, 1); $('tcBox').innerHTML = tcEditHtml(); };
+  function renderTopClicks(real, tc, editing) {
+    const shown = tc ? tc.map(x => [x.label, x.count]) : real;
+    if (editing) { if (!tcRows) tcRows = shown.map(([l, c]) => ({ l, c: String(c) })); return '<div id="tcBox">' + tcEditHtml() + '</div>'; }
+    if (!shown.length) return '<p class="gt-empty" style="padding:1rem 0">Nenhum clique registrado ainda.</p>';
+    return `<div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Elemento</th><th>Cliques</th></tr></thead><tbody>${shown.map(([l, c]) => `<tr><td>${escapeHtml(l) || '—'}</td><td><strong>${escapeHtml(c)}</strong></td></tr>`).join('')}</tbody></table></div>${tc && isOwner ? '<span class="gt-sim-tag" style="margin:.6rem 0 0">editado</span>' : ''}`;
+  }
+  const statToggle = (on) => { statEdit = on; tcRows = null; switchAdminTab('analytics'); };
   async function statSave() {
     const values = {};
     STAT_DEFS.forEach(([k]) => { const v = $('st_' + k).value.trim(); if (v !== String(lastReal[k])) values[k] = v; });
-    try { await setDoc(doc(db, 'teamStats', 'main'), { values, updatedAt: serverTimestamp() }); statEdit = false; switchAdminTab('analytics'); } catch (e) { alert(e.message); }
+    let topClicks = null;
+    if (tcRows) { tcSync(); const rows = tcRows.filter(r => r.l.trim()).map(r => ({ label: r.l.trim(), count: Number(r.c) || 0 }));
+      const same = JSON.stringify(rows.map(r => [r.label, r.count])) === JSON.stringify(lastRealTC.map(([l, c]) => [l, Number(c)])); topClicks = same ? null : rows; }
+    try { await setDoc(doc(db, 'teamStats', 'main'), { values, topClicks, updatedAt: serverTimestamp() }); statEdit = false; tcRows = null; switchAdminTab('analytics'); } catch (e) { alert(e.message); }
   }
-  async function statReset() { if (!confirm('Voltar a mostrar os números reais para todos?')) return; try { await setDoc(doc(db, 'teamStats', 'main'), { values: {}, updatedAt: serverTimestamp() }); statEdit = false; switchAdminTab('analytics'); } catch (e) { alert(e.message); } }
+  async function statReset() { if (!confirm('Voltar a mostrar os números reais para todos?')) return; try { await setDoc(doc(db, 'teamStats', 'main'), { values: {}, topClicks: null, updatedAt: serverTimestamp() }); statEdit = false; tcRows = null; switchAdminTab('analytics'); } catch (e) { alert(e.message); } }
   /* aba Analytics do ADMIN: mostra o que o OWNER publicou (somente leitura) */
   function renderStaffStats() {
-    const content = $('dashContent'); let ov = {}, tix = [];
+    const content = $('dashContent'); let ov = {}, tix = [], tc = null;
     const paint = () => {
       const c = (f) => tix.filter(f).length;
       const real = { visitas: '—', pageviews: '—', scroll75: '—', tempo: '—', scrollmax: '—', eventos: '—', abertos: c(t => !t.status || t.status === 'aberto'), andamento: c(t => t.status === 'andamento'), resolvidos: c(t => t.status === 'resolvido'), leads: tix.length, vendas: c(t => t.status === 'resolvido'), receita: money(tix.filter(t => t.status === 'resolvido').reduce((s, t) => s + Number(t.valor ?? 75), 0)) };
-      content.innerHTML = `<p class="gt-panel-title">Analytics <span class="gt-sim-tag">sim</span></p>` + renderStatCards(real, ov, false);
+      content.innerHTML = `<p class="gt-panel-title">Analytics</p>` + renderStatCards(real, ov, false) + (tc ? `<div class="surface-card gt-panel"><p class="gt-panel-title">🖱️ Top Cliques</p>${renderTopClicks([], tc, false)}</div>` : '');
     };
-    liveUnsubs.push(onSnapshot(doc(db, 'teamStats', 'main'), (s) => { ov = s.exists() ? (s.data().values || {}) : {}; paint(); }, () => paint()));
+    liveUnsubs.push(onSnapshot(doc(db, 'teamStats', 'main'), (s) => { ov = s.exists() ? (s.data().values || {}) : {}; tc = s.exists() ? (s.data().topClicks || null) : null; paint(); }, () => paint()));
     liveUnsubs.push(onSnapshot(query(collection(db, 'tickets'), where('simulated', '==', true), limit(300)), (s) => { tix = s.docs.map(d => d.data()); paint(); }));
   }
-  const GTX = { statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins };
+  const GTX = { tcAdd, tcDel, statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins };
 
   /* ================= EXPÕE PARA OS onclick="" DO HTML ================= */
   window.GT = {
