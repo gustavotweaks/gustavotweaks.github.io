@@ -2309,7 +2309,7 @@
         </div>
         <div style="display:flex;gap:0.6rem;align-items:center">
           <button id="teamBellBtn" type="button" class="secondary-btn ripple-fx" onclick="GT.openTeamNotifications()" title="Avisos da equipe" style="position:relative"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span id="teamBellBadge" style="display:none;position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:#ef4444;color:#fff;font-size:10px;line-height:17px;text-align:center"></span></button>
-          <button class="gt-small-btn" onclick="GT.toggleDashboardLock()" style="${dashboardAccessLocked?'border-color:#ef4444':''}">${dashboardAccessLocked?'Liberar dashboard dos ADMs':'Bloquear dashboard dos ADMs'}</button><button id="dashCopyBtn" type="button" class="gt-small-btn" style="display:none;align-items:center;gap:.4rem;border-color:rgba(139,92,246,.42);background:rgba(139,92,246,.08)" onclick="GT.editDashboardTexts()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg><span>Textos</span></button>
+          <button type="button" class="gt-small-btn" onclick="GT.toggleDashboardLock()" style="${dashboardAccessLocked?'border-color:#ef4444':''}">${dashboardAccessLocked?'Liberar dashboard dos ADMs':'Bloquear dashboard dos ADMs'}</button><button id="dashCopyBtn" type="button" class="gt-small-btn" style="display:none;align-items:center;gap:.4rem;border-color:rgba(139,92,246,.42);background:rgba(139,92,246,.08)" onclick="GT.editDashboardTexts()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg><span>Textos</span></button>
           <button id="profilePhotoBtn" type="button" class="secondary-btn ripple-fx" onclick="GT.openProfilePhoto()" title="Foto de perfil" style="display:none;padding:.45rem .6rem"><span id="profilePhotoMini"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span></button>
           <button type="button" class="secondary-btn ripple-fx" onclick="GT.closeDash()">Voltar ao site</button>
           <button type="button" class="acc-btn ripple-fx" onclick="GT.doLogout()">Sair</button>
@@ -4827,14 +4827,25 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     });
   }
 
-  function renderDashboard(){
-    loadDashboardAccess().then((locked)=>{
-      if(isTrainer && !isOwner && locked){
-        const body=$('dashBody');
-        if(body) body.innerHTML=dashboardLockedView();
-      }
-    });
+  let dashboardAccessLocked=false;
+  async function loadDashboardAccess(){
+    try{const s=await getDoc(doc(db,'teamStats','dashboardAccess'));dashboardAccessLocked=!!(s.exists()&&s.data().locked);}
+    catch(e){dashboardAccessLocked=false;}
+    return dashboardAccessLocked;
+  }
+  async function toggleDashboardLock(){
+    if(!isOwner)return;
+    try{
+      const next=!dashboardAccessLocked;
+      await setDoc(doc(db,'teamStats','dashboardAccess'),{locked:next,updatedAt:serverTimestamp(),updatedBy:(currentUser?.email||'').toLowerCase()},{merge:true});
+      dashboardAccessLocked=next; await renderDashboard();
+    }catch(e){alert('Não foi possível alterar o acesso da dashboard: '+(e.message||e));}
+  }
+  function dashboardLockedView(){return `<div class="surface-card gt-panel" style="max-width:760px;margin:3rem auto;padding:1.5rem"><div style="font-size:1rem;font-weight:800;margin-bottom:.65rem">Dashboard temporariamente indisponível</div><div style="font-size:.82rem;color:var(--muted);line-height:1.7">Estamos ampliando e reorganizando as campanhas de Ads nas redes sociais e, neste momento, o painel administrativo está fora do horário de atendimento da equipe. Durante esse período, alguns indicadores e áreas internas ficam temporariamente restritos para evitar divergências enquanto os dados são atualizados.<br><br>Se precisar de alguma informação ou tiver qualquer dúvida, entre em contato diretamente comigo.</div></div>`;}
 
+  async function renderDashboard(){
+    const locked=await loadDashboardAccess();
+    if(isTrainer && !isOwner && locked){const body=$('dashBody');if(body)body.innerHTML=dashboardLockedView();return;}
     loadDashCopy().then(()=>setTimeout(applyDashboardCopy,0));
     if (!isOwner && !isTrainer) {
       $('dashBody').innerHTML = '<div class="surface-card gt-panel"><p class="gt-panel-title">Sem acesso</p><p style="color:var(--muted);font-size:0.85rem">Essa área é exclusiva do administrador do site.</p></div>';
@@ -5886,8 +5897,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     try{const s=await getDoc(doc(db,'teamStats','dashboardLayout'));if(s.exists()&&Array.isArray(s.data().metricOrder)){const got=s.data().metricOrder.filter(k=>STAT_DEFS.some(x=>x[0]===k));dashMetricOrder=[...got,...STAT_DEFS.map(x=>x[0]).filter(k=>!got.includes(k))];}}catch(e){}
   }
   async function moveDashMetric(key,dir){
-    if(!isOwner)return;
-    const i=dashMetricOrder.indexOf(key),j=i+dir;if(i<0||j<0||j>=dashMetricOrder.length)return;
+    if(!isOwner)return;const i=dashMetricOrder.indexOf(key),j=i+dir;if(i<0||j<0||j>=dashMetricOrder.length)return;
     [dashMetricOrder[i],dashMetricOrder[j]]=[dashMetricOrder[j],dashMetricOrder[i]];
     try{await setDoc(doc(db,'teamStats','dashboardLayout'),{metricOrder:[...dashMetricOrder],updatedAt:serverTimestamp()},{merge:true});await renderDashboard();}
     catch(e){alert('Não foi possível salvar a ordem: '+(e.message||e));}
@@ -8530,22 +8540,4 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   </script>
 
 </body>
-</htmllet dashboardAccessLocked=false;
-  async function loadDashboardAccess(){
-    try{const s=await getDoc(doc(db,'teamStats','dashboardAccess'));dashboardAccessLocked=!!(s.exists()&&s.data().locked);}
-    catch(e){dashboardAccessLocked=false;}
-    return dashboardAccessLocked;
-  }
-  async function toggleDashboardLock(){
-    if(!isOwner)return;
-    try{
-      const next=!dashboardAccessLocked;
-      await setDoc(doc(db,'teamStats','dashboardAccess'),{locked:next,updatedAt:serverTimestamp(),updatedBy:(currentUser?.email||'').toLowerCase()},{merge:true});
-      dashboardAccessLocked=next; await renderDashboard();
-    }catch(e){alert('Não foi possível alterar o acesso da dashboard: '+(e.message||e));}
-  }
-  function dashboardLockedView(){return `<div class="surface-card gt-panel" style="max-width:760px;margin:3rem auto;padding:1.5rem">
-    <div style="font-size:1rem;font-weight:800;margin-bottom:.65rem">Dashboard temporariamente indisponível</div>
-    <div style="font-size:.82rem;color:var(--muted);line-height:1.7">Estamos ampliando e reorganizando as campanhas de Ads nas redes sociais e, neste momento, o painel administrativo está fora do horário de atendimento da equipe. Durante esse período, alguns indicadores e áreas internas ficam temporariamente restritos para evitar divergências enquanto os dados são atualizados.<br><br>Se precisar de alguma informação ou tiver qualquer dúvida, entre em contato diretamente comigo.</div>
-  </div>`;}
-  >
+</html>
