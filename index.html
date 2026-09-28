@@ -4536,7 +4536,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import {
     getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where,
-    getDocs, updateDoc, deleteDoc, serverTimestamp, orderBy, onSnapshot, limit, Timestamp, runTransaction
+    getDocs, getCountFromServer, updateDoc, deleteDoc, serverTimestamp, orderBy, onSnapshot, limit, Timestamp, runTransaction
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   /* ======================================================
@@ -4868,6 +4868,16 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     setTimeout(()=>{paintAdminSessionTime();startAdminTicketCounter();},0);
   }
 
+  async function getGlobalAnalytics(){
+    const col=collection(db,'analyticsEvents');
+    const count=async(q)=>{ try{return (await getCountFromServer(q)).data().count||0;}catch(e){return 0;} };
+    const [visits,pageviews,scroll75,clicks]=await Promise.all([
+      count(query(col,where('type','==','visit'))), count(query(col,where('type','==','page_view'))),
+      count(query(col,where('type','==','scroll75'))), count(query(col,where('type','==','click')))
+    ]);
+    return {visits,pageviews,scroll75,eventos:visits+pageviews+scroll75+clicks};
+  }
+
   async function switchAdminTab(tab){
     if (!isOwner && !isTrainer) return;
     activeAdminTab = tab;
@@ -4934,7 +4944,8 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
         var closedLeads   = leads.filter(l=>l.saleValue).length;
         var totalRevenue  = leads.reduce(function(s,l){return s+(l.saleValue?Number(l.saleValue):0);},0);
 
-        lastReal = { visitas: aStore.visits||0, pageviews: pageViews, scroll75: deepScrolls, tempo: adminSessionText(), scrollmax: (aStore.maxScroll||0)+'%', eventos: (aStore.events||[]).length, abertos: openTickets, andamento: inProgress, resolvidos: closedTickets, leads: leads.length, vendas: closedLeads, receita: 'R$ '+totalRevenue.toFixed(2).replace('.',',') };
+        const globalA = await getGlobalAnalytics();
+        lastReal = { visitas: globalA.visits, pageviews: globalA.pageviews, scroll75: globalA.scroll75, tempo: adminSessionText(), scrollmax: (aStore.maxScroll||0)+'%', eventos: globalA.eventos, abertos: openTickets, andamento: inProgress, resolvidos: closedTickets, leads: leads.length, vendas: closedLeads, receita: 'R$ '+totalRevenue.toFixed(2).replace('.',',') };
         lastRealTC = topClicks; let statOv = {}, statTC = null; try { const so = await getDoc(doc(db,'teamStats','main')); if (so.exists()) { statOv = so.data().values || {}; statTC = so.data().topClicks || null; statG = { g: so.data().growth || {}, at: ms(so.data().updatedAt) }; } else statG = { g: {}, at: 0 }; } catch(e){}
         content.innerHTML = `
           ${renderStatCards(lastReal, statOv, statEdit)}
@@ -5857,8 +5868,8 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       return statBox(l, `<div style="font-size:1.2rem;font-weight:700;color:var(--fg)"><span id="sv_${k}">${escapeHtml(shown)}</span>${has && isOwner ? '<span class="gt-sim-tag">editado</span>' : ''}</div>`, ic);
     }).join('');
     const btns = !isOwner ? '' : editing
-      ? `<button type="button" class="acc-btn ripple-fx" onclick="GT.statSave()">Salvar e publicar para a equipe</button><button type="button" class="secondary-btn ripple-fx" onclick="GT.statToggle(false)">Cancelar</button><button type="button" class="gt-small-btn ripple-fx" onclick="GT.statReset()">Restaurar números reais</button>`
-      : `<button type="button" class="gt-small-btn ripple-fx" onclick="GT.statToggle(true)">✏️ Editar números</button>`;
+      ? `<button type="button" class="acc-btn ripple-fx" onclick="GT.statSave()">Salvar valores personalizados</button><button type="button" class="secondary-btn ripple-fx" onclick="GT.statToggle(false)">Cancelar</button><button type="button" class="gt-small-btn ripple-fx" onclick="GT.statReset()">Voltar aos números reais</button>`
+      : `<button type="button" class="gt-small-btn ripple-fx" onclick="GT.statToggle(true)">Editar números</button>`;
     if (!editing) { if (genTimer) clearInterval(genTimer); genTimer = setInterval(tickStats, 20000); }
     return `<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem">${btns}</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem">${grid}</div>`;
@@ -6290,6 +6301,11 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
 
     function allowed() { return consent() === 'all'; }
 
+    function cloudTrack(type, data) {
+      if (!allowed()) return;
+      try { addDoc(collection(db,'analyticsEvents'), {type:type,data:data||{},path:location.pathname,createdAt:serverTimestamp()}).catch(function(){}); } catch(e) {}
+    }
+
     function track(name, data) {
       if (!allowed()) return;
       store.events.push({ e: name, d: data || {}, t: Date.now() });
@@ -6306,6 +6322,8 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       store.firstVisit = store.firstVisit || new Date().toISOString();
       store.lastVisit = new Date().toISOString();
       save();
+      cloudTrack('visit', { ref: document.referrer || 'direct' });
+      cloudTrack('page_view', { ref: document.referrer || 'direct', lang: document.documentElement.lang, w: window.innerWidth });
       track('page_view', { ref: document.referrer || 'direct', lang: document.documentElement.lang, w: window.innerWidth });
 
       var start = Date.now(), ticking = false;
@@ -6322,12 +6340,14 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
         }
       }, 1000);
       document.addEventListener('visibilitychange', function(){ timeCheckpoint = Date.now(); });
+      var sent75 = false;
       window.addEventListener('scroll', function () {
         if (ticking) return; ticking = true;
         requestAnimationFrame(function () {
           var h = document.documentElement.scrollHeight - window.innerHeight;
           var pct = h > 0 ? Math.round((window.scrollY / h) * 100) : 0;
           if (pct > (store.maxScroll || 0)) { store.maxScroll = pct; if (pct % 25 === 0) track('scroll_depth', { pct: pct }); }
+          if (!sent75 && pct >= 75) { sent75 = true; cloudTrack('scroll75', {pct:pct}); }
           ticking = false;
         });
       }, { passive: true });
@@ -6335,7 +6355,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       document.addEventListener('click', function (ev) {
         var el = ev.target.closest('button, a');
         if (!el) return;
-        track('click', { label: (el.innerText || el.getAttribute('aria-label') || '').trim().slice(0, 40), href: el.getAttribute('href') || '' });
+        var clickData={label:(el.innerText||el.getAttribute('aria-label')||'').trim().slice(0,40),href:el.getAttribute('href')||''}; track('click',clickData); cloudTrack('click',clickData);
       }, true);
 
       window.addEventListener('beforeunload', function () {
