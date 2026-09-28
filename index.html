@@ -1910,6 +1910,13 @@
     }
     /* ============ FIM SEÇÃO APP ============ */
 </style>
+
+  <style id="gt-svg-professional">
+    .gt-tab svg,.gt-small-btn svg,.acc-btn svg,#teamBellBtn svg{vertical-align:middle;flex:0 0 auto}
+    .gt-tab{display:inline-flex;align-items:center;gap:.45rem}
+    #dashCopyBtn{align-items:center;gap:.4rem}
+  </style>
+
 </head>
 <body>
 
@@ -2138,7 +2145,8 @@
           <span data-i18n="nav.cta">Agendar agora</span>
         </button>
         <button id="acctBtn" class="acc-btn ripple-fx" onclick="GT.openAccountArea()" aria-label="Área do administrador">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span id="navAdminAvatar" style="display:none;width:26px;height:26px;border-radius:50%;overflow:hidden;align-items:center;justify-content:center;background:rgba(255,255,255,.08);flex:0 0 26px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+          <svg id="acctDefaultIcon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 1-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <span id="acctBtnLabel">Entrar</span>
         </button>
       </div>
@@ -2299,7 +2307,10 @@
             <p id="dashUserEmail">&mdash;</p>
           </div>
         </div>
-        <div style="display:flex;gap:0.6rem">
+        <div style="display:flex;gap:0.6rem;align-items:center">
+          <button id="teamBellBtn" type="button" class="secondary-btn ripple-fx" onclick="GT.openTeamNotifications()" title="Avisos da equipe" style="position:relative"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span id="teamBellBadge" style="display:none;position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:#ef4444;color:#fff;font-size:10px;line-height:17px;text-align:center"></span></button>
+          <button id="dashCopyBtn" type="button" class="gt-small-btn" style="display:none" onclick="GT.editDashboardTexts()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg><span>Textos</span></button>
+          <button id="profilePhotoBtn" type="button" class="secondary-btn ripple-fx" onclick="GT.openProfilePhoto()" title="Foto de perfil" style="display:none;padding:.45rem .6rem"><span id="profilePhotoMini"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span></button>
           <button type="button" class="secondary-btn ripple-fx" onclick="GT.closeDash()">Voltar ao site</button>
           <button type="button" class="acc-btn ripple-fx" onclick="GT.doLogout()">Sair</button>
         </div>
@@ -4518,9 +4529,9 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   window.GT = window.GT || { openAccountArea: function(){ alert('Carregando… tente novamente em instantes.'); } };
 </script>
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
-    getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
+    getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword,
     setPersistence, browserLocalPersistence
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import {
@@ -4667,28 +4678,86 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     const password = $('loginPassword').value;
     $('loginError').textContent = '';
     if(!email || !password){ $('loginError').textContent = 'Preencha e-mail e senha.'; return; }
-    const emailLow = email.toLowerCase();
-    const allowed  = emailLow === OWNER_EMAIL || TRAINER_EMAILS.includes(emailLow);
-    if(!allowed){ $('loginError').textContent = 'Acesso restrito ao administrador.'; return; }
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      const emailLow=(cred.user.email||'').toLowerCase();
+      let staffOk=emailLow===OWNER_EMAIL;
+      if(!staffOk){
+        try { staffOk=(await getDoc(doc(db,'staff',emailLow))).exists(); } catch(e){ staffOk=false; }
+      }
+      if(!staffOk){
+        await signOut(auth);
+        $('loginError').textContent='Acesso restrito ao administrador.';
+        return;
+      }
       closeLogin();
-      openDash();
+      setTimeout(openDash,80);
     } catch(e){
       $('loginError').textContent = 'E-mail ou senha inválidos.';
     }
   }
   async function doLogout(){ await signOut(auth); closeDash(); }
 
-  onAuthStateChanged(auth, (user) => {
+  let adminSessionStart=0, adminSessionTimer=null, adminTicketLiveUnsub=null;
+  function adminSessionSeconds(){ return adminSessionStart ? Math.max(0,Math.floor((Date.now()-adminSessionStart)/1000)) : 0; }
+  function adminSessionText(){
+    const s=adminSessionSeconds(), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
+    return (h ? h+'h ' : '') + m+'m '+String(sec).padStart(2,'0')+'s';
+  }
+  function paintAdminSessionTime(){
+    const el=$('sv_tempo'); if(el) el.textContent=adminSessionText();
+  }
+  function startAdminSessionClock(){
+    if(adminSessionTimer) clearInterval(adminSessionTimer);
+    adminSessionStart=Date.now(); paintAdminSessionTime();
+    adminSessionTimer=setInterval(paintAdminSessionTime,1000);
+  }
+  function stopAdminSessionClock(){
+    if(adminSessionTimer) clearInterval(adminSessionTimer);
+    adminSessionTimer=null; adminSessionStart=0;
+  }
+  function startAdminTicketCounter(){
+    if(adminTicketLiveUnsub){adminTicketLiveUnsub();adminTicketLiveUnsub=null;}
+    if(!currentUser || (!isOwner && !isTrainer)) return;
+    const q=isTrainer
+      ? query(collection(db,'tickets'),where('simulated','==',true),limit(300))
+      : query(collection(db,'tickets'),orderBy('createdAt','desc'),limit(300));
+    adminTicketLiveUnsub=onSnapshot(q,(snap)=>{
+      let arr=snap.docs.map(d=>d.data());
+      if(isOwner) arr=arr.filter(x=>!x.simulated);
+      const setN=(k,n)=>{const el=$('sv_'+k);if(el)el.textContent=String(n);};
+      setN('abertos',arr.filter(x=>!x.status||x.status==='aberto').length);
+      setN('andamento',arr.filter(x=>x.status==='andamento').length);
+      setN('resolvidos',arr.filter(x=>x.status==='resolvido').length);
+    },()=>{});
+  }
+  function stopAdminTicketCounter(){
+    if(adminTicketLiveUnsub){adminTicketLiveUnsub();adminTicketLiveUnsub=null;}
+  }
+
+  onAuthStateChanged(auth, async (user) => {
     currentUser = user;
     const emailLow = (user && user.email || '').toLowerCase();
-    isOwner   = emailLow === OWNER_EMAIL;
-    isTrainer = TRAINER_EMAILS.includes(emailLow);
+    isOwner = emailLow === OWNER_EMAIL;
+    isTrainer = false;
+    if(user && !isOwner){
+      try { isTrainer=(await getDoc(doc(db,'staff',emailLow))).exists(); } catch(e){ isTrainer=false; }
+    }
     const label = $('acctBtnLabel');
     if (label) label.textContent = (isOwner || isTrainer) ? 'Meu painel' : 'Entrar';
     if (!isOwner && !isTrainer) { cache.leads = null; cache.tickets = null; }
     if (user && !isOwner && !isTrainer) { signOut(auth).catch(()=>{}); }
+    if (user && (isOwner || isTrainer)) {
+      startAdminSessionClock();
+      startAdminTicketCounter();
+      setTimeout(() => { updateNoticeBadge(); refreshProfilePhoto(); const b=$('dashCopyBtn');if(b)b.style.display=isOwner?'':'none'; }, 150);
+    } else {
+      stopAdminSessionClock(); stopAdminTicketCounter();
+      const av=$('navAdminAvatar'), ico=$('acctDefaultIcon'), pbtn=$('profilePhotoBtn');
+      if(av){av.style.display='none';av.innerHTML=UIICON.user;}
+      if(ico) ico.style.display='';
+      if(pbtn) pbtn.style.display='none';
+    }
   });
 
   /* ================= FETCHERS (só admin autenticado) ================= */
@@ -4705,7 +4774,60 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   }
 
   /* ================= PAINEL ================= */
+
+  const UIICON = {
+    user:`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>`,
+    bell:`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>`,
+    edit:`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>`,
+    chart:`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9"/><path d="M10 19V5"/><path d="M16 19v-7"/><path d="M22 19V3"/><path d="M2 19h22"/></svg>`,
+    wallet:`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h15a2 2 0 0 1 2 2v11H4a2 2 0 0 1-2-2V6a3 3 0 0 1 3-3h13"/><path d="M16 12h5"/><circle cx="16" cy="12" r=".5" fill="currentColor"/></svg>`,
+    message:`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.5-5A8 8 0 1 1 21 15Z"/></svg>`,
+    megaphone:`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 14-6v14L3 13Z"/><path d="M11 16v4a2 2 0 0 1-4 0v-5"/><path d="M21 9v6"/></svg>`,
+    trophy:`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0Z"/><path d="M8 6H4v2a4 4 0 0 0 4 4"/><path d="M16 6h4v2a4 4 0 0 1-4 4"/><path d="M12 13v5"/><path d="M8 21h8"/><path d="M10 18h4"/></svg>`,
+    lock:`<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>`
+  };
+  const uiLabel=(icon,text)=>`<span style="display:inline-flex;align-items:center;gap:.45rem">${UIICON[icon]||''}<span>${text}</span></span>`;
+
+  let dashCopyCache = {};
+  async function loadDashCopy(){
+    try { const s=await getDoc(doc(db,'teamStats','dashboardCopy')); dashCopyCache=s.exists()?s.data():{}; } catch(e){ dashCopyCache={}; }
+  }
+  async function editDashboardTexts(){
+    if(!isOwner)return;
+    await loadDashCopy();
+    let ov=$('dashCopyOverlay');
+    if(!ov){
+      ov=document.createElement('div'); ov.id='dashCopyOverlay'; ov.className='gt-modal-overlay';
+      ov.innerHTML=`<div class="gt-modal" style="max-width:720px"><button class="gt-modal-close" onclick="document.getElementById('dashCopyOverlay').classList.remove('open')">×</button>
+      <h3>${uiLabel('edit','Textos da dashboard')}</h3><p style="font-size:.75rem;color:var(--muted)">Altere títulos e observações exibidas nos cards.</p><div id="dashCopyFields" style="display:grid;gap:.65rem;margin-top:1rem"></div>
+      <button class="acc-btn" style="margin-top:1rem" onclick="GT.saveDashboardTexts()">Salvar textos</button></div>`;
+      document.body.appendChild(ov);
+    }
+    const defs=[['salesTitle','Vendas fechadas'],['salesNote',''],['openTitle','Chamados em aberto'],['openNote',''],['progressTitle','Em andamento'],['progressNote',''],['resolvedTitle','Resolvidos'],['resolvedNote',''],['revenueTitle','Receita'],['revenueNote',''],['visitsTitle','Visitas'],['visitsNote',''],['timeTitle','Tempo no site'],['timeNote',''],['leadsTitle','Leads'],['leadsNote','']];
+    $('dashCopyFields').innerHTML=defs.map(([k,d])=>`<label style="font-size:.72rem;color:var(--muted)">${k.endsWith('Note')?'Observação':'Título'} — ${escapeHtml(d||k.replace('Note',''))}<input id="dc_${k}" class="gt-mini-input" style="width:100%;margin-top:.25rem" value="${escapeHtml(dashCopyCache[k]??d)}" placeholder="${escapeHtml(d)}"></label>`).join('');
+    ov.classList.add('open');
+  }
+  async function saveDashboardTexts(){
+    if(!isOwner)return;
+    const keys=['salesTitle','salesNote','openTitle','openNote','progressTitle','progressNote','resolvedTitle','resolvedNote','revenueTitle','revenueNote','visitsTitle','visitsNote','timeTitle','timeNote','leadsTitle','leadsNote'], data={};
+    keys.forEach(k=>data[k]=($('dc_'+k)?.value||'').trim());
+    await setDoc(doc(db,'teamStats','dashboardCopy'),data,{merge:true}); dashCopyCache=data;
+    $('dashCopyOverlay')?.classList.remove('open'); applyDashboardCopy();
+  }
+  function applyDashboardCopy(){
+    const map={vendas:['salesTitle','salesNote'],abertos:['openTitle','openNote'],andamento:['progressTitle','progressNote'],resolvidos:['resolvedTitle','resolvedNote'],receita:['revenueTitle','revenueNote'],visitas:['visitsTitle','visitsNote'],tempo:['timeTitle','timeNote'],leads:['leadsTitle','leadsNote']};
+    Object.entries(map).forEach(([key,[tk,nk]])=>{
+      const value=$('sv_'+key); if(!value)return;
+      const card=value.closest('.surface-card')||value.parentElement?.parentElement; if(!card)return;
+      const title=card.querySelector('.stat-label,.gt-stat-label,.gt-panel-title,h4');
+      if(title&&dashCopyCache[tk])title.textContent=dashCopyCache[tk];
+      let note=card.querySelector(`[data-dash-note="${key}"]`);
+      if(dashCopyCache[nk]){if(!note){note=document.createElement('div');note.dataset.dashNote=key;note.style.cssText='font-size:.67rem;color:var(--muted);margin-top:.25rem';card.appendChild(note)}note.textContent=dashCopyCache[nk];} else if(note)note.remove();
+    });
+  }
+
   function renderDashboard(){
+    loadDashCopy().then(()=>setTimeout(applyDashboardCopy,0));
     if (!isOwner && !isTrainer) {
       $('dashBody').innerHTML = '<div class="surface-card gt-panel"><p class="gt-panel-title">Sem acesso</p><p style="color:var(--muted);font-size:0.85rem">Essa área é exclusiva do administrador do site.</p></div>';
       return;
@@ -4717,9 +4839,12 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       /* ── PAINEL DE TREINAMENTO ── */
       $('dashBody').innerHTML = `
         <div class="gt-tabs">
-          <button type="button" class="gt-tab ripple-fx" id="tab_sim_stats" onclick="GT.switchAdminTab('sim_stats')">📊 Analytics</button>
+          <button type="button" class="gt-tab ripple-fx" id="tab_sim_stats" onclick="GT.switchAdminTab('sim_stats')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3M2 19h22"/></svg><span>Analytics</span></button>
           <button type="button" class="gt-tab ripple-fx" id="tab_sim_tickets" onclick="GT.switchAdminTab('sim_tickets')">Chamados</button>
           <button type="button" class="gt-tab ripple-fx" id="tab_sim_leads"   onclick="GT.switchAdminTab('sim_leads')">Leads / Orçamentos</button>
+          <button type="button" class="gt-tab ripple-fx" id="tab_earnings" onclick="GT.switchAdminTab('earnings')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h15a2 2 0 0 1 2 2v11H4a2 2 0 0 1-2-2V6a3 3 0 0 1 3-3h13"/><path d="M16 12h5"/></svg><span>Dinheiro ganho</span></button>
+          <button type="button" class="gt-tab ripple-fx" id="tab_whatsapp_staff" onclick="GT.switchAdminTab('whatsapp_staff')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.5-5A8 8 0 1 1 21 15Z"/></svg><span>Chamados WhatsApp</span></button>
+          <button type="button" class="gt-tab ripple-fx" id="tab_ads_staff" onclick="GT.switchAdminTab('ads_staff')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 11 14-6v14L3 13Z"/><path d="M11 16v4a2 2 0 0 1-4 0v-5"/><path d="M21 9v6"/></svg><span>Ads Instagram / TikTok</span></button>
         </div>
         <div id="dashContent"><p class="gt-empty">Carregando…</p></div>`;
       switchAdminTab('sim_stats');
@@ -4730,14 +4855,17 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     $('dashBody').innerHTML = `
       <div style="display:flex;justify-content:flex-end;margin-bottom:1rem"><button type="button" class="acc-btn ripple-fx" onclick="GT.openCreate()">+ CRIAR PEDIDO</button></div>
       <div class="gt-tabs">
-        <button type="button" class="gt-tab ripple-fx" id="tab_analytics" onclick="GT.switchAdminTab('analytics')">📊 Analytics</button>
+        <button type="button" class="gt-tab ripple-fx" id="tab_analytics" onclick="GT.switchAdminTab('analytics')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3M2 19h22"/></svg><span>Analytics</span></button>
         <button type="button" class="gt-tab ripple-fx" id="tab_tickets" onclick="GT.switchAdminTab('tickets')">Chamados</button>
         <button type="button" class="gt-tab ripple-fx" id="tab_leads" onclick="GT.switchAdminTab('leads')">Leads / Orçamentos</button>
         <button type="button" class="gt-tab ripple-fx" id="tab_sim" onclick="GT.switchAdminTab('sim')">Simulados</button>
-        <button type="button" class="gt-tab ripple-fx" id="tab_team" onclick="GT.switchAdminTab('team')">🏆 Ranking da equipe</button>
+        <button type="button" class="gt-tab ripple-fx" id="tab_team" onclick="GT.switchAdminTab('team')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 4h8v5a4 4 0 0 1-8 0Z"/><path d="M8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4M12 13v5M8 21h8"/></svg><span>Ranking da equipe</span></button>
+        <button type="button" class="gt-tab ripple-fx" id="tab_whatsapp" onclick="GT.switchAdminTab('whatsapp')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.5-5A8 8 0 1 1 21 15Z"/></svg><span>Chamados WhatsApp</span></button>
+        <button type="button" class="gt-tab ripple-fx" id="tab_ads" onclick="GT.switchAdminTab('ads')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 11 14-6v14L3 13Z"/><path d="M11 16v4a2 2 0 0 1-4 0v-5"/><path d="M21 9v6"/></svg><span>Ads Instagram / TikTok</span></button>
       </div>
       <div id="dashContent"><p class="gt-empty">Carregando…</p></div>`;
     switchAdminTab(activeAdminTab || 'analytics');
+    setTimeout(()=>{paintAdminSessionTime();startAdminTicketCounter();},0);
   }
 
   async function switchAdminTab(tab){
@@ -4746,20 +4874,26 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     stopLive();
 
     /* ── abas reais (owner only) ── */
-    ['analytics','tickets','leads','sim','team'].forEach(t=>{
+    ['analytics','tickets','leads','sim','team','whatsapp','ads'].forEach(t=>{
       const el = $('tab_'+t); if (el) el.classList.toggle('active', t===tab);
     });
     /* ── abas simuladas (trainer) ── */
-    ['sim_stats','sim_tickets','sim_leads'].forEach(t=>{
+    ['sim_stats','sim_tickets','sim_leads','earnings','whatsapp_staff','ads_staff'].forEach(t=>{
       const el = $('tab_'+t); if (el) el.classList.toggle('active', t===tab);
     });
 
     const content = $('dashContent');
     if (!content) return;
     content.innerHTML = '<p class="gt-empty">Carregando…</p>';
+    setTimeout(()=>{paintAdminSessionTime();startAdminTicketCounter();},0);
 
     if (tab === 'sim_stats') { renderStaffStats(); return; }
+    if (tab === 'earnings') { renderMyEarnings(); return; }
+    if (tab === 'whatsapp_staff') { renderWhatsAppOrders(false); return; }
+    if (tab === 'ads_staff') { renderAdsPanel(false); return; }
     if (tab === 'sim_tickets' || tab === 'sim_leads') { renderStaffTab(tab); return; }
+    if (isOwner && tab === 'whatsapp') { renderWhatsAppOrders(true); return; }
+    if (isOwner && tab === 'ads') { renderAdsPanel(true); return; }
     if (isOwner && ['gen','sim','team'].includes(tab)) { await renderOwnerTab(tab); return; }
 
     /* ========================================================
@@ -4800,7 +4934,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
         var closedLeads   = leads.filter(l=>l.saleValue).length;
         var totalRevenue  = leads.reduce(function(s,l){return s+(l.saleValue?Number(l.saleValue):0);},0);
 
-        lastReal = { visitas: aStore.visits||0, pageviews: pageViews, scroll75: deepScrolls, tempo: avgMin+'m '+avgSec+'s', scrollmax: (aStore.maxScroll||0)+'%', eventos: (aStore.events||[]).length, abertos: openTickets, andamento: inProgress, resolvidos: closedTickets, leads: leads.length, vendas: closedLeads, receita: 'R$ '+totalRevenue.toFixed(2).replace('.',',') };
+        lastReal = { visitas: aStore.visits||0, pageviews: pageViews, scroll75: deepScrolls, tempo: adminSessionText(), scrollmax: (aStore.maxScroll||0)+'%', eventos: (aStore.events||[]).length, abertos: openTickets, andamento: inProgress, resolvidos: closedTickets, leads: leads.length, vendas: closedLeads, receita: 'R$ '+totalRevenue.toFixed(2).replace('.',',') };
         lastRealTC = topClicks; let statOv = {}, statTC = null; try { const so = await getDoc(doc(db,'teamStats','main')); if (so.exists()) { statOv = so.data().values || {}; statTC = so.data().topClicks || null; statG = { g: so.data().growth || {}, at: ms(so.data().updatedAt) }; } else statG = { g: {}, at: 0 }; } catch(e){}
         content.innerHTML = `
           ${renderStatCards(lastReal, statOv, statEdit)}
@@ -5063,15 +5197,58 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
      Chamada UMA VEZ pelo owner para criar as contas no Firebase Auth.
      As senhas são informadas na hora — nunca ficam no código.
   ================================================================ */
-  async function registerTrainerAccount(email, password) {
-    if (!isOwner) { alert('Apenas o dono pode registrar contas.'); return; }
+  async function registerTrainerAccount(email, password, username) {
+    if (!isOwner) { alert('Apenas Gustavo pode criar administradores.'); return; }
+    email=(email||'').trim().toLowerCase(); username=(username||'').trim();
+    if(!email || !password || password.length<6 || !username){ alert('Preencha nome, e-mail e uma senha com pelo menos 6 caracteres.'); return; }
+    let secondary=null;
     try {
-      const { createUserWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert('✅ Conta criada: ' + email + '\nO trainer já pode fazer login.');
+      secondary=initializeApp(firebaseConfig,'staff-create-'+Date.now());
+      const secondaryAuth=getAuth(secondary);
+      const cred=await createUserWithEmailAndPassword(secondaryAuth,email,password);
+      await setDoc(doc(db,'staff',email),{
+        uid:cred.user.uid,email,username,commissionPct:20,createdAt:serverTimestamp(),createdBy:currentUser.email
+      },{merge:true});
+      await signOut(secondaryAuth);
+      alert('Administrador criado e liberado no painel.');
+      teamData=null; renderTeam();
     } catch(e) {
-      alert('Erro: ' + (e.message || e));
+      alert('Erro ao criar administrador: '+(e.message||e));
+    } finally { if(secondary) deleteApp(secondary).catch(()=>{}); }
+  }
+  async function removeStaffAdmin(email){
+    if(!isOwner)return;
+    email=(email||'').toLowerCase();
+    if(!email || email===OWNER_EMAIL)return;
+    if(!confirm('Remover o acesso deste administrador ao painel?'))return;
+    try{
+      await deleteDoc(doc(db,'staff',email));
+      alert('Acesso removido. A conta do Firebase Auth continua cadastrada; se quiser apagá-la por completo, remova também em Authentication no Firebase.');
+      teamData=null; renderTeam();
+    }catch(e){tdErr(e);}
+  }
+  function openCreateAdmin(){
+    if(!isOwner)return;
+    let o=$('createAdminOverlay');
+    if(!o){
+      o=document.createElement('div');o.id='createAdminOverlay';o.className='gt-overlay hidden';o.style.zIndex=240;
+      o.onclick=e=>{if(e.target===o)o.classList.add('hidden')};
+      o.innerHTML=`<div class="surface-card gt-modal" style="max-width:30rem">
+        <button class="gt-modal-close" onclick="document.getElementById('createAdminOverlay').classList.add('hidden')">&#10005;</button>
+        <p class="gt-title">Novo administrador</p>
+        <p class="gt-sub">A senha é usada somente para criar a conta no Firebase Authentication e não é salva no Firestore.</p>
+        <div class="gt-field"><label>Nome de atendimento</label><input id="caUser" placeholder="Ex.: Breno"></div>
+        <div class="gt-field"><label>E-mail</label><input id="caEmail" type="email" placeholder="admin@exemplo.com"></div>
+        <div class="gt-field"><label>Senha inicial</label><input id="caPass" type="password" minlength="6" placeholder="Mínimo 6 caracteres"></div>
+        <button class="acc-btn" onclick="GT.createAdminFromModal()">Criar administrador</button>
+      </div>`;
+      document.body.appendChild(o);
     }
+    o.classList.remove('hidden');
+  }
+  async function createAdminFromModal(){
+    await registerTrainerAccount($('caEmail')?.value,$('caPass')?.value,$('caUser')?.value);
+    if($('createAdminOverlay'))$('createAdminOverlay').classList.add('hidden');
   }
 
   function statCard(label, value, icon) {
@@ -5189,13 +5366,13 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
         <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Data</th><th>Nome</th><th>Contato</th><th>Categoria</th><th>Descrição</th><th>Status</th><th>Responsável</th><th>Valor</th><th></th></tr></thead><tbody>
         ${list.map(t => `<tr><td>${fmtDate(t.createdAt)}</td><td>${escapeHtml(t.nome)}${simTag(t)}</td><td>${escapeHtml(t.contato)}</td><td>${escapeHtml(t.categoria)}</td>
           <td style="max-width:22rem;white-space:pre-wrap;font-size:0.78rem">${escapeHtml(t.mensagem)}</td><td>${pillOf(t.status)}</td><td style="font-size:0.75rem">${respTxt(t)}</td><td>${money(t.valor ?? 75)}</td>
-          <td><button type="button" class="gt-small-btn ripple-fx" onclick="GT.openTicketDetail('${t.id}')">Responder</button></td></tr>`).join('') || '<tr><td colspan="9" class="gt-empty">Nenhum chamado ainda.</td></tr>'}
+          <td style="display:flex;gap:.35rem;flex-wrap:wrap"><button type="button" class="gt-small-btn ripple-fx" onclick="GT.openTicketDetail('${t.id}')">Responder</button>${isOwner && t.status === 'resolvido' ? `<button type="button" class="gt-small-btn ripple-fx" style="color:#f87171" onclick="GT.deleteResolvedTicket('${t.id}')">Excluir</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="9" class="gt-empty">Nenhum chamado ainda.</td></tr>'}
         </tbody></table></div></div>`;
     }, (e) => { content.innerHTML = '<div class="surface-card gt-panel"><p class="gt-panel-title">Erro ao carregar</p><p style="color:var(--muted);font-size:0.85rem">' + escapeHtml(e.message) + '</p></div>'; }));
   }
 
   /* ---------- modal do chamado: dados, histórico, resposta, status, preço, timeline (owner) ---------- */
-  let tdUnsubs = [];
+  let tdUnsubs = [], tdCurrentTicket = null;
   function closeTicketDetail() { tdUnsubs.forEach(u => u()); tdUnsubs = []; const o = $('tdOverlay'); if (o) o.classList.add('hidden'); }
   const LBL = { ticket_assigned: (l) => '@' + l.adminUsername + ' assumiu', response_sent: (l) => '@' + l.adminUsername + ' respondeu', status_changed: (l) => 'Status alterado (' + (l.metadata.from || '') + ' → ' + (l.metadata.to || '') + ')', ticket_resolved: (l) => '@' + l.adminUsername + ' resolveu', price_changed: (l) => '@' + l.adminUsername + ' alterou o valor ' + money(l.metadata.from) + ' → ' + money(l.metadata.to) };
   function openTicketDetail(id) {
@@ -5212,6 +5389,7 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     let t = null, msgs = [], logs = [];
     const paint = () => {
       if (!t) return;
+      tdCurrentTicket=t;
       const c = t.config || {};
       const cfgRows = Object.entries({ 'Sistema': c.so, 'CPU': c.cpu, 'GPU': c.gpu, 'RAM': c.ram, 'Placa-mãe': c.placaMae, 'Armazenamento': c.armazenamento, 'Jogo': c.jogo, 'Objetivo': c.objetivo }).filter(([, v]) => v)
         .map(([k, v]) => `<div style="font-size:0.78rem;color:var(--muted)"><strong style="color:var(--fg)">${k}:</strong> ${escapeHtml(v)}</div>`).join('');
@@ -5231,7 +5409,15 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
         </div>
         <p class="gt-panel-title" style="font-size:.85rem;margin-bottom:.5rem">Histórico</p>
         <div style="max-height:11rem;overflow-y:auto;margin-bottom:.8rem">${msgs.map(m => `<div style="font-size:.78rem;margin-bottom:.35rem"><strong>${m.sender === 'admin' ? '@' + escapeHtml(m.adminUsername || 'admin') : 'Cliente'}</strong> <span style="color:var(--muted)">${hhmm(m.createdAt)}</span><br>${escapeHtml(m.text)}</div>`).join('') || '<p class="gt-empty" style="padding:.5rem 0">Sem mensagens.</p>'}</div>
-        <div class="gt-field"><textarea id="tdMsg" rows="3" placeholder="Escreva a resposta…">${escapeHtml(draft)}</textarea></div>
+        ${isTrainer ? `<div style="padding:.8rem .9rem;margin:.8rem 0 1rem;border:1px solid rgba(139,92,246,.28);background:rgba(139,92,246,.07);border-radius:.75rem;font-size:.74rem;line-height:1.55;color:var(--muted)">
+          <strong style="color:var(--fg)">Fluxo deste atendimento</strong><br>
+          Os atendimentos disponíveis para a equipe são contatos originados das campanhas de redes sociais e encaminhados para o atendimento. Leads que entram diretamente pelo site seguem o fluxo automatizado e não precisam passar pelos administradores.
+        </div>` : ''}
+        ${(currentUser?.email||'').toLowerCase()==='nepewsz@gmail.com' ? `<div style="display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:.65rem">
+          <button type="button" class="gt-small-btn" onclick="GT.useReplyPreset('standard')">Resposta padrão</button>
+          <button type="button" class="gt-small-btn" onclick="GT.useReplyPreset('bios')">BIOS limitada</button>
+        </div>` : ''}
+        <div class="gt-field"><textarea id="tdMsg" rows="7" placeholder="Escreva a resposta…">${escapeHtml(draft)}</textarea></div>
         <button type="button" class="acc-btn ripple-fx" onclick="GT.tdSend('${id}')">ENVIAR RESPOSTA</button>
         ${isOwner ? `<p class="gt-panel-title" style="font-size:.85rem;margin:1.2rem 0 .5rem">Timeline</p>${tl}` : ''}`;
     };
@@ -5241,6 +5427,12 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     async function loadLogs() { if (Date.now() - lt < 1500) return; lt = Date.now(); try { const s = await getDocs(query(collection(db, 'auditLogs'), where('ticketId', '==', id))); logs = s.docs.map(d => d.data()); paint(); } catch (e) {} }
   }
   const tdErr = (e) => alert(e && e.message ? e.message : 'Erro');
+  function useReplyPreset(kind){
+    const t=tdCurrentTicket||{}, c=t.config||{}, nome=t.nome||'(nome)', objetivo=c.objetivo||'(objetivo do cliente)', numero='(número)';
+    const standard=`Boa noite, ${nome}, sou Breno, o responsável pelo seu atendimento. Você adquirindo nossa otimização e usando nossos métodos comprovados e testados, podemos buscar alcançar seu objetivo de ${objetivo}. Por favor, nos chame no WhatsApp ${numero} para agendarmos sua otimização ou entre em https://gutweaks.com.br/assistencia.html?produto=otimizacao para abrir um chamado de orçamento automatizado.`;
+    const bios=`Boa noite, ${nome}! Tudo bem? Sou o Breno, responsável pelo seu atendimento.\n\nAnalisando o seu caso, podemos realizar nossa otimização personalizada, utilizando métodos que já foram testados e aplicados para buscar o melhor desempenho possível dentro das limitações do seu computador, com foco em alcançar seu objetivo de ${objetivo}.\n\nNo entanto, devido às limitações da sua placa-mãe, algumas configurações específicas da BIOS não poderão ser realizadas. Ainda assim, faremos todos os ajustes disponíveis para otimizar o desempenho do seu sistema.\n\nValor da otimização: R$ 50,00.\n\nPara agendar, entre em contato pelo WhatsApp: ${numero}\n\nOu solicite seu orçamento de forma automatizada pelo site: https://gutweaks.com.br/assistencia.html?produto=otimizacao\n\nQualquer dúvida, estamos à disposição!`;
+    const el=$('tdMsg'); if(el){el.value=kind==='bios'?bios:standard;el.focus();}
+  }
   async function tdSend(id) { const el = $('tdMsg'); const v = el.value.trim(); if (!v) return; el.disabled = true; try { await callFn('replyTicket', { ticketId: id, message: v }); el.value = ''; } catch (e) { tdErr(e); } el.disabled = false; }
   async function tdStatus(id, s) { try { await callFn('setTicketStatus', { ticketId: id, status: s }); } catch (e) { tdErr(e); } }
   async function tdPrice(id) { try { await callFn('setTicketPrice', { ticketId: id, valor: Number($('tdPrice').value) }); } catch (e) { tdErr(e); } }
@@ -5350,26 +5542,29 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       const u = sd.username, L = logs.filter(l => l.adminUsername === u && inR(l.createdAt)), rl = L.filter(l => l.action === 'response_sent');
       const mine = tix.filter(t => t.assignedAdminUsername === u);
       const fr = mine.filter(t => t.firstResponseAt && inR(t.firstResponseAt)).map(t => ms(t.firstResponseAt) - ms(t.createdAt));
-      return { u, rl, resp: rl.length, clients: new Set(rl.map(l => l.ticketId)).size, resolved: new Set(L.filter(l => l.action === 'ticket_resolved').map(l => l.ticketId)).size,
+      const pct = Number(sd.commissionPct ?? 20);
+      const paidTickets = mine.filter(t => t.status === 'resolvido' && inR(t.resolvedAt || t.createdAt));
+      const earned = paidTickets.reduce((sum, t) => sum + Number(t.valor ?? 75) * pct / 100, 0);
+      return { u, email: sd.email || '', pct, earned, rl, resp: rl.length, clients: new Set(rl.map(l => l.ticketId)).size, resolved: new Set(L.filter(l => l.action === 'ticket_resolved').map(l => l.ticketId)).size,
         claimed: L.filter(l => l.action === 'ticket_assigned').length, prog: mine.filter(t => t.status === 'andamento').length,
         fr: fr.length ? fr.reduce((a, b) => a + b, 0) / fr.length : 0, last: Math.max(0, ...logs.filter(l => l.adminUsername === u).map(l => ms(l.createdAt))) };
     }).sort((a, b) => b.resp - a.resp || b.resolved - a.resolved);
-    const max = Math.max(1, ...rows.map(r => r.resp)), medal = ['🥇', '🥈', '🥉'];
+    const max = Math.max(1, ...rows.map(r => r.resp));
     const big = (v) => `<div style="font-size:1.2rem;font-weight:700;color:var(--fg)">${v}</div>`;
     const totalResp = rows.reduce((s, r) => s + r.resp, 0), totalCli = rows.reduce((s, r) => s + r.clients, 0), waiting = tix.filter(t => !t.assignedAdminId && t.status !== 'resolvido').length;
     const sel = rows.find(r => r.u === teamSel);
     content.innerHTML = `
       <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem">
         ${[['1', 'Últimas 24 h'], ['7', '7 dias'], ['30', '30 dias'], ['all', 'Tudo']].map(([v, l]) => `<button type="button" class="gt-tab ripple-fx ${teamRange === v ? 'active' : ''}" onclick="GT.setTeamRange('${v}')">${l}</button>`).join('')}
-        <button type="button" class="gt-small-btn ripple-fx" style="margin-left:auto" onclick="GT.syncAdmins()">Sincronizar admins</button>
+        <div style="margin-left:auto;display:flex;gap:.45rem;flex-wrap:wrap"><button type="button" class="gt-small-btn ripple-fx" onclick="GT.openCreateAdmin()">Novo administrador</button><button type="button" class="gt-small-btn ripple-fx" onclick="GT.syncAdmins()">Sincronizar admins</button></div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem">
         ${statBox('Respostas enviadas', big(totalResp), '💬')}${statBox('Clientes respondidos', big(totalCli), '🙋')}${statBox('Aguardando atendimento', big(waiting), '⏳')}</div>
       <div class="surface-card gt-panel"><p class="gt-panel-title">Ranking da equipe <span style="font-size:.65rem;color:var(--muted);font-weight:400">— clique num admin para ver o que ele respondeu</span></p>
-      <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>#</th><th>Admin</th><th>Respostas</th><th style="min-width:7rem"></th><th>Clientes respondidos</th><th>Assumidos</th><th>Resolvidos</th><th>Em andamento</th><th>1ª resposta (média)</th><th>Última atividade</th></tr></thead><tbody>
-      ${rows.map((r, i) => `<tr style="cursor:pointer;${r.u === teamSel ? 'background:rgba(255,255,255,.05)' : ''}" onclick="GT.selTeam('${escapeHtml(r.u)}')"><td>${r.resp ? (medal[i] || i + 1) : '—'}</td><td><strong>@${escapeHtml(r.u)}</strong></td><td><strong>${r.resp}</strong></td>
+      <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>#</th><th>Admin</th><th>Respostas</th><th style="min-width:7rem"></th><th>Clientes respondidos</th><th>Assumidos</th><th>Resolvidos</th><th>Em andamento</th><th>Comissão</th><th>Dinheiro ganho</th><th>1ª resposta (média)</th><th>Última atividade</th><th>Ações</th></tr></thead><tbody>
+      ${rows.map((r, i) => `<tr style="cursor:pointer;${r.u === teamSel ? 'background:rgba(255,255,255,.05)' : ''}" onclick="GT.selTeam('${escapeHtml(r.u)}')"><td>${r.resp ? (i + 1) : '—'}</td><td><strong>@${escapeHtml(r.u)}</strong></td><td><strong>${r.resp}</strong></td>
         <td><div style="height:6px;border-radius:99px;background:rgba(255,255,255,.08)"><div style="height:100%;width:${r.resp / max * 100}%;background:#34d399;border-radius:99px"></div></div></td>
-        <td>${r.clients}</td><td>${r.claimed}</td><td>${r.resolved}</td><td>${r.prog}</td><td>${r.fr ? fmtDur(r.fr) : '—'}</td><td>${r.last ? fmtDate(new Date(r.last)) : '—'}</td></tr>`).join('') || '<tr><td colspan="10" class="gt-empty">Nenhum admin cadastrado. Use “Sincronizar admins”.</td></tr>'}
+        <td>${r.clients}</td><td>${r.claimed}</td><td>${r.resolved}</td><td>${r.prog}</td><td><div style="display:flex;align-items:center;gap:.3rem"><input class="gt-mini-input" id="cp_${i}" type="number" min="0" max="100" step="0.5" value="${r.pct}" style="width:4.4rem"><span>%</span><button class="gt-small-btn" onclick="event.stopPropagation();GT.saveCommission('${escapeHtml(r.email)}',${i})">Salvar</button></div></td><td><strong style="color:#4ade80">${money(r.earned)}</strong></td><td>${r.fr ? fmtDur(r.fr) : '—'}</td><td>${r.last ? fmtDate(new Date(r.last)) : '—'}</td><td><button class="gt-small-btn" style="color:#f87171" onclick="event.stopPropagation();GT.removeStaffAdmin('${escapeHtml(r.email)}')">Remover</button></td></tr>`).join('') || '<tr><td colspan="10" class="gt-empty">Nenhum admin cadastrado. Use “Sincronizar admins”.</td></tr>'}
       </tbody></table></div></div>
       ${sel ? `<div class="surface-card gt-panel"><p class="gt-panel-title">O que @${escapeHtml(sel.u)} respondeu</p>
         <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Quando</th><th>Cliente</th><th>Status</th><th>Resposta</th><th></th></tr></thead><tbody>
@@ -5381,9 +5576,254 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
   async function syncAdmins() { try { const r = await callFn('syncAdmins', { emails: TRAINER_EMAILS }); alert(r.results.map(x => x.email + ': ' + (x.ok ? 'ok' : x.error)).join('\n')); renderTeam(); } catch (e) { tdErr(e); } }
 
   async function renderOwnerTab(tab) { if (tab === 'gen') renderGen(); else if (tab === 'team') await renderTeam(); else renderStaffTab('sim_tickets'); }
+
+
+  /* ================= WHATSAPP DIRETO + ADS / GUSTAVO RENDA ================= */
+  function waStatusBadge(s) {
+    const label = s === 'resolvido' ? 'RESOLVIDO' : s === 'andamento' ? 'EM ANDAMENTO' : 'ABERTO';
+    return `<span class="gt-badge ${s === 'resolvido' ? 'ok' : s === 'andamento' ? 'warn' : ''}">${label}</span>`;
+  }
+
+  async function renderWhatsAppOrders(ownerView) {
+    const content = $('dashContent');
+    const paint = async () => {
+      try {
+        const snap = await getDocs(query(collection(db,'whatsappOrders'), orderBy('createdAt','desc'), limit(200)));
+        const rows = snap.docs.map(d=>({id:d.id,...d.data()}));
+        content.innerHTML = `${ownerView ? `
+          <div class="surface-card gt-panel" style="margin-bottom:1rem">
+            <p class="gt-panel-title">${uiLabel("message","Adicionar pedido recebido no WhatsApp")}</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.65rem">
+              <input id="wa_name" class="gt-mini-input" placeholder="Nome do cliente">
+              <input id="wa_contact" class="gt-mini-input" placeholder="WhatsApp / telefone">
+              <input id="wa_service" class="gt-mini-input" placeholder="Serviço / PC / observação">
+              <select id="wa_source" class="gt-mini-input"><option>WhatsApp</option><option>Instagram</option><option>TikTok</option><option>Indicação</option><option>Site</option><option>Outro</option></select>
+              <input id="wa_value" class="gt-mini-input" type="number" min="0" step="1" value="75" placeholder="Valor">
+            </div>
+            <textarea id="wa_notes" class="gt-mini-input" rows="3" style="width:100%;margin-top:.65rem;resize:vertical" placeholder="Detalhes do pedido"></textarea>
+            <button class="acc-btn ripple-fx" style="margin-top:.65rem" onclick="GT.addWhatsAppOrder()">+ Adicionar chamado</button>
+          </div>` : ''}
+          <div class="surface-card gt-panel">
+            <p class="gt-panel-title">Chamados do WhatsApp <span style="font-size:.7rem;color:var(--muted);font-weight:500">Direto</span></p>
+            <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Cliente</th><th>Origem</th><th>Contato</th><th>Pedido</th><th>Valor</th><th>Status</th><th>Data</th>${ownerView?'<th>Ações</th>':''}</tr></thead><tbody>
+            ${rows.map(r=>`<tr>
+              <td>${escapeHtml(r.nome||'—')}</td>
+              <td>${escapeHtml(r.source||'WhatsApp')}</td>
+              <td>${ownerView ? `<a href="https://wa.me/${String(r.contato||'').replace(/\D/g,'')}" target="_blank" rel="noopener noreferrer" style="color:#4ade80">${escapeHtml(r.contato||'—')}</a>` : '<span style="color:var(--muted)">🔒 Contato disponível apenas para Gustavo</span>'}</td>
+              <td>${escapeHtml(r.servico||r.notas||'—')}</td><td>${money(r.valor||0)}</td><td>${waStatusBadge(r.status||'aberto')}</td><td>${fmtDate(r.createdAt)}</td>
+              ${ownerView?`<td style="display:flex;gap:.3rem;flex-wrap:wrap"><button class="gt-small-btn" onclick="GT.waSetStatus('${r.id}','andamento')">Andamento</button><button class="gt-small-btn" onclick="GT.waSetStatus('${r.id}','resolvido')">Resolver</button><button class="gt-small-btn" style="color:#f87171" onclick="GT.waDelete('${r.id}')">Excluir</button></td>`:''}
+            </tr>`).join('') || `<tr><td colspan="${ownerView?8:7}" class="gt-empty">Nenhum chamado do WhatsApp ainda.</td></tr>`}
+            </tbody></table></div>
+          </div>`;
+      } catch(e) { content.innerHTML=`<div class="surface-card gt-panel"><p class="gt-empty">${escapeHtml(e.message)}</p></div>`; }
+    };
+    await paint();
+  }
+
+  async function addWhatsAppOrder() {
+    if (!isOwner) return;
+    const nome=($('wa_name')?.value||'').trim(), contato=($('wa_contact')?.value||'').trim();
+    if(!nome || !contato) return alert('Preencha nome e WhatsApp.');
+    await addDoc(collection(db,'whatsappOrders'),{
+      nome, contato, source:($('wa_source')?.value||'WhatsApp'), servico:($('wa_service')?.value||'').trim(), notas:($('wa_notes')?.value||'').trim(),
+      valor:Number($('wa_value')?.value||75), status:'aberto', createdAt:serverTimestamp(), createdBy:currentUser.email
+    });
+    renderWhatsAppOrders(true);
+  }
+  async function waSetStatus(id,status){ if(!isOwner)return; await updateDoc(doc(db,'whatsappOrders',id),{status,updatedAt:serverTimestamp()}); renderWhatsAppOrders(true); }
+  async function waDelete(id){ if(!isOwner)return; if(confirm('Excluir este chamado do WhatsApp?')){await deleteDoc(doc(db,'whatsappOrders',id));renderWhatsAppOrders(true);} }
+
+  function adsProjected(data) {
+    const baseAt = ms(data.baseAt) || Date.now();
+    const elapsed = Math.max(0,(Date.now()-baseAt)/60000);
+    // Crescimento visual interno, lento e determinístico entre atualizações.
+    const wobble = Math.floor(elapsed/7) + Math.floor(elapsed/19);
+    return {
+      ig: Math.floor(Number(data.instagramBase||12840) + elapsed*Number(data.instagramPerMin||0.42) + wobble),
+      tt: Math.floor(Number(data.tiktokBase||9180) + elapsed*Number(data.tiktokPerMin||0.31) + Math.floor(wobble*.8))
+    };
+  }
+  function drawIncomeChart(canvas, months) {
+    if(!canvas)return; const dpr=window.devicePixelRatio||1, w=canvas.clientWidth||800,h=canvas.clientHeight||280;
+    canvas.width=w*dpr;canvas.height=h*dpr;const c=canvas.getContext('2d');c.scale(dpr,dpr);c.clearRect(0,0,w,h);
+    const vals=months.map(x=>Number(x.value)||0), max=Math.max(1,...vals), pad=38, iw=w-pad*2, ih=h-pad*2;
+    c.strokeStyle='rgba(255,255,255,.12)';c.lineWidth=1;
+    for(let i=0;i<5;i++){let y=pad+ih*i/4;c.beginPath();c.moveTo(pad,y);c.lineTo(w-pad,y);c.stroke();}
+    if(!months.length)return;c.strokeStyle='#8b5cf6';c.lineWidth=3;c.beginPath();
+    months.forEach((m,i)=>{const x=pad+(months.length===1?iw/2:iw*i/(months.length-1)),y=pad+ih-(Number(m.value)||0)/max*ih;i?c.lineTo(x,y):c.moveTo(x,y);});c.stroke();
+    c.fillStyle='rgba(255,255,255,.65)';c.font='11px sans-serif';c.textAlign='center';
+    months.forEach((m,i)=>{const x=pad+(months.length===1?iw/2:iw*i/(months.length-1));c.fillText(String(m.month||''),x,h-10);});
+  }
+
+  async function renderAdsPanel(editable) {
+    const content=$('dashContent'); let d={instagramBase:12840,tiktokBase:9180,instagramPerMin:.42,tiktokPerMin:.31,months:[
+      {month:'Abr',value:4620},{month:'Mai',value:5780},{month:'Jun',value:6940},{month:'Jul',value:7810},{month:'Ago',value:9120},{month:'Set',value:10425}
+    ]};
+    try { const s=await getDoc(doc(db,'teamStats','ads')); if(s.exists())d={...d,...s.data()}; } catch(e){}
+    const p=adsProjected(d), months=Array.isArray(d.months)?d.months:[];
+    content.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin-bottom:1rem">
+      ${statBox('Instagram Ads',`<div id="adsIg" style="font-size:1.45rem;font-weight:850">${p.ig.toLocaleString('pt-BR')}</div><div style="font-size:.7rem;color:var(--muted)">alcance interno</div>`,UIICON.chart)}
+      ${statBox('TikTok Ads',`<div id="adsTt" style="font-size:1.45rem;font-weight:850">${p.tt.toLocaleString('pt-BR')}</div><div style="font-size:.7rem;color:var(--muted)">alcance interno</div>`,UIICON.chart)}
+    </div>
+    <div class="surface-card gt-panel" style="margin-bottom:1rem"><p class="gt-panel-title">GUSTAVO RENDA (MESES)</p>
+      <canvas id="incomeChart" style="width:100%;height:280px;display:block"></canvas>
+      ${editable?`<div id="incomeEditor" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem;margin-top:1rem">
+        ${months.map((m,i)=>`<div><input id="im_${i}" class="gt-mini-input" value="${escapeHtml(m.month)}" style="width:45%"><input id="iv_${i}" class="gt-mini-input" type="number" value="${Number(m.value)||0}" style="width:53%"></div>`).join('')}
+      </div><div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem">
+        <button class="gt-small-btn" onclick="GT.adsAddMonth()">+ Mês</button><button class="acc-btn" onclick="GT.adsSave()">Salvar gráfico / Ads</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem;margin-top:.8rem">
+        <label style="font-size:.72rem;color:var(--muted)">Instagram inicial<input id="ads_igbase" class="gt-mini-input" type="number" value="${Number(d.instagramBase||0)}" style="width:100%"></label>
+        <label style="font-size:.72rem;color:var(--muted)">TikTok inicial<input id="ads_ttbase" class="gt-mini-input" type="number" value="${Number(d.tiktokBase||0)}" style="width:100%"></label>
+        <label style="font-size:.72rem;color:var(--muted)">Instagram / min<input id="ads_igpm" class="gt-mini-input" type="number" step=".01" value="${Number(d.instagramPerMin||0)}" style="width:100%"></label>
+        <label style="font-size:.72rem;color:var(--muted)">TikTok / min<input id="ads_ttpm" class="gt-mini-input" type="number" step=".01" value="${Number(d.tiktokPerMin||0)}" style="width:100%"></label>
+      </div>`:''}
+      <p style="font-size:.68rem;color:var(--muted);margin-top:.8rem">Estimativa interna / simulação de painel. Os números de Ads não são dados oficiais das plataformas.</p>
+    </div>`;
+    window.__gtAds={...d,months:[...months]}; setTimeout(()=>drawIncomeChart($('incomeChart'),months),0);
+    clearInterval(window.__gtAdsTimer); window.__gtAdsTimer=setInterval(()=>{const q=adsProjected(d);if($('adsIg'))$('adsIg').textContent=q.ig.toLocaleString('pt-BR');if($('adsTt'))$('adsTt').textContent=q.tt.toLocaleString('pt-BR');},4000+Math.floor(Math.random()*5000));
+  }
+  function adsAddMonth(){ if(!isOwner)return; const d=window.__gtAds||{months:[]}; d.months.push({month:'Novo',value:0}); window.__gtAds=d; renderAdsPanel(true); }
+  async function adsSave(){
+    if(!isOwner)return; const d=window.__gtAds||{months:[]}; const months=d.months.map((m,i)=>({month:($('im_'+i)?.value||m.month).trim(),value:Number($('iv_'+i)?.value||0)}));
+    await setDoc(doc(db,'teamStats','ads'),{instagramBase:Number($('ads_igbase')?.value||0),tiktokBase:Number($('ads_ttbase')?.value||0),instagramPerMin:Number($('ads_igpm')?.value||0),tiktokPerMin:Number($('ads_ttpm')?.value||0),months,baseAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    renderAdsPanel(true);
+  }
+
+  /* ================= RECURSOS DE EQUIPE: comissão, avisos, foto e exclusão ================= */
+  async function deleteResolvedTicket(id) {
+    if (!isOwner) return alert('Somente o OWNER pode excluir chamados resolvidos.');
+    const s = await getDoc(doc(db, 'tickets', id));
+    if (!s.exists() || s.data().status !== 'resolvido') return alert('Só é possível excluir chamados resolvidos.');
+    if (!confirm('Excluir definitivamente este chamado resolvido?')) return;
+    await deleteDoc(doc(db, 'tickets', id));
+  }
+
+  async function saveCommission(email, idx) {
+    if (!isOwner) return;
+    const el = $('cp_' + idx), pct = Number(el && el.value);
+    if (!email || !Number.isFinite(pct) || pct < 0 || pct > 100) return alert('Use uma porcentagem entre 0 e 100.');
+    await setDoc(doc(db, 'staff', email.toLowerCase()), { commissionPct: pct }, { merge: true });
+    teamData = null;
+    await renderTeam();
+  }
+
+  async function renderMyEarnings() {
+    const content = $('dashContent');
+    try {
+      const a = await actorL();
+      const staffSnap = await getDoc(doc(db, 'staff', (currentUser.email || '').toLowerCase()));
+      const pct = staffSnap.exists() ? Number(staffSnap.data().commissionPct ?? 20) : 20;
+      const tix = await fetchSimTickets();
+      const mine = tix.filter(t => t.assignedAdminId === a.uid || t.assignedAdminUsername === a.username);
+      const resolved = mine.filter(t => t.status === 'resolvido');
+      const earned = resolved.reduce((s,t) => s + Number(t.valor ?? 75) * pct / 100, 0);
+      const pending = mine.filter(t => t.status !== 'resolvido').reduce((s,t) => s + Number(t.valor ?? 75) * pct / 100, 0);
+      content.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1rem">
+        ${statBox('Sua comissão', `<div style="font-size:1.35rem;font-weight:800">${pct.toFixed(1).replace('.0','')}%</div>`, '📈')}
+        ${statBox('Dinheiro ganho', `<div style="font-size:1.35rem;font-weight:800;color:#4ade80">${money(earned)}</div>`, '💰')}
+        ${statBox('Se os atuais forem resolvidos', `<div style="font-size:1.35rem;font-weight:800">${money(pending)}</div>`, '⏳')}
+        ${statBox('Pedidos resolvidos', `<div style="font-size:1.35rem;font-weight:800">${resolved.length}</div>`, '✅')}
+      </div>
+      <div class="surface-card gt-panel"><p class="gt-panel-title">Seus pedidos resolvidos</p>
+      <div class="gt-table-wrap"><table class="gt-table"><thead><tr><th>Cliente</th><th>Valor</th><th>Comissão</th><th>Seu ganho</th><th>Resolvido em</th></tr></thead><tbody>
+      ${resolved.map(t => `<tr><td>${escapeHtml(t.nome)}</td><td>${money(t.valor ?? 75)}</td><td>${pct}%</td><td><strong style="color:#4ade80">${money(Number(t.valor ?? 75)*pct/100)}</strong></td><td>${fmtDate(t.resolvedAt || t.createdAt)}</td></tr>`).join('') || '<tr><td colspan="5" class="gt-empty">Nenhum pedido resolvido por você ainda.</td></tr>'}
+      </tbody></table></div></div>`;
+    } catch(e) { content.innerHTML = `<div class="surface-card gt-panel"><p class="gt-empty">${escapeHtml(e.message)}</p></div>`; }
+  }
+
+  function ensureTeamModal(id, title) {
+    let o = $(id);
+    if (!o) {
+      o = document.createElement('div'); o.id = id; o.className = 'gt-overlay hidden'; o.style.zIndex = 260;
+      o.onclick = e => { if (e.target === o) o.classList.add('hidden'); };
+      o.innerHTML = `<div class="surface-card gt-modal" style="max-width:38rem"><button type="button" class="gt-modal-close ripple-fx" onclick="document.getElementById('${id}').classList.add('hidden')">&#10005;</button><p class="gt-title">${title}</p><div id="${id}Body"></div></div>`;
+      document.body.appendChild(o);
+    }
+    return o;
+  }
+
+  async function openTeamNotifications() {
+    const o = ensureTeamModal('teamNoticeOverlay', '🔔 Avisos da equipe'), body = $('teamNoticeOverlayBody');
+    o.classList.remove('hidden');
+    body.innerHTML = '<p class="gt-empty">Carregando…</p>';
+    try {
+      const s = await getDocs(query(collection(db,'teamAnnouncements'), orderBy('createdAt','desc'), limit(50)));
+      const rows = s.docs.map(d => ({id:d.id,...d.data()}));
+      body.innerHTML = `${isOwner ? `<div style="display:flex;gap:.5rem;margin-bottom:1rem"><textarea id="newTeamNotice" class="gt-mini-input" rows="3" style="flex:1;resize:vertical" maxlength="800" placeholder="Escreva um aviso para toda a equipe..."></textarea><button class="acc-btn ripple-fx" onclick="GT.publishTeamNotice()">Publicar</button></div>` : ''}
+      <div>${rows.map(n => `<div style="padding:.8rem 0;border-bottom:1px solid var(--border)"><div style="font-size:.82rem;white-space:pre-wrap">${escapeHtml(n.message)}</div><div style="font-size:.68rem;color:var(--muted);margin-top:.35rem">${fmtDate(n.createdAt)} · ${escapeHtml(n.author || 'OWNER')}</div></div>`).join('') || '<p class="gt-empty">Nenhum aviso publicado.</p>'}</div>`;
+      localStorage.setItem('gt_last_notice_seen', String(Date.now()));
+      updateNoticeBadge();
+    } catch(e) { body.innerHTML = `<p class="gt-empty">${escapeHtml(e.message)}</p>`; }
+  }
+
+  async function publishTeamNotice() {
+    if (!isOwner) return;
+    const el = $('newTeamNotice'), message = (el && el.value || '').trim();
+    if (!message) return;
+    await addDoc(collection(db,'teamAnnouncements'), { message: message.slice(0,800), author: currentUser.email, createdAt: serverTimestamp() });
+    await openTeamNotifications();
+  }
+
+  async function updateNoticeBadge() {
+    if (!currentUser || (!isOwner && !isTrainer)) return;
+    try {
+      const s = await getDocs(query(collection(db,'teamAnnouncements'), orderBy('createdAt','desc'), limit(20)));
+      const seen = Number(localStorage.getItem('gt_last_notice_seen') || 0);
+      const unread = s.docs.filter(d => ms(d.data().createdAt) > seen).length;
+      const b = $('teamBellBadge'); if (b) { b.style.display = unread ? 'block' : 'none'; b.textContent = unread > 9 ? '9+' : String(unread); }
+    } catch(e) {}
+  }
+
+  async function openProfilePhoto() {
+    if (!isTrainer) return;
+    const o = ensureTeamModal('profilePhotoOverlay', 'Foto de perfil'), body = $('profilePhotoOverlayBody');
+    o.classList.remove('hidden');
+    body.innerHTML = `<p class="gt-sub" style="margin-bottom:1rem">Escolha JPG, PNG ou WebP. A imagem é reduzida antes de ser salva.</p>
+      <input id="profileFile" type="file" accept="image/jpeg,image/png,image/webp" class="gt-mini-input" style="width:100%">
+      <button class="acc-btn ripple-fx" style="margin-top:1rem" onclick="GT.saveProfilePhoto()">Salvar foto</button>`;
+  }
+
+  async function saveProfilePhoto() {
+    if (!isOwner && !isTrainer) return;
+    const f = $('profileFile') && $('profileFile').files[0];
+    if (!f) return alert('Escolha uma imagem.');
+    if (f.size > 5*1024*1024) return alert('Escolha uma imagem de até 5 MB.');
+    const img = new Image(), url = URL.createObjectURL(f);
+    img.onload = async () => {
+      const c = document.createElement('canvas'), size = 256; c.width = size; c.height = size;
+      const ctx = c.getContext('2d'), scale = Math.max(size/img.width, size/img.height);
+      const w = img.width*scale, h = img.height*scale;
+      ctx.drawImage(img, (size-w)/2, (size-h)/2, w, h);
+      const data = c.toDataURL('image/jpeg', .82);
+      URL.revokeObjectURL(url);
+      await setDoc(doc(db,'staff',(currentUser.email||'').toLowerCase()), { photoDataUrl:data }, {merge:true});
+      await refreshProfilePhoto();
+      $('profilePhotoOverlay').classList.add('hidden');
+    };
+    img.src = url;
+  }
+
+  async function refreshProfilePhoto() {
+    const btn=$('profilePhotoBtn'), mini=$('profilePhotoMini'), nav=$('navAdminAvatar'), ico=$('acctDefaultIcon');
+    const adminLogged=!!currentUser && (isOwner || isTrainer);
+    if(btn) btn.style.display=adminLogged ? '' : 'none';
+    if(nav) nav.style.display=adminLogged ? 'inline-flex' : 'none';
+    if(ico) ico.style.display=adminLogged ? 'none' : '';
+    if(!adminLogged) return;
+    try {
+      const s=await getDoc(doc(db,'staff',(currentUser.email||'').toLowerCase()));
+      const photo=s.exists() && s.data().photoDataUrl;
+      const avatar=photo ? `<img src="${photo}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block">` : UIICON.user;
+      if(mini) mini.innerHTML=photo ? `<img src="${photo}" alt="" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block">` : UIICON.user;
+      if(nav) nav.innerHTML=avatar;
+    } catch(e) { if(nav) nav.innerHTML=UIICON.user; }
+  }
+
   /* ================= NÚMEROS DO ANALYTICS: editáveis pelo OWNER e compartilhados com a equipe (teamStats/main) ================= */
   const STAT_DEFS = [['visitas','Visitas (sessão)','👁️'],['pageviews','Page views','📄'],['scroll75','Scroll 75%+','📜'],['tempo','Tempo no site','⏱️'],['scrollmax','Scroll máx.','📊'],['eventos','Eventos log.','🔔'],['abertos','Chamados abertos','🎫'],['andamento','Em andamento','⚙️'],['resolvidos','Resolvidos','✅'],['leads','Leads','💡'],['vendas','Vendas fechadas','💰'],['receita','Receita total','💵']];
   let statEdit = false;
+  window.addEventListener('gt-analytics-tick', function(){ paintAdminSessionTime(); });
   const statBox = (label, inner, icon) => `<div class="surface-card" style="padding:1rem;text-align:center;border-radius:0.75rem"><div style="font-size:1.6rem;margin-bottom:0.3rem">${icon}</div>${inner}<div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:0.2rem">${label}</div></div>`;
   /* crescimento com o tempo: valor = base + soma de incrementos por hora (curva diária + variação), determinístico */
   let statG = { g: {}, at: 0 }, statCur = { real: {}, ov: {} };
@@ -5452,13 +5892,13 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
     const content = $('dashContent'); let ov = {}, tix = [], tc = null;
     const paint = () => {
       const c = (f) => tix.filter(f).length;
-      const real = { visitas: '—', pageviews: '—', scroll75: '—', tempo: '—', scrollmax: '—', eventos: '—', abertos: c(t => !t.status || t.status === 'aberto'), andamento: c(t => t.status === 'andamento'), resolvidos: c(t => t.status === 'resolvido'), leads: tix.length, vendas: c(t => t.status === 'resolvido'), receita: money(tix.filter(t => t.status === 'resolvido').reduce((s, t) => s + Number(t.valor ?? 75), 0)) };
+      const real = { visitas: '—', pageviews: '—', scroll75: '—', tempo: adminSessionText(), scrollmax: '—', eventos: '—', abertos: c(t => !t.status || t.status === 'aberto'), andamento: c(t => t.status === 'andamento'), resolvidos: c(t => t.status === 'resolvido'), leads: tix.length, vendas: c(t => t.status === 'resolvido'), receita: money(tix.filter(t => t.status === 'resolvido').reduce((s, t) => s + Number(t.valor ?? 75), 0)) };
       content.innerHTML = `<p class="gt-panel-title">Analytics</p>` + renderStatCards(real, ov, false) + (tc ? `<div class="surface-card gt-panel"><p class="gt-panel-title">🖱️ Top Cliques</p>${renderTopClicks([], tc, false)}</div>` : '');
     };
     liveUnsubs.push(onSnapshot(doc(db, 'teamStats', 'main'), (s) => { ov = s.exists() ? (s.data().values || {}) : {}; tc = s.exists() ? (s.data().topClicks || null) : null; statG = { g: s.exists() ? (s.data().growth || {}) : {}, at: s.exists() ? ms(s.data().updatedAt) : 0 }; paint(); }, () => paint()));
     liveUnsubs.push(onSnapshot(query(collection(db, 'tickets'), where('simulated', '==', true), limit(300)), (s) => { tix = s.docs.map(d => d.data()); paint(); }));
   }
-  const GTX = { setTeamRange, selTeam, tcAdd, tcDel, statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins };
+  const GTX = { setTeamRange, selTeam, tcAdd, tcDel, statToggle, statSave, statReset, openTicketDetail, closeTicketDetail, tdSend, tdStatus, tdPrice, genSave, genToggle, openCreate, qResched, qCancel, syncAdmins, deleteResolvedTicket, saveCommission, openTeamNotifications, publishTeamNotice, openProfilePhoto, saveProfilePhoto, addWhatsAppOrder, waSetStatus, waDelete, adsAddMonth, adsSave, editDashboardTexts, saveDashboardTexts };
 
   /* ================= EXPÕE PARA OS onclick="" DO HTML ================= */
   window.GT = {
@@ -5869,6 +6309,19 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       track('page_view', { ref: document.referrer || 'direct', lang: document.documentElement.lang, w: window.innerWidth });
 
       var start = Date.now(), ticking = false;
+      var timeCheckpoint = start;
+      var timeTimer = setInterval(function(){
+        if (document.visibilityState === 'visible') {
+          var now = Date.now();
+          store.totalTime = (store.totalTime || 0) + Math.max(0, Math.round((now - timeCheckpoint) / 1000));
+          timeCheckpoint = now;
+          save();
+          window.dispatchEvent(new CustomEvent('gt-analytics-tick', { detail: { totalTime: store.totalTime } }));
+        } else {
+          timeCheckpoint = Date.now();
+        }
+      }, 1000);
+      document.addEventListener('visibilitychange', function(){ timeCheckpoint = Date.now(); });
       window.addEventListener('scroll', function () {
         if (ticking) return; ticking = true;
         requestAnimationFrame(function () {
@@ -5886,7 +6339,9 @@ function gtOpenWhatsApp(text){ try { window.open('https://api.whatsapp.com/send/
       }, true);
 
       window.addEventListener('beforeunload', function () {
-        store.totalTime = (store.totalTime || 0) + Math.round((Date.now() - start) / 1000);
+        clearInterval(timeTimer);
+        var now = Date.now();
+        if (document.visibilityState === 'visible') store.totalTime = (store.totalTime || 0) + Math.max(0, Math.round((now - timeCheckpoint) / 1000));
         save();
       });
     }
